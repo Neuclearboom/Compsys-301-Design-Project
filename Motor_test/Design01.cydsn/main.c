@@ -55,11 +55,11 @@
 #define RAW_LEFT()             S5_Read()
 #define RAW_RIGHT()            S1_Read()
 
-/* ---- Start switch ---------------------------------------------------------
- * The switch's idle level is read at power-up (assumes it is NOT held down at
- * boot); "pressed" is whatever level differs from that, so polarity doesn't
- * matter. Set USE_START_SWITCH to 0 to start straight after the self-test. */
-#define USE_START_SWITCH       1
+/* ---- Start-up ------------------------------------------------------------
+ * No start switch on the board: after power-up the robot runs the motor
+ * self-test, then waits START_DELAY_MS (LED blinking) so it can be placed on
+ * the line before it begins following. */
+#define START_DELAY_MS         3000u
 
 /* ---- Startup motor self-test: both wheels forward, then backward ---------- */
 #define SELFTEST_SPEED         60u
@@ -526,25 +526,17 @@ int main(void)
     CyDelay(200u);          /* let the supply and inputs settle */
     Motor_SelfTest();
 
-#if USE_START_SWITCH
+    /* countdown: LED blinks so you know it's about to go */
     {
-        /* idle level = what the switch reads right now; pressed = the opposite */
-        uint8_t idle = (uint8_t)(SW_Read() ? 1u : 0u);
-        uint8_t blink = 0u;
-        uint8_t ledOn = 0u;
-
-        /* wait for press (LED blinks to show we're armed and waiting) */
-        while ((SW_Read() ? 1u : 0u) == idle) {
-            CyDelay(10u);
-            if (++blink >= 25u) { blink = 0u; ledOn = (uint8_t)!ledOn; LED_Write(ledOn); }
+        uint16_t waited;
+        uint8_t  ledOn = 0u;
+        for (waited = 0u; waited < START_DELAY_MS; waited += 250u) {
+            ledOn = (uint8_t)!ledOn;
+            LED_Write(ledOn);
+            CyDelay(250u);
         }
         LED_Write(0u);
-
-        /* wait for release, then give the user time to let go */
-        while ((SW_Read() ? 1u : 0u) != idle) { CyDelay(10u); }
-        CyDelay(500u);
     }
-#endif
 
     for (;;) {
         SensorState sensors;
