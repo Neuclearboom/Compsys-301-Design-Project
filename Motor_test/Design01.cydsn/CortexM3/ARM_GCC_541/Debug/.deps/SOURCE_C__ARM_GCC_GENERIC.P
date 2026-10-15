@@ -1,0 +1,324 @@
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/Clock_1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/Clock_2.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_2.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_2.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_2.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/Cm3Start.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Cm3Start.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Cm3Start.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/CyDmac.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/CyFlash.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/CyLib.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/CySpc.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/D1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/D1_1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/ENCD1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/ENCD2.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/ENCD3.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/ENCD4.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/IN2.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/IN2_1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/In1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/In1_1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/LED.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/PWM_1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/PWM_1_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/PWM_2.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/PWM_2_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PVT.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L_Cnt16.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L_Cnt16_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L_INT.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_INT.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_INT.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_L_isr.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_isr.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_isr.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_isr.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_isr.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PVT.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R_Cnt16.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R_Cnt16_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R_INT.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_INT.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_INT.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R_PM.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PM.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PM.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/QuadDec_R_isr.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_isr.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_isr.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_isr.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_isr.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S1.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S2.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S3.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S4.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S5.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/S6.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/SW.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW_aliases.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/cyPm.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/cy_em_eeprom.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cy_em_eeprom.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cy_em_eeprom.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cy_em_eeprom.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cy_em_eeprom.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/cyfitter_cfg.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.c C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/cyapicallbacks.h 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/cymetadata.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cymetadata.c 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cymetadata.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/cyutils.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyutils.c 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyutils.c : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/CortexM3/ARM_GCC_541/Debug/main.o : C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_armcc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_compiler.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_gcc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/core_cm3.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/core_cm3_psoc5.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydisabledsheets.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/project.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/Clock_2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyDmac.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyFlash.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CyLib.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/CySpc.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/D1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD3_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/ENCD4_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/IN2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/In1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/LED_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/PWM_2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_L_isr.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_Cnt16.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_PVT.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/QuadDec_R_isr.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S1_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S2_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S3_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S4_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S5_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/S6_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/SW_aliases.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyPm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cy_em_eeprom.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydevice_trm.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cyfitter_cfg.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cypins.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cytypes.h C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/main.c 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_armcc.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_compiler.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cmsis_gcc.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/core_cm3.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/core_cm3_psoc5.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/cydisabledsheets.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/Generated_Source/PSoC5/project.h : 
+
+C:/TEMP/Compsys-301-Design-Project/Motor_test/Design01.cydsn/main.c : 
+

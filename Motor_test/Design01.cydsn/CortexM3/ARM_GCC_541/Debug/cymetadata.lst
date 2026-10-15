@@ -1,0 +1,2634 @@
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"cymetadata.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.global	cy_metadata
+  20              		.global	cy_meta_flashprotect
+  21              		.global	cy_meta_wonvl
+  22              		.global	cy_meta_custnvl
+  23              		.global	cy_meta_configecc
+  24              		.section	.cyconfigecc,"a",%progbits
+  25              		.align	2
+  26              		.type	cy_meta_configecc, %object
+  27              		.size	cy_meta_configecc, 2024
+  28              	cy_meta_configecc:
+  29 0000 04       		.byte	4
+  30 0001 52       		.byte	82
+  31 0002 00       		.byte	0
+  32 0003 40       		.byte	64
+  33 0004 04       		.byte	4
+  34 0005 64       		.byte	100
+  35 0006 00       		.byte	0
+  36 0007 40       		.byte	64
+  37 0008 02       		.byte	2
+  38 0009 65       		.byte	101
+  39 000a 00       		.byte	0
+  40 000b 40       		.byte	64
+  41 000c 5F       		.byte	95
+  42 000d 00       		.byte	0
+  43 000e 01       		.byte	1
+  44 000f 40       		.byte	64
+  45 0010 36       		.byte	54
+  46 0011 01       		.byte	1
+  47 0012 01       		.byte	1
+  48 0013 40       		.byte	64
+  49 0014 4A       		.byte	74
+  50 0015 02       		.byte	2
+  51 0016 01       		.byte	1
+  52 0017 40       		.byte	64
+  53 0018 45       		.byte	69
+  54 0019 03       		.byte	3
+  55 001a 01       		.byte	1
+  56 001b 40       		.byte	64
+  57 001c 53       		.byte	83
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 2
+
+
+  58 001d 04       		.byte	4
+  59 001e 01       		.byte	1
+  60 001f 40       		.byte	64
+  61 0020 3C       		.byte	60
+  62 0021 05       		.byte	5
+  63 0022 01       		.byte	1
+  64 0023 40       		.byte	64
+  65 0024 49       		.byte	73
+  66 0025 06       		.byte	6
+  67 0026 01       		.byte	1
+  68 0027 40       		.byte	64
+  69 0028 3E       		.byte	62
+  70 0029 07       		.byte	7
+  71 002a 01       		.byte	1
+  72 002b 40       		.byte	64
+  73 002c 55       		.byte	85
+  74 002d 14       		.byte	20
+  75 002e 01       		.byte	1
+  76 002f 40       		.byte	64
+  77 0030 3B       		.byte	59
+  78 0031 15       		.byte	21
+  79 0032 01       		.byte	1
+  80 0033 40       		.byte	64
+  81 0034 65       		.byte	101
+  82 0035 16       		.byte	22
+  83 0036 01       		.byte	1
+  84 0037 40       		.byte	64
+  85 0038 44       		.byte	68
+  86 0039 17       		.byte	23
+  87 003a 01       		.byte	1
+  88 003b 40       		.byte	64
+  89 003c 03       		.byte	3
+  90 003d 40       		.byte	64
+  91 003e 01       		.byte	1
+  92 003f 40       		.byte	64
+  93 0040 06       		.byte	6
+  94 0041 41       		.byte	65
+  95 0042 01       		.byte	1
+  96 0043 40       		.byte	64
+  97 0044 0A       		.byte	10
+  98 0045 42       		.byte	66
+  99 0046 01       		.byte	1
+ 100 0047 40       		.byte	64
+ 101 0048 04       		.byte	4
+ 102 0049 43       		.byte	67
+ 103 004a 01       		.byte	1
+ 104 004b 40       		.byte	64
+ 105 004c 05       		.byte	5
+ 106 004d 48       		.byte	72
+ 107 004e 01       		.byte	1
+ 108 004f 40       		.byte	64
+ 109 0050 09       		.byte	9
+ 110 0051 49       		.byte	73
+ 111 0052 01       		.byte	1
+ 112 0053 40       		.byte	64
+ 113 0054 05       		.byte	5
+ 114 0055 50       		.byte	80
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 3
+
+
+ 115 0056 01       		.byte	1
+ 116 0057 40       		.byte	64
+ 117 0058 01       		.byte	1
+ 118 0059 51       		.byte	81
+ 119 005a 01       		.byte	1
+ 120 005b 40       		.byte	64
+ 121 005c 18       		.byte	24
+ 122 005d 10       		.byte	16
+ 123 005e 19       		.byte	25
+ 124 005f 10       		.byte	16
+ 125 0060 60       		.byte	96
+ 126 0061 08       		.byte	8
+ 127 0062 61       		.byte	97
+ 128 0063 0C       		.byte	12
+ 129 0064 81       		.byte	-127
+ 130 0065 6F       		.byte	111
+ 131 0066 82       		.byte	-126
+ 132 0067 0F       		.byte	15
+ 133 0068 85       		.byte	-123
+ 134 0069 0F       		.byte	15
+ 135 006a 86       		.byte	-122
+ 136 006b 0F       		.byte	15
+ 137 006c 85       		.byte	-123
+ 138 006d 0F       		.byte	15
+ 139 006e 87       		.byte	-121
+ 140 006f 6F       		.byte	111
+ 141 0070 04       		.byte	4
+ 142 0071 0A       		.byte	10
+ 143 0072 06       		.byte	6
+ 144 0073 05       		.byte	5
+ 145 0074 08       		.byte	8
+ 146 0075 03       		.byte	3
+ 147 0076 0A       		.byte	10
+ 148 0077 0C       		.byte	12
+ 149 0078 0C       		.byte	12
+ 150 0079 0C       		.byte	12
+ 151 007a 0E       		.byte	14
+ 152 007b 03       		.byte	3
+ 153 007c 10       		.byte	16
+ 154 007d 0F       		.byte	15
+ 155 007e 14       		.byte	20
+ 156 007f 05       		.byte	5
+ 157 0080 16       		.byte	22
+ 158 0081 0A       		.byte	10
+ 159 0082 18       		.byte	24
+ 160 0083 10       		.byte	16
+ 161 0084 1E       		.byte	30
+ 162 0085 30       		.byte	48
+ 163 0086 20       		.byte	32
+ 164 0087 07       		.byte	7
+ 165 0088 27       		.byte	39
+ 166 0089 01       		.byte	1
+ 167 008a 2E       		.byte	46
+ 168 008b 10       		.byte	16
+ 169 008c 30       		.byte	48
+ 170 008d 0F       		.byte	15
+ 171 008e 31       		.byte	49
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 4
+
+
+ 172 008f 01       		.byte	1
+ 173 0090 34       		.byte	52
+ 174 0091 20       		.byte	32
+ 175 0092 36       		.byte	54
+ 176 0093 10       		.byte	16
+ 177 0094 3E       		.byte	62
+ 178 0095 40       		.byte	64
+ 179 0096 40       		.byte	64
+ 180 0097 15       		.byte	21
+ 181 0098 41       		.byte	65
+ 182 0099 03       		.byte	3
+ 183 009a 49       		.byte	73
+ 184 009b FF       		.byte	-1
+ 185 009c 4A       		.byte	74
+ 186 009d FF       		.byte	-1
+ 187 009e 4B       		.byte	75
+ 188 009f FF       		.byte	-1
+ 189 00a0 4D       		.byte	77
+ 190 00a1 A0       		.byte	-96
+ 191 00a2 4F       		.byte	79
+ 192 00a3 01       		.byte	1
+ 193 00a4 50       		.byte	80
+ 194 00a5 18       		.byte	24
+ 195 00a6 58       		.byte	88
+ 196 00a7 04       		.byte	4
+ 197 00a8 59       		.byte	89
+ 198 00a9 04       		.byte	4
+ 199 00aa 5A       		.byte	90
+ 200 00ab 04       		.byte	4
+ 201 00ac 5C       		.byte	92
+ 202 00ad 01       		.byte	1
+ 203 00ae 5D       		.byte	93
+ 204 00af 01       		.byte	1
+ 205 00b0 5F       		.byte	95
+ 206 00b1 01       		.byte	1
+ 207 00b2 60       		.byte	96
+ 208 00b3 40       		.byte	64
+ 209 00b4 62       		.byte	98
+ 210 00b5 80       		.byte	-128
+ 211 00b6 64       		.byte	100
+ 212 00b7 40       		.byte	64
+ 213 00b8 65       		.byte	101
+ 214 00b9 40       		.byte	64
+ 215 00ba 66       		.byte	102
+ 216 00bb 80       		.byte	-128
+ 217 00bc 68       		.byte	104
+ 218 00bd 40       		.byte	64
+ 219 00be 6A       		.byte	106
+ 220 00bf 80       		.byte	-128
+ 221 00c0 6C       		.byte	108
+ 222 00c1 40       		.byte	64
+ 223 00c2 6D       		.byte	109
+ 224 00c3 20       		.byte	32
+ 225 00c4 6E       		.byte	110
+ 226 00c5 80       		.byte	-128
+ 227 00c6 80       		.byte	-128
+ 228 00c7 01       		.byte	1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 5
+
+
+ 229 00c8 88       		.byte	-120
+ 230 00c9 08       		.byte	8
+ 231 00ca 8C       		.byte	-116
+ 232 00cb 04       		.byte	4
+ 233 00cc 8D       		.byte	-115
+ 234 00cd 06       		.byte	6
+ 235 00ce 91       		.byte	-111
+ 236 00cf 03       		.byte	3
+ 237 00d0 99       		.byte	-103
+ 238 00d1 06       		.byte	6
+ 239 00d2 9C       		.byte	-100
+ 240 00d3 03       		.byte	3
+ 241 00d4 A4       		.byte	-92
+ 242 00d5 03       		.byte	3
+ 243 00d6 A6       		.byte	-90
+ 244 00d7 08       		.byte	8
+ 245 00d8 AB       		.byte	-85
+ 246 00d9 08       		.byte	8
+ 247 00da AD       		.byte	-83
+ 248 00db 05       		.byte	5
+ 249 00dc AE       		.byte	-82
+ 250 00dd 04       		.byte	4
+ 251 00de B0       		.byte	-80
+ 252 00df 04       		.byte	4
+ 253 00e0 B1       		.byte	-79
+ 254 00e1 07       		.byte	7
+ 255 00e2 B2       		.byte	-78
+ 256 00e3 02       		.byte	2
+ 257 00e4 B4       		.byte	-76
+ 258 00e5 08       		.byte	8
+ 259 00e6 B5       		.byte	-75
+ 260 00e7 08       		.byte	8
+ 261 00e8 B6       		.byte	-74
+ 262 00e9 01       		.byte	1
+ 263 00ea B8       		.byte	-72
+ 264 00eb 88       		.byte	-120
+ 265 00ec B9       		.byte	-71
+ 266 00ed 02       		.byte	2
+ 267 00ee BE       		.byte	-66
+ 268 00ef 51       		.byte	81
+ 269 00f0 C0       		.byte	-64
+ 270 00f1 51       		.byte	81
+ 271 00f2 C1       		.byte	-63
+ 272 00f3 03       		.byte	3
+ 273 00f4 C5       		.byte	-59
+ 274 00f5 2C       		.byte	44
+ 275 00f6 C6       		.byte	-58
+ 276 00f7 30       		.byte	48
+ 277 00f8 C7       		.byte	-57
+ 278 00f9 4E       		.byte	78
+ 279 00fa C8       		.byte	-56
+ 280 00fb 3B       		.byte	59
+ 281 00fc C9       		.byte	-55
+ 282 00fd FF       		.byte	-1
+ 283 00fe CA       		.byte	-54
+ 284 00ff FF       		.byte	-1
+ 285 0100 CB       		.byte	-53
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 6
+
+
+ 286 0101 FF       		.byte	-1
+ 287 0102 CD       		.byte	-51
+ 288 0103 AF       		.byte	-81
+ 289 0104 CE       		.byte	-50
+ 290 0105 07       		.byte	7
+ 291 0106 CF       		.byte	-49
+ 292 0107 01       		.byte	1
+ 293 0108 D0       		.byte	-48
+ 294 0109 18       		.byte	24
+ 295 010a D4       		.byte	-44
+ 296 010b 0F       		.byte	15
+ 297 010c D8       		.byte	-40
+ 298 010d 04       		.byte	4
+ 299 010e D9       		.byte	-39
+ 300 010f 04       		.byte	4
+ 301 0110 DA       		.byte	-38
+ 302 0111 04       		.byte	4
+ 303 0112 DB       		.byte	-37
+ 304 0113 04       		.byte	4
+ 305 0114 DC       		.byte	-36
+ 306 0115 11       		.byte	17
+ 307 0116 DD       		.byte	-35
+ 308 0117 11       		.byte	17
+ 309 0118 DF       		.byte	-33
+ 310 0119 05       		.byte	5
+ 311 011a E0       		.byte	-32
+ 312 011b 40       		.byte	64
+ 313 011c E2       		.byte	-30
+ 314 011d 80       		.byte	-128
+ 315 011e E4       		.byte	-28
+ 316 011f 40       		.byte	64
+ 317 0120 E5       		.byte	-27
+ 318 0121 40       		.byte	64
+ 319 0122 E6       		.byte	-26
+ 320 0123 80       		.byte	-128
+ 321 0124 E8       		.byte	-24
+ 322 0125 40       		.byte	64
+ 323 0126 EA       		.byte	-22
+ 324 0127 80       		.byte	-128
+ 325 0128 EC       		.byte	-20
+ 326 0129 40       		.byte	64
+ 327 012a ED       		.byte	-19
+ 328 012b 20       		.byte	32
+ 329 012c EE       		.byte	-18
+ 330 012d 80       		.byte	-128
+ 331 012e 00       		.byte	0
+ 332 012f 04       		.byte	4
+ 333 0130 01       		.byte	1
+ 334 0131 60       		.byte	96
+ 335 0132 05       		.byte	5
+ 336 0133 40       		.byte	64
+ 337 0134 07       		.byte	7
+ 338 0135 48       		.byte	72
+ 339 0136 09       		.byte	9
+ 340 0137 08       		.byte	8
+ 341 0138 0A       		.byte	10
+ 342 0139 48       		.byte	72
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 7
+
+
+ 343 013a 0B       		.byte	11
+ 344 013b 02       		.byte	2
+ 345 013c 0F       		.byte	15
+ 346 013d 02       		.byte	2
+ 347 013e 10       		.byte	16
+ 348 013f 02       		.byte	2
+ 349 0140 11       		.byte	17
+ 350 0141 02       		.byte	2
+ 351 0142 16       		.byte	22
+ 352 0143 22       		.byte	34
+ 353 0144 18       		.byte	24
+ 354 0145 80       		.byte	-128
+ 355 0146 19       		.byte	25
+ 356 0147 02       		.byte	2
+ 357 0148 1A       		.byte	26
+ 358 0149 4B       		.byte	75
+ 359 014a 1C       		.byte	28
+ 360 014b 42       		.byte	66
+ 361 014c 1D       		.byte	29
+ 362 014d 80       		.byte	-128
+ 363 014e 1E       		.byte	30
+ 364 014f 28       		.byte	40
+ 365 0150 23       		.byte	35
+ 366 0151 40       		.byte	64
+ 367 0152 25       		.byte	37
+ 368 0153 01       		.byte	1
+ 369 0154 26       		.byte	38
+ 370 0155 02       		.byte	2
+ 371 0156 27       		.byte	39
+ 372 0157 48       		.byte	72
+ 373 0158 28       		.byte	40
+ 374 0159 20       		.byte	32
+ 375 015a 2E       		.byte	46
+ 376 015b 60       		.byte	96
+ 377 015c 35       		.byte	53
+ 378 015d 10       		.byte	16
+ 379 015e 36       		.byte	54
+ 380 015f 02       		.byte	2
+ 381 0160 3D       		.byte	61
+ 382 0161 40       		.byte	64
+ 383 0162 42       		.byte	66
+ 384 0163 01       		.byte	1
+ 385 0164 43       		.byte	67
+ 386 0165 04       		.byte	4
+ 387 0166 45       		.byte	69
+ 388 0167 80       		.byte	-128
+ 389 0168 47       		.byte	71
+ 390 0169 04       		.byte	4
+ 391 016a 48       		.byte	72
+ 392 016b 01       		.byte	1
+ 393 016c 4E       		.byte	78
+ 394 016d 01       		.byte	1
+ 395 016e 4F       		.byte	79
+ 396 016f 06       		.byte	6
+ 397 0170 56       		.byte	86
+ 398 0171 2A       		.byte	42
+ 399 0172 5C       		.byte	92
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 8
+
+
+ 400 0173 40       		.byte	64
+ 401 0174 5D       		.byte	93
+ 402 0175 10       		.byte	16
+ 403 0176 5E       		.byte	94
+ 404 0177 08       		.byte	8
+ 405 0178 5F       		.byte	95
+ 406 0179 02       		.byte	2
+ 407 017a 66       		.byte	102
+ 408 017b 08       		.byte	8
+ 409 017c 67       		.byte	103
+ 410 017d 04       		.byte	4
+ 411 017e 7E       		.byte	126
+ 412 017f 02       		.byte	2
+ 413 0180 85       		.byte	-123
+ 414 0181 10       		.byte	16
+ 415 0182 87       		.byte	-121
+ 416 0183 01       		.byte	1
+ 417 0184 C0       		.byte	-64
+ 418 0185 D7       		.byte	-41
+ 419 0186 C2       		.byte	-62
+ 420 0187 8F       		.byte	-113
+ 421 0188 C4       		.byte	-60
+ 422 0189 A9       		.byte	-87
+ 423 018a CA       		.byte	-54
+ 424 018b 32       		.byte	50
+ 425 018c CC       		.byte	-52
+ 426 018d A0       		.byte	-96
+ 427 018e CE       		.byte	-50
+ 428 018f 10       		.byte	16
+ 429 0190 D0       		.byte	-48
+ 430 0191 5A       		.byte	90
+ 431 0192 D2       		.byte	-46
+ 432 0193 18       		.byte	24
+ 433 0194 D6       		.byte	-42
+ 434 0195 F0       		.byte	-16
+ 435 0196 D8       		.byte	-40
+ 436 0197 60       		.byte	96
+ 437 0198 DE       		.byte	-34
+ 438 0199 10       		.byte	16
+ 439 019a 03       		.byte	3
+ 440 019b 06       		.byte	6
+ 441 019c 06       		.byte	6
+ 442 019d 20       		.byte	32
+ 443 019e 08       		.byte	8
+ 444 019f 0C       		.byte	12
+ 445 01a0 09       		.byte	9
+ 446 01a1 02       		.byte	2
+ 447 01a2 0A       		.byte	10
+ 448 01a3 02       		.byte	2
+ 449 01a4 0E       		.byte	14
+ 450 01a5 40       		.byte	64
+ 451 01a6 10       		.byte	16
+ 452 01a7 0B       		.byte	11
+ 453 01a8 12       		.byte	18
+ 454 01a9 04       		.byte	4
+ 455 01aa 16       		.byte	22
+ 456 01ab 10       		.byte	16
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 9
+
+
+ 457 01ac 17       		.byte	23
+ 458 01ad 01       		.byte	1
+ 459 01ae 18       		.byte	24
+ 460 01af 08       		.byte	8
+ 461 01b0 1A       		.byte	26
+ 462 01b1 01       		.byte	1
+ 463 01b2 1B       		.byte	27
+ 464 01b3 01       		.byte	1
+ 465 01b4 1C       		.byte	28
+ 466 01b5 10       		.byte	16
+ 467 01b6 20       		.byte	32
+ 468 01b7 0C       		.byte	12
+ 469 01b8 21       		.byte	33
+ 470 01b9 01       		.byte	1
+ 471 01ba 22       		.byte	34
+ 472 01bb 01       		.byte	1
+ 473 01bc 24       		.byte	36
+ 474 01bd 10       		.byte	16
+ 475 01be 2A       		.byte	42
+ 476 01bf 0F       		.byte	15
+ 477 01c0 2C       		.byte	44
+ 478 01c1 07       		.byte	7
+ 479 01c2 30       		.byte	48
+ 480 01c3 28       		.byte	40
+ 481 01c4 31       		.byte	49
+ 482 01c5 01       		.byte	1
+ 483 01c6 32       		.byte	50
+ 484 01c7 10       		.byte	16
+ 485 01c8 34       		.byte	52
+ 486 01c9 0F       		.byte	15
+ 487 01ca 35       		.byte	53
+ 488 01cb 04       		.byte	4
+ 489 01cc 36       		.byte	54
+ 490 01cd 40       		.byte	64
+ 491 01ce 37       		.byte	55
+ 492 01cf 02       		.byte	2
+ 493 01d0 3E       		.byte	62
+ 494 01d1 04       		.byte	4
+ 495 01d2 3F       		.byte	63
+ 496 01d3 41       		.byte	65
+ 497 01d4 54       		.byte	84
+ 498 01d5 0F       		.byte	15
+ 499 01d6 56       		.byte	86
+ 500 01d7 04       		.byte	4
+ 501 01d8 58       		.byte	88
+ 502 01d9 04       		.byte	4
+ 503 01da 59       		.byte	89
+ 504 01db 04       		.byte	4
+ 505 01dc 5B       		.byte	91
+ 506 01dd 04       		.byte	4
+ 507 01de 5C       		.byte	92
+ 508 01df 11       		.byte	17
+ 509 01e0 5D       		.byte	93
+ 510 01e1 10       		.byte	16
+ 511 01e2 5F       		.byte	95
+ 512 01e3 01       		.byte	1
+ 513 01e4 86       		.byte	-122
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 10
+
+
+ 514 01e5 01       		.byte	1
+ 515 01e6 8E       		.byte	-114
+ 516 01e7 08       		.byte	8
+ 517 01e8 94       		.byte	-108
+ 518 01e9 02       		.byte	2
+ 519 01ea 95       		.byte	-107
+ 520 01eb 04       		.byte	4
+ 521 01ec 96       		.byte	-106
+ 522 01ed 04       		.byte	4
+ 523 01ee 97       		.byte	-105
+ 524 01ef 02       		.byte	2
+ 525 01f0 98       		.byte	-104
+ 526 01f1 04       		.byte	4
+ 527 01f2 9A       		.byte	-102
+ 528 01f3 02       		.byte	2
+ 529 01f4 9B       		.byte	-101
+ 530 01f5 01       		.byte	1
+ 531 01f6 9C       		.byte	-100
+ 532 01f7 02       		.byte	2
+ 533 01f8 9D       		.byte	-99
+ 534 01f9 02       		.byte	2
+ 535 01fa 9E       		.byte	-98
+ 536 01fb 14       		.byte	20
+ 537 01fc 9F       		.byte	-97
+ 538 01fd 14       		.byte	20
+ 539 01fe A1       		.byte	-95
+ 540 01ff 02       		.byte	2
+ 541 0200 A3       		.byte	-93
+ 542 0201 04       		.byte	4
+ 543 0202 A4       		.byte	-92
+ 544 0203 02       		.byte	2
+ 545 0204 A6       		.byte	-90
+ 546 0205 04       		.byte	4
+ 547 0206 AB       		.byte	-85
+ 548 0207 08       		.byte	8
+ 549 0208 AD       		.byte	-83
+ 550 0209 02       		.byte	2
+ 551 020a AF       		.byte	-81
+ 552 020b 04       		.byte	4
+ 553 020c B0       		.byte	-80
+ 554 020d 08       		.byte	8
+ 555 020e B1       		.byte	-79
+ 556 020f 10       		.byte	16
+ 557 0210 B2       		.byte	-78
+ 558 0211 10       		.byte	16
+ 559 0212 B3       		.byte	-77
+ 560 0213 06       		.byte	6
+ 561 0214 B4       		.byte	-76
+ 562 0215 06       		.byte	6
+ 563 0216 B5       		.byte	-75
+ 564 0217 08       		.byte	8
+ 565 0218 B6       		.byte	-74
+ 566 0219 01       		.byte	1
+ 567 021a B7       		.byte	-73
+ 568 021b 01       		.byte	1
+ 569 021c BA       		.byte	-70
+ 570 021d 20       		.byte	32
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 11
+
+
+ 571 021e BB       		.byte	-69
+ 572 021f 08       		.byte	8
+ 573 0220 D2       		.byte	-46
+ 574 0221 80       		.byte	-128
+ 575 0222 D8       		.byte	-40
+ 576 0223 04       		.byte	4
+ 577 0224 D9       		.byte	-39
+ 578 0225 04       		.byte	4
+ 579 0226 DB       		.byte	-37
+ 580 0227 04       		.byte	4
+ 581 0228 DC       		.byte	-36
+ 582 0229 11       		.byte	17
+ 583 022a DD       		.byte	-35
+ 584 022b 10       		.byte	16
+ 585 022c DF       		.byte	-33
+ 586 022d 01       		.byte	1
+ 587 022e 00       		.byte	0
+ 588 022f 80       		.byte	-128
+ 589 0230 02       		.byte	2
+ 590 0231 10       		.byte	16
+ 591 0232 03       		.byte	3
+ 592 0233 02       		.byte	2
+ 593 0234 05       		.byte	5
+ 594 0235 14       		.byte	20
+ 595 0236 06       		.byte	6
+ 596 0237 02       		.byte	2
+ 597 0238 0A       		.byte	10
+ 598 0239 24       		.byte	36
+ 599 023a 0B       		.byte	11
+ 600 023b 01       		.byte	1
+ 601 023c 0E       		.byte	14
+ 602 023d 66       		.byte	102
+ 603 023e 12       		.byte	18
+ 604 023f 20       		.byte	32
+ 605 0240 17       		.byte	23
+ 606 0241 65       		.byte	101
+ 607 0242 19       		.byte	25
+ 608 0243 21       		.byte	33
+ 609 0244 1A       		.byte	26
+ 610 0245 24       		.byte	36
+ 611 0246 1B       		.byte	27
+ 612 0247 80       		.byte	-128
+ 613 0248 1C       		.byte	28
+ 614 0249 04       		.byte	4
+ 615 024a 1D       		.byte	29
+ 616 024b 50       		.byte	80
+ 617 024c 1E       		.byte	30
+ 618 024d 12       		.byte	18
+ 619 024e 1F       		.byte	31
+ 620 024f 41       		.byte	65
+ 621 0250 20       		.byte	32
+ 622 0251 80       		.byte	-128
+ 623 0252 21       		.byte	33
+ 624 0253 08       		.byte	8
+ 625 0254 22       		.byte	34
+ 626 0255 20       		.byte	32
+ 627 0256 23       		.byte	35
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 12
+
+
+ 628 0257 21       		.byte	33
+ 629 0258 24       		.byte	36
+ 630 0259 40       		.byte	64
+ 631 025a 25       		.byte	37
+ 632 025b 10       		.byte	16
+ 633 025c 27       		.byte	39
+ 634 025d 02       		.byte	2
+ 635 025e 28       		.byte	40
+ 636 025f 08       		.byte	8
+ 637 0260 29       		.byte	41
+ 638 0261 01       		.byte	1
+ 639 0262 2B       		.byte	43
+ 640 0263 02       		.byte	2
+ 641 0264 2F       		.byte	47
+ 642 0265 40       		.byte	64
+ 643 0266 31       		.byte	49
+ 644 0267 08       		.byte	8
+ 645 0268 32       		.byte	50
+ 646 0269 20       		.byte	32
+ 647 026a 33       		.byte	51
+ 648 026b 80       		.byte	-128
+ 649 026c 36       		.byte	54
+ 650 026d 10       		.byte	16
+ 651 026e 37       		.byte	55
+ 652 026f 04       		.byte	4
+ 653 0270 3D       		.byte	61
+ 654 0271 20       		.byte	32
+ 655 0272 3F       		.byte	63
+ 656 0273 02       		.byte	2
+ 657 0274 5C       		.byte	92
+ 658 0275 40       		.byte	64
+ 659 0276 5D       		.byte	93
+ 660 0277 02       		.byte	2
+ 661 0278 5E       		.byte	94
+ 662 0279 10       		.byte	16
+ 663 027a 5F       		.byte	95
+ 664 027b 04       		.byte	4
+ 665 027c 64       		.byte	100
+ 666 027d 40       		.byte	64
+ 667 027e 70       		.byte	112
+ 668 027f 02       		.byte	2
+ 669 0280 88       		.byte	-120
+ 670 0281 40       		.byte	64
+ 671 0282 8A       		.byte	-118
+ 672 0283 02       		.byte	2
+ 673 0284 8B       		.byte	-117
+ 674 0285 04       		.byte	4
+ 675 0286 90       		.byte	-112
+ 676 0287 80       		.byte	-128
+ 677 0288 92       		.byte	-110
+ 678 0289 40       		.byte	64
+ 679 028a 93       		.byte	-109
+ 680 028b 40       		.byte	64
+ 681 028c 94       		.byte	-108
+ 682 028d 04       		.byte	4
+ 683 028e 95       		.byte	-107
+ 684 028f 40       		.byte	64
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 13
+
+
+ 685 0290 97       		.byte	-105
+ 686 0291 02       		.byte	2
+ 687 0292 99       		.byte	-103
+ 688 0293 02       		.byte	2
+ 689 0294 9A       		.byte	-102
+ 690 0295 02       		.byte	2
+ 691 0296 9B       		.byte	-101
+ 692 0297 40       		.byte	64
+ 693 0298 9C       		.byte	-100
+ 694 0299 20       		.byte	32
+ 695 029a 9D       		.byte	-99
+ 696 029b 70       		.byte	112
+ 697 029c 9F       		.byte	-97
+ 698 029d 06       		.byte	6
+ 699 029e A2       		.byte	-94
+ 700 029f 12       		.byte	18
+ 701 02a0 A3       		.byte	-93
+ 702 02a1 01       		.byte	1
+ 703 02a2 A4       		.byte	-92
+ 704 02a3 02       		.byte	2
+ 705 02a4 A5       		.byte	-91
+ 706 02a5 08       		.byte	8
+ 707 02a6 C0       		.byte	-64
+ 708 02a7 E5       		.byte	-27
+ 709 02a8 C2       		.byte	-62
+ 710 02a9 F7       		.byte	-9
+ 711 02aa C4       		.byte	-60
+ 712 02ab F4       		.byte	-12
+ 713 02ac CA       		.byte	-54
+ 714 02ad 8D       		.byte	-115
+ 715 02ae CC       		.byte	-52
+ 716 02af 6E       		.byte	110
+ 717 02b0 CE       		.byte	-50
+ 718 02b1 A0       		.byte	-96
+ 719 02b2 D6       		.byte	-42
+ 720 02b3 F0       		.byte	-16
+ 721 02b4 D8       		.byte	-40
+ 722 02b5 80       		.byte	-128
+ 723 02b6 E2       		.byte	-30
+ 724 02b7 80       		.byte	-128
+ 725 02b8 00       		.byte	0
+ 726 02b9 7F       		.byte	127
+ 727 02ba 01       		.byte	1
+ 728 02bb 96       		.byte	-106
+ 729 02bc 03       		.byte	3
+ 730 02bd 68       		.byte	104
+ 731 02be 04       		.byte	4
+ 732 02bf C5       		.byte	-59
+ 733 02c0 05       		.byte	5
+ 734 02c1 0E       		.byte	14
+ 735 02c2 06       		.byte	6
+ 736 02c3 3A       		.byte	58
+ 737 02c4 07       		.byte	7
+ 738 02c5 F0       		.byte	-16
+ 739 02c6 09       		.byte	9
+ 740 02c7 FE       		.byte	-2
+ 741 02c8 0B       		.byte	11
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 14
+
+
+ 742 02c9 01       		.byte	1
+ 743 02ca 0C       		.byte	12
+ 744 02cb A3       		.byte	-93
+ 745 02cc 0E       		.byte	14
+ 746 02cd 5C       		.byte	92
+ 747 02ce 10       		.byte	16
+ 748 02cf FE       		.byte	-2
+ 749 02d0 12       		.byte	18
+ 750 02d1 01       		.byte	1
+ 751 02d2 14       		.byte	20
+ 752 02d3 96       		.byte	-106
+ 753 02d4 15       		.byte	21
+ 754 02d5 7F       		.byte	127
+ 755 02d6 16       		.byte	22
+ 756 02d7 68       		.byte	104
+ 757 02d8 18       		.byte	24
+ 758 02d9 0E       		.byte	14
+ 759 02da 19       		.byte	25
+ 760 02db C5       		.byte	-59
+ 761 02dc 1A       		.byte	26
+ 762 02dd F0       		.byte	-16
+ 763 02de 1B       		.byte	27
+ 764 02df 3A       		.byte	58
+ 765 02e0 1E       		.byte	30
+ 766 02e1 01       		.byte	1
+ 767 02e2 23       		.byte	35
+ 768 02e3 01       		.byte	1
+ 769 02e4 2D       		.byte	45
+ 770 02e5 A3       		.byte	-93
+ 771 02e6 2F       		.byte	47
+ 772 02e7 5C       		.byte	92
+ 773 02e8 31       		.byte	49
+ 774 02e9 FF       		.byte	-1
+ 775 02ea 32       		.byte	50
+ 776 02eb FF       		.byte	-1
+ 777 02ec 3E       		.byte	62
+ 778 02ed 04       		.byte	4
+ 779 02ee 3F       		.byte	63
+ 780 02ef 01       		.byte	1
+ 781 02f0 58       		.byte	88
+ 782 02f1 04       		.byte	4
+ 783 02f2 59       		.byte	89
+ 784 02f3 04       		.byte	4
+ 785 02f4 5F       		.byte	95
+ 786 02f5 01       		.byte	1
+ 787 02f6 86       		.byte	-122
+ 788 02f7 01       		.byte	1
+ 789 02f8 87       		.byte	-121
+ 790 02f9 04       		.byte	4
+ 791 02fa 88       		.byte	-120
+ 792 02fb 08       		.byte	8
+ 793 02fc 89       		.byte	-119
+ 794 02fd 04       		.byte	4
+ 795 02fe 8E       		.byte	-114
+ 796 02ff 05       		.byte	5
+ 797 0300 8F       		.byte	-113
+ 798 0301 08       		.byte	8
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 15
+
+
+ 799 0302 94       		.byte	-108
+ 800 0303 08       		.byte	8
+ 801 0304 97       		.byte	-105
+ 802 0305 04       		.byte	4
+ 803 0306 99       		.byte	-103
+ 804 0307 02       		.byte	2
+ 805 0308 A2       		.byte	-94
+ 806 0309 02       		.byte	2
+ 807 030a A7       		.byte	-89
+ 808 030b 03       		.byte	3
+ 809 030c AA       		.byte	-86
+ 810 030d 08       		.byte	8
+ 811 030e AB       		.byte	-85
+ 812 030f 08       		.byte	8
+ 813 0310 AE       		.byte	-82
+ 814 0311 04       		.byte	4
+ 815 0312 B0       		.byte	-80
+ 816 0313 02       		.byte	2
+ 817 0314 B1       		.byte	-79
+ 818 0315 08       		.byte	8
+ 819 0316 B2       		.byte	-78
+ 820 0317 08       		.byte	8
+ 821 0318 B3       		.byte	-77
+ 822 0319 01       		.byte	1
+ 823 031a B4       		.byte	-76
+ 824 031b 04       		.byte	4
+ 825 031c B5       		.byte	-75
+ 826 031d 02       		.byte	2
+ 827 031e B6       		.byte	-74
+ 828 031f 01       		.byte	1
+ 829 0320 B7       		.byte	-73
+ 830 0321 04       		.byte	4
+ 831 0322 BE       		.byte	-66
+ 832 0323 14       		.byte	20
+ 833 0324 BF       		.byte	-65
+ 834 0325 40       		.byte	64
+ 835 0326 C0       		.byte	-64
+ 836 0327 40       		.byte	64
+ 837 0328 C1       		.byte	-63
+ 838 0329 01       		.byte	1
+ 839 032a C5       		.byte	-59
+ 840 032b D0       		.byte	-48
+ 841 032c C6       		.byte	-58
+ 842 032d 10       		.byte	16
+ 843 032e C7       		.byte	-57
+ 844 032f 25       		.byte	37
+ 845 0330 C8       		.byte	-56
+ 846 0331 3A       		.byte	58
+ 847 0332 C9       		.byte	-55
+ 848 0333 FF       		.byte	-1
+ 849 0334 CA       		.byte	-54
+ 850 0335 FF       		.byte	-1
+ 851 0336 CB       		.byte	-53
+ 852 0337 FF       		.byte	-1
+ 853 0338 CD       		.byte	-51
+ 854 0339 A0       		.byte	-96
+ 855 033a CF       		.byte	-49
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 16
+
+
+ 856 033b 04       		.byte	4
+ 857 033c D0       		.byte	-48
+ 858 033d 18       		.byte	24
+ 859 033e D2       		.byte	-46
+ 860 033f 80       		.byte	-128
+ 861 0340 D4       		.byte	-44
+ 862 0341 07       		.byte	7
+ 863 0342 D8       		.byte	-40
+ 864 0343 04       		.byte	4
+ 865 0344 D9       		.byte	-39
+ 866 0345 04       		.byte	4
+ 867 0346 DA       		.byte	-38
+ 868 0347 04       		.byte	4
+ 869 0348 DB       		.byte	-37
+ 870 0349 04       		.byte	4
+ 871 034a DF       		.byte	-33
+ 872 034b 01       		.byte	1
+ 873 034c E0       		.byte	-32
+ 874 034d 40       		.byte	64
+ 875 034e E2       		.byte	-30
+ 876 034f C0       		.byte	-64
+ 877 0350 E4       		.byte	-28
+ 878 0351 40       		.byte	64
+ 879 0352 E5       		.byte	-27
+ 880 0353 40       		.byte	64
+ 881 0354 E6       		.byte	-26
+ 882 0355 C0       		.byte	-64
+ 883 0356 E8       		.byte	-24
+ 884 0357 C0       		.byte	-64
+ 885 0358 EA       		.byte	-22
+ 886 0359 C0       		.byte	-64
+ 887 035a EC       		.byte	-20
+ 888 035b C0       		.byte	-64
+ 889 035c EE       		.byte	-18
+ 890 035d C0       		.byte	-64
+ 891 035e 00       		.byte	0
+ 892 035f 04       		.byte	4
+ 893 0360 01       		.byte	1
+ 894 0361 40       		.byte	64
+ 895 0362 03       		.byte	3
+ 896 0363 41       		.byte	65
+ 897 0364 04       		.byte	4
+ 898 0365 40       		.byte	64
+ 899 0366 06       		.byte	6
+ 900 0367 20       		.byte	32
+ 901 0368 07       		.byte	7
+ 902 0369 08       		.byte	8
+ 903 036a 09       		.byte	9
+ 904 036b 08       		.byte	8
+ 905 036c 0A       		.byte	10
+ 906 036d 44       		.byte	68
+ 907 036e 0B       		.byte	11
+ 908 036f 02       		.byte	2
+ 909 0370 0E       		.byte	14
+ 910 0371 10       		.byte	16
+ 911 0372 16       		.byte	22
+ 912 0373 8A       		.byte	-118
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 17
+
+
+ 913 0374 19       		.byte	25
+ 914 0375 04       		.byte	4
+ 915 0376 1C       		.byte	28
+ 916 0377 42       		.byte	66
+ 917 0378 1D       		.byte	29
+ 918 0379 02       		.byte	2
+ 919 037a 1E       		.byte	30
+ 920 037b 28       		.byte	40
+ 921 037c 20       		.byte	32
+ 922 037d 80       		.byte	-128
+ 923 037e 24       		.byte	36
+ 924 037f 08       		.byte	8
+ 925 0380 26       		.byte	38
+ 926 0381 42       		.byte	66
+ 927 0382 27       		.byte	39
+ 928 0383 20       		.byte	32
+ 929 0384 29       		.byte	41
+ 930 0385 81       		.byte	-127
+ 931 0386 2F       		.byte	47
+ 932 0387 28       		.byte	40
+ 933 0388 32       		.byte	50
+ 934 0389 14       		.byte	20
+ 935 038a 37       		.byte	55
+ 936 038b 28       		.byte	40
+ 937 038c 38       		.byte	56
+ 938 038d 02       		.byte	2
+ 939 038e 39       		.byte	57
+ 940 038f 28       		.byte	40
+ 941 0390 3C       		.byte	60
+ 942 0391 40       		.byte	64
+ 943 0392 3D       		.byte	61
+ 944 0393 08       		.byte	8
+ 945 0394 3E       		.byte	62
+ 946 0395 18       		.byte	24
+ 947 0396 45       		.byte	69
+ 948 0397 02       		.byte	2
+ 949 0398 46       		.byte	70
+ 950 0399 02       		.byte	2
+ 951 039a 4D       		.byte	77
+ 952 039b 01       		.byte	1
+ 953 039c 56       		.byte	86
+ 954 039d 22       		.byte	34
+ 955 039e 57       		.byte	87
+ 956 039f 28       		.byte	40
+ 957 03a0 5C       		.byte	92
+ 958 03a1 80       		.byte	-128
+ 959 03a2 5D       		.byte	93
+ 960 03a3 21       		.byte	33
+ 961 03a4 5E       		.byte	94
+ 962 03a5 08       		.byte	8
+ 963 03a6 76       		.byte	118
+ 964 03a7 80       		.byte	-128
+ 965 03a8 82       		.byte	-126
+ 966 03a9 02       		.byte	2
+ 967 03aa 88       		.byte	-120
+ 968 03ab 20       		.byte	32
+ 969 03ac 90       		.byte	-112
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 18
+
+
+ 970 03ad 84       		.byte	-124
+ 971 03ae 92       		.byte	-110
+ 972 03af 44       		.byte	68
+ 973 03b0 93       		.byte	-109
+ 974 03b1 42       		.byte	66
+ 975 03b2 95       		.byte	-107
+ 976 03b3 40       		.byte	64
+ 977 03b4 99       		.byte	-103
+ 978 03b5 10       		.byte	16
+ 979 03b6 9B       		.byte	-101
+ 980 03b7 40       		.byte	64
+ 981 03b8 9C       		.byte	-100
+ 982 03b9 20       		.byte	32
+ 983 03ba 9D       		.byte	-99
+ 984 03bb 04       		.byte	4
+ 985 03bc 9F       		.byte	-97
+ 986 03bd 05       		.byte	5
+ 987 03be A1       		.byte	-95
+ 988 03bf 08       		.byte	8
+ 989 03c0 AC       		.byte	-84
+ 990 03c1 08       		.byte	8
+ 991 03c2 AE       		.byte	-82
+ 992 03c3 10       		.byte	16
+ 993 03c4 C0       		.byte	-64
+ 994 03c5 ED       		.byte	-19
+ 995 03c6 C2       		.byte	-62
+ 996 03c7 2F       		.byte	47
+ 997 03c8 C4       		.byte	-60
+ 998 03c9 D0       		.byte	-48
+ 999 03ca CA       		.byte	-54
+ 1000 03cb 69       		.byte	105
+ 1001 03cc CC       		.byte	-52
+ 1002 03cd 66       		.byte	102
+ 1003 03ce CE       		.byte	-50
+ 1004 03cf 77       		.byte	119
+ 1005 03d0 D0       		.byte	-48
+ 1006 03d1 90       		.byte	-112
+ 1007 03d2 D6       		.byte	-42
+ 1008 03d3 F0       		.byte	-16
+ 1009 03d4 E0       		.byte	-32
+ 1010 03d5 80       		.byte	-128
+ 1011 03d6 00       		.byte	0
+ 1012 03d7 73       		.byte	115
+ 1013 03d8 05       		.byte	5
+ 1014 03d9 01       		.byte	1
+ 1015 03da 07       		.byte	7
+ 1016 03db F2       		.byte	-14
+ 1017 03dc 08       		.byte	8
+ 1018 03dd 9E       		.byte	-98
+ 1019 03de 0A       		.byte	10
+ 1020 03df 60       		.byte	96
+ 1021 03e0 0C       		.byte	12
+ 1022 03e1 FD       		.byte	-3
+ 1023 03e2 0D       		.byte	13
+ 1024 03e3 B7       		.byte	-73
+ 1025 03e4 0E       		.byte	14
+ 1026 03e5 02       		.byte	2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 19
+
+
+ 1027 03e6 0F       		.byte	15
+ 1028 03e7 40       		.byte	64
+ 1029 03e8 11       		.byte	17
+ 1030 03e9 C0       		.byte	-64
+ 1031 03ea 13       		.byte	19
+ 1032 03eb 24       		.byte	36
+ 1033 03ec 14       		.byte	20
+ 1034 03ed 30       		.byte	48
+ 1035 03ee 16       		.byte	22
+ 1036 03ef C9       		.byte	-55
+ 1037 03f0 17       		.byte	23
+ 1038 03f1 07       		.byte	7
+ 1039 03f2 18       		.byte	24
+ 1040 03f3 94       		.byte	-108
+ 1041 03f4 19       		.byte	25
+ 1042 03f5 C1       		.byte	-63
+ 1043 03f6 1A       		.byte	26
+ 1044 03f7 60       		.byte	96
+ 1045 03f8 1B       		.byte	27
+ 1046 03f9 12       		.byte	18
+ 1047 03fa 1D       		.byte	29
+ 1048 03fb 77       		.byte	119
+ 1049 03fc 20       		.byte	32
+ 1050 03fd CF       		.byte	-49
+ 1051 03fe 22       		.byte	34
+ 1052 03ff 30       		.byte	48
+ 1053 0400 23       		.byte	35
+ 1054 0401 08       		.byte	8
+ 1055 0402 26       		.byte	38
+ 1056 0403 0F       		.byte	15
+ 1057 0404 29       		.byte	41
+ 1058 0405 84       		.byte	-124
+ 1059 0406 2B       		.byte	43
+ 1060 0407 10       		.byte	16
+ 1061 0408 35       		.byte	53
+ 1062 0409 0F       		.byte	15
+ 1063 040a 36       		.byte	54
+ 1064 040b FF       		.byte	-1
+ 1065 040c 37       		.byte	55
+ 1066 040d F0       		.byte	-16
+ 1067 040e 3E       		.byte	62
+ 1068 040f 40       		.byte	64
+ 1069 0410 54       		.byte	84
+ 1070 0411 0F       		.byte	15
+ 1071 0412 56       		.byte	86
+ 1072 0413 04       		.byte	4
+ 1073 0414 58       		.byte	88
+ 1074 0415 04       		.byte	4
+ 1075 0416 59       		.byte	89
+ 1076 0417 04       		.byte	4
+ 1077 0418 5B       		.byte	91
+ 1078 0419 04       		.byte	4
+ 1079 041a 5C       		.byte	92
+ 1080 041b 10       		.byte	16
+ 1081 041c 5F       		.byte	95
+ 1082 041d 01       		.byte	1
+ 1083 041e 81       		.byte	-127
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 20
+
+
+ 1084 041f 04       		.byte	4
+ 1085 0420 84       		.byte	-124
+ 1086 0421 02       		.byte	2
+ 1087 0422 87       		.byte	-121
+ 1088 0423 07       		.byte	7
+ 1089 0424 89       		.byte	-119
+ 1090 0425 07       		.byte	7
+ 1091 0426 8A       		.byte	-118
+ 1092 0427 03       		.byte	3
+ 1093 0428 8D       		.byte	-115
+ 1094 0429 20       		.byte	32
+ 1095 042a 8E       		.byte	-114
+ 1096 042b 08       		.byte	8
+ 1097 042c 90       		.byte	-112
+ 1098 042d C4       		.byte	-60
+ 1099 042e 92       		.byte	-110
+ 1100 042f 20       		.byte	32
+ 1101 0430 94       		.byte	-108
+ 1102 0431 04       		.byte	4
+ 1103 0432 95       		.byte	-107
+ 1104 0433 07       		.byte	7
+ 1105 0434 96       		.byte	-106
+ 1106 0435 F0       		.byte	-16
+ 1107 0436 98       		.byte	-104
+ 1108 0437 C4       		.byte	-60
+ 1109 0438 99       		.byte	-103
+ 1110 0439 01       		.byte	1
+ 1111 043a 9A       		.byte	-102
+ 1112 043b 10       		.byte	16
+ 1113 043c 9B       		.byte	-101
+ 1114 043d 02       		.byte	2
+ 1115 043e 9C       		.byte	-100
+ 1116 043f 80       		.byte	-128
+ 1117 0440 9E       		.byte	-98
+ 1118 0441 14       		.byte	20
+ 1119 0442 A3       		.byte	-93
+ 1120 0443 08       		.byte	8
+ 1121 0444 A4       		.byte	-92
+ 1122 0445 B4       		.byte	-76
+ 1123 0446 A6       		.byte	-90
+ 1124 0447 40       		.byte	64
+ 1125 0448 A7       		.byte	-89
+ 1126 0449 30       		.byte	48
+ 1127 044a A8       		.byte	-88
+ 1128 044b 70       		.byte	112
+ 1129 044c A9       		.byte	-87
+ 1130 044d 01       		.byte	1
+ 1131 044e AB       		.byte	-85
+ 1132 044f 02       		.byte	2
+ 1133 0450 AF       		.byte	-81
+ 1134 0451 04       		.byte	4
+ 1135 0452 B0       		.byte	-80
+ 1136 0453 0C       		.byte	12
+ 1137 0454 B1       		.byte	-79
+ 1138 0455 10       		.byte	16
+ 1139 0456 B2       		.byte	-78
+ 1140 0457 01       		.byte	1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 21
+
+
+ 1141 0458 B4       		.byte	-76
+ 1142 0459 02       		.byte	2
+ 1143 045a B5       		.byte	-75
+ 1144 045b 0F       		.byte	15
+ 1145 045c B6       		.byte	-74
+ 1146 045d F0       		.byte	-16
+ 1147 045e B7       		.byte	-73
+ 1148 045f 20       		.byte	32
+ 1149 0460 BF       		.byte	-65
+ 1150 0461 40       		.byte	64
+ 1151 0462 D8       		.byte	-40
+ 1152 0463 04       		.byte	4
+ 1153 0464 D9       		.byte	-39
+ 1154 0465 04       		.byte	4
+ 1155 0466 DF       		.byte	-33
+ 1156 0467 01       		.byte	1
+ 1157 0468 00       		.byte	0
+ 1158 0469 80       		.byte	-128
+ 1159 046a 01       		.byte	1
+ 1160 046b 08       		.byte	8
+ 1161 046c 03       		.byte	3
+ 1162 046d 08       		.byte	8
+ 1163 046e 04       		.byte	4
+ 1164 046f 80       		.byte	-128
+ 1165 0470 05       		.byte	5
+ 1166 0471 10       		.byte	16
+ 1167 0472 07       		.byte	7
+ 1168 0473 40       		.byte	64
+ 1169 0474 08       		.byte	8
+ 1170 0475 11       		.byte	17
+ 1171 0476 0A       		.byte	10
+ 1172 0477 01       		.byte	1
+ 1173 0478 0B       		.byte	11
+ 1174 0479 10       		.byte	16
+ 1175 047a 0C       		.byte	12
+ 1176 047b 08       		.byte	8
+ 1177 047c 0D       		.byte	13
+ 1178 047d 08       		.byte	8
+ 1179 047e 0E       		.byte	14
+ 1180 047f 04       		.byte	4
+ 1181 0480 13       		.byte	19
+ 1182 0481 24       		.byte	36
+ 1183 0482 17       		.byte	23
+ 1184 0483 05       		.byte	5
+ 1185 0484 19       		.byte	25
+ 1186 0485 A9       		.byte	-87
+ 1187 0486 1B       		.byte	27
+ 1188 0487 01       		.byte	1
+ 1189 0488 1F       		.byte	31
+ 1190 0489 40       		.byte	64
+ 1191 048a 20       		.byte	32
+ 1192 048b 44       		.byte	68
+ 1193 048c 23       		.byte	35
+ 1194 048d 0A       		.byte	10
+ 1195 048e 27       		.byte	39
+ 1196 048f 05       		.byte	5
+ 1197 0490 28       		.byte	40
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 22
+
+
+ 1198 0491 01       		.byte	1
+ 1199 0492 29       		.byte	41
+ 1200 0493 86       		.byte	-122
+ 1201 0494 2A       		.byte	42
+ 1202 0495 20       		.byte	32
+ 1203 0496 2C       		.byte	44
+ 1204 0497 08       		.byte	8
+ 1205 0498 2F       		.byte	47
+ 1206 0499 40       		.byte	64
+ 1207 049a 30       		.byte	48
+ 1208 049b 10       		.byte	16
+ 1209 049c 32       		.byte	50
+ 1210 049d 14       		.byte	20
+ 1211 049e 35       		.byte	53
+ 1212 049f 10       		.byte	16
+ 1213 04a0 37       		.byte	55
+ 1214 04a1 45       		.byte	69
+ 1215 04a2 38       		.byte	56
+ 1216 04a3 46       		.byte	70
+ 1217 04a4 39       		.byte	57
+ 1218 04a5 20       		.byte	32
+ 1219 04a6 3E       		.byte	62
+ 1220 04a7 44       		.byte	68
+ 1221 04a8 41       		.byte	65
+ 1222 04a9 04       		.byte	4
+ 1223 04aa 42       		.byte	66
+ 1224 04ab 20       		.byte	32
+ 1225 04ac 5C       		.byte	92
+ 1226 04ad 08       		.byte	8
+ 1227 04ae 5E       		.byte	94
+ 1228 04af A2       		.byte	-94
+ 1229 04b0 64       		.byte	100
+ 1230 04b1 80       		.byte	-128
+ 1231 04b2 90       		.byte	-112
+ 1232 04b3 80       		.byte	-128
+ 1233 04b4 92       		.byte	-110
+ 1234 04b5 44       		.byte	68
+ 1235 04b6 93       		.byte	-109
+ 1236 04b7 40       		.byte	64
+ 1237 04b8 94       		.byte	-108
+ 1238 04b9 02       		.byte	2
+ 1239 04ba 95       		.byte	-107
+ 1240 04bb 28       		.byte	40
+ 1241 04bc 96       		.byte	-106
+ 1242 04bd 38       		.byte	56
+ 1243 04be 99       		.byte	-103
+ 1244 04bf 10       		.byte	16
+ 1245 04c0 9B       		.byte	-101
+ 1246 04c1 40       		.byte	64
+ 1247 04c2 9D       		.byte	-99
+ 1248 04c3 A1       		.byte	-95
+ 1249 04c4 9F       		.byte	-97
+ 1250 04c5 0D       		.byte	13
+ 1251 04c6 A0       		.byte	-96
+ 1252 04c7 40       		.byte	64
+ 1253 04c8 A1       		.byte	-95
+ 1254 04c9 08       		.byte	8
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 23
+
+
+ 1255 04ca A2       		.byte	-94
+ 1256 04cb 50       		.byte	80
+ 1257 04cc A3       		.byte	-93
+ 1258 04cd 08       		.byte	8
+ 1259 04ce A5       		.byte	-91
+ 1260 04cf 04       		.byte	4
+ 1261 04d0 A8       		.byte	-88
+ 1262 04d1 84       		.byte	-124
+ 1263 04d2 AC       		.byte	-84
+ 1264 04d3 01       		.byte	1
+ 1265 04d4 C0       		.byte	-64
+ 1266 04d5 D7       		.byte	-41
+ 1267 04d6 C2       		.byte	-62
+ 1268 04d7 6F       		.byte	111
+ 1269 04d8 C4       		.byte	-60
+ 1270 04d9 36       		.byte	54
+ 1271 04da CA       		.byte	-54
+ 1272 04db AF       		.byte	-81
+ 1273 04dc CC       		.byte	-52
+ 1274 04dd F6       		.byte	-10
+ 1275 04de CE       		.byte	-50
+ 1276 04df 5F       		.byte	95
+ 1277 04e0 D6       		.byte	-42
+ 1278 04e1 F0       		.byte	-16
+ 1279 04e2 D8       		.byte	-40
+ 1280 04e3 80       		.byte	-128
+ 1281 04e4 01       		.byte	1
+ 1282 04e5 10       		.byte	16
+ 1283 04e6 03       		.byte	3
+ 1284 04e7 20       		.byte	32
+ 1285 04e8 05       		.byte	5
+ 1286 04e9 28       		.byte	40
+ 1287 04ea 07       		.byte	7
+ 1288 04eb 11       		.byte	17
+ 1289 04ec 09       		.byte	9
+ 1290 04ed 0B       		.byte	11
+ 1291 04ee 0B       		.byte	11
+ 1292 04ef 04       		.byte	4
+ 1293 04f0 0C       		.byte	12
+ 1294 04f1 04       		.byte	4
+ 1295 04f2 0D       		.byte	13
+ 1296 04f3 0C       		.byte	12
+ 1297 04f4 0E       		.byte	14
+ 1298 04f5 02       		.byte	2
+ 1299 04f6 0F       		.byte	15
+ 1300 04f7 01       		.byte	1
+ 1301 04f8 10       		.byte	16
+ 1302 04f9 02       		.byte	2
+ 1303 04fa 12       		.byte	18
+ 1304 04fb 14       		.byte	20
+ 1305 04fc 14       		.byte	20
+ 1306 04fd 02       		.byte	2
+ 1307 04fe 15       		.byte	21
+ 1308 04ff 07       		.byte	7
+ 1309 0500 16       		.byte	22
+ 1310 0501 04       		.byte	4
+ 1311 0502 18       		.byte	24
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 24
+
+
+ 1312 0503 02       		.byte	2
+ 1313 0504 19       		.byte	25
+ 1314 0505 0C       		.byte	12
+ 1315 0506 1A       		.byte	26
+ 1316 0507 0C       		.byte	12
+ 1317 0508 1B       		.byte	27
+ 1318 0509 02       		.byte	2
+ 1319 050a 1D       		.byte	29
+ 1320 050b 10       		.byte	16
+ 1321 050c 1E       		.byte	30
+ 1322 050d 01       		.byte	1
+ 1323 050e 1F       		.byte	31
+ 1324 050f 60       		.byte	96
+ 1325 0510 21       		.byte	33
+ 1326 0511 10       		.byte	16
+ 1327 0512 23       		.byte	35
+ 1328 0513 A0       		.byte	-96
+ 1329 0514 2F       		.byte	47
+ 1330 0515 0F       		.byte	15
+ 1331 0516 30       		.byte	48
+ 1332 0517 01       		.byte	1
+ 1333 0518 31       		.byte	49
+ 1334 0519 40       		.byte	64
+ 1335 051a 32       		.byte	50
+ 1336 051b 08       		.byte	8
+ 1337 051c 33       		.byte	51
+ 1338 051d 30       		.byte	48
+ 1339 051e 34       		.byte	52
+ 1340 051f 10       		.byte	16
+ 1341 0520 35       		.byte	53
+ 1342 0521 0F       		.byte	15
+ 1343 0522 36       		.byte	54
+ 1344 0523 06       		.byte	6
+ 1345 0524 37       		.byte	55
+ 1346 0525 80       		.byte	-128
+ 1347 0526 3A       		.byte	58
+ 1348 0527 80       		.byte	-128
+ 1349 0528 3B       		.byte	59
+ 1350 0529 08       		.byte	8
+ 1351 052a 58       		.byte	88
+ 1352 052b 04       		.byte	4
+ 1353 052c 59       		.byte	89
+ 1354 052d 04       		.byte	4
+ 1355 052e 5F       		.byte	95
+ 1356 052f 01       		.byte	1
+ 1357 0530 82       		.byte	-126
+ 1358 0531 08       		.byte	8
+ 1359 0532 83       		.byte	-125
+ 1360 0533 0E       		.byte	14
+ 1361 0534 8A       		.byte	-118
+ 1362 0535 04       		.byte	4
+ 1363 0536 8B       		.byte	-117
+ 1364 0537 01       		.byte	1
+ 1365 0538 94       		.byte	-108
+ 1366 0539 01       		.byte	1
+ 1367 053a 9A       		.byte	-102
+ 1368 053b 07       		.byte	7
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 25
+
+
+ 1369 053c 9D       		.byte	-99
+ 1370 053d 08       		.byte	8
+ 1371 053e A7       		.byte	-89
+ 1372 053f 03       		.byte	3
+ 1373 0540 B0       		.byte	-80
+ 1374 0541 01       		.byte	1
+ 1375 0542 B1       		.byte	-79
+ 1376 0543 04       		.byte	4
+ 1377 0544 B2       		.byte	-78
+ 1378 0545 02       		.byte	2
+ 1379 0546 B3       		.byte	-77
+ 1380 0547 02       		.byte	2
+ 1381 0548 B4       		.byte	-76
+ 1382 0549 08       		.byte	8
+ 1383 054a B5       		.byte	-75
+ 1384 054b 01       		.byte	1
+ 1385 054c B6       		.byte	-74
+ 1386 054d 04       		.byte	4
+ 1387 054e B7       		.byte	-73
+ 1388 054f 08       		.byte	8
+ 1389 0550 BF       		.byte	-65
+ 1390 0551 10       		.byte	16
+ 1391 0552 C0       		.byte	-64
+ 1392 0553 20       		.byte	32
+ 1393 0554 C1       		.byte	-63
+ 1394 0555 06       		.byte	6
+ 1395 0556 C5       		.byte	-59
+ 1396 0557 D1       		.byte	-47
+ 1397 0558 C6       		.byte	-58
+ 1398 0559 20       		.byte	32
+ 1399 055a C7       		.byte	-57
+ 1400 055b 50       		.byte	80
+ 1401 055c C8       		.byte	-56
+ 1402 055d 2B       		.byte	43
+ 1403 055e C9       		.byte	-55
+ 1404 055f FF       		.byte	-1
+ 1405 0560 CA       		.byte	-54
+ 1406 0561 FF       		.byte	-1
+ 1407 0562 CB       		.byte	-53
+ 1408 0563 FF       		.byte	-1
+ 1409 0564 CD       		.byte	-51
+ 1410 0565 A0       		.byte	-96
+ 1411 0566 CF       		.byte	-49
+ 1412 0567 04       		.byte	4
+ 1413 0568 D0       		.byte	-48
+ 1414 0569 18       		.byte	24
+ 1415 056a D2       		.byte	-46
+ 1416 056b 80       		.byte	-128
+ 1417 056c D4       		.byte	-44
+ 1418 056d 07       		.byte	7
+ 1419 056e D8       		.byte	-40
+ 1420 056f 04       		.byte	4
+ 1421 0570 D9       		.byte	-39
+ 1422 0571 04       		.byte	4
+ 1423 0572 DA       		.byte	-38
+ 1424 0573 04       		.byte	4
+ 1425 0574 DB       		.byte	-37
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 26
+
+
+ 1426 0575 04       		.byte	4
+ 1427 0576 DC       		.byte	-36
+ 1428 0577 11       		.byte	17
+ 1429 0578 DD       		.byte	-35
+ 1430 0579 11       		.byte	17
+ 1431 057a DF       		.byte	-33
+ 1432 057b 01       		.byte	1
+ 1433 057c E0       		.byte	-32
+ 1434 057d 40       		.byte	64
+ 1435 057e E2       		.byte	-30
+ 1436 057f C0       		.byte	-64
+ 1437 0580 E4       		.byte	-28
+ 1438 0581 40       		.byte	64
+ 1439 0582 E5       		.byte	-27
+ 1440 0583 40       		.byte	64
+ 1441 0584 E6       		.byte	-26
+ 1442 0585 C0       		.byte	-64
+ 1443 0586 E8       		.byte	-24
+ 1444 0587 C0       		.byte	-64
+ 1445 0588 EA       		.byte	-22
+ 1446 0589 C0       		.byte	-64
+ 1447 058a EC       		.byte	-20
+ 1448 058b C0       		.byte	-64
+ 1449 058c EE       		.byte	-18
+ 1450 058d C0       		.byte	-64
+ 1451 058e 01       		.byte	1
+ 1452 058f 80       		.byte	-128
+ 1453 0590 05       		.byte	5
+ 1454 0591 10       		.byte	16
+ 1455 0592 06       		.byte	6
+ 1456 0593 80       		.byte	-128
+ 1457 0594 08       		.byte	8
+ 1458 0595 80       		.byte	-128
+ 1459 0596 0A       		.byte	10
+ 1460 0597 14       		.byte	20
+ 1461 0598 0B       		.byte	11
+ 1462 0599 40       		.byte	64
+ 1463 059a 0E       		.byte	14
+ 1464 059b 20       		.byte	32
+ 1465 059c 0F       		.byte	15
+ 1466 059d 08       		.byte	8
+ 1467 059e 18       		.byte	24
+ 1468 059f 02       		.byte	2
+ 1469 05a0 19       		.byte	25
+ 1470 05a1 81       		.byte	-127
+ 1471 05a2 1A       		.byte	26
+ 1472 05a3 15       		.byte	21
+ 1473 05a4 1D       		.byte	29
+ 1474 05a5 30       		.byte	48
+ 1475 05a6 1E       		.byte	30
+ 1476 05a7 60       		.byte	96
+ 1477 05a8 1F       		.byte	31
+ 1478 05a9 A0       		.byte	-96
+ 1479 05aa 20       		.byte	32
+ 1480 05ab 20       		.byte	32
+ 1481 05ac 21       		.byte	33
+ 1482 05ad 85       		.byte	-123
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 27
+
+
+ 1483 05ae 22       		.byte	34
+ 1484 05af 10       		.byte	16
+ 1485 05b0 23       		.byte	35
+ 1486 05b1 10       		.byte	16
+ 1487 05b2 25       		.byte	37
+ 1488 05b3 08       		.byte	8
+ 1489 05b4 27       		.byte	39
+ 1490 05b5 4A       		.byte	74
+ 1491 05b6 29       		.byte	41
+ 1492 05b7 81       		.byte	-127
+ 1493 05b8 2F       		.byte	47
+ 1494 05b9 20       		.byte	32
+ 1495 05ba 31       		.byte	49
+ 1496 05bb 80       		.byte	-128
+ 1497 05bc 32       		.byte	50
+ 1498 05bd 14       		.byte	20
+ 1499 05be 37       		.byte	55
+ 1500 05bf 40       		.byte	64
+ 1501 05c0 39       		.byte	57
+ 1502 05c1 6A       		.byte	106
+ 1503 05c2 3D       		.byte	61
+ 1504 05c3 02       		.byte	2
+ 1505 05c4 3F       		.byte	63
+ 1506 05c5 20       		.byte	32
+ 1507 05c6 45       		.byte	69
+ 1508 05c7 20       		.byte	32
+ 1509 05c8 4F       		.byte	79
+ 1510 05c9 29       		.byte	41
+ 1511 05ca 55       		.byte	85
+ 1512 05cb 01       		.byte	1
+ 1513 05cc 57       		.byte	87
+ 1514 05cd 10       		.byte	16
+ 1515 05ce 5D       		.byte	93
+ 1516 05cf 20       		.byte	32
+ 1517 05d0 5E       		.byte	94
+ 1518 05d1 40       		.byte	64
+ 1519 05d2 5F       		.byte	95
+ 1520 05d3 09       		.byte	9
+ 1521 05d4 76       		.byte	118
+ 1522 05d5 80       		.byte	-128
+ 1523 05d6 81       		.byte	-127
+ 1524 05d7 20       		.byte	32
+ 1525 05d8 83       		.byte	-125
+ 1526 05d9 02       		.byte	2
+ 1527 05da 87       		.byte	-121
+ 1528 05db 80       		.byte	-128
+ 1529 05dc 8D       		.byte	-115
+ 1530 05dd 08       		.byte	8
+ 1531 05de 91       		.byte	-111
+ 1532 05df 60       		.byte	96
+ 1533 05e0 92       		.byte	-110
+ 1534 05e1 08       		.byte	8
+ 1535 05e2 93       		.byte	-109
+ 1536 05e3 40       		.byte	64
+ 1537 05e4 94       		.byte	-108
+ 1538 05e5 02       		.byte	2
+ 1539 05e6 95       		.byte	-107
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 28
+
+
+ 1540 05e7 08       		.byte	8
+ 1541 05e8 96       		.byte	-106
+ 1542 05e9 21       		.byte	33
+ 1543 05ea 97       		.byte	-105
+ 1544 05eb 10       		.byte	16
+ 1545 05ec 98       		.byte	-104
+ 1546 05ed 80       		.byte	-128
+ 1547 05ee A4       		.byte	-92
+ 1548 05ef 10       		.byte	16
+ 1549 05f0 A8       		.byte	-88
+ 1550 05f1 80       		.byte	-128
+ 1551 05f2 C0       		.byte	-64
+ 1552 05f3 51       		.byte	81
+ 1553 05f4 C2       		.byte	-62
+ 1554 05f5 6F       		.byte	111
+ 1555 05f6 CA       		.byte	-54
+ 1556 05f7 49       		.byte	73
+ 1557 05f8 CC       		.byte	-52
+ 1558 05f9 1E       		.byte	30
+ 1559 05fa CE       		.byte	-50
+ 1560 05fb AF       		.byte	-81
+ 1561 05fc D0       		.byte	-48
+ 1562 05fd 20       		.byte	32
+ 1563 05fe D2       		.byte	-46
+ 1564 05ff 20       		.byte	32
+ 1565 0600 D6       		.byte	-42
+ 1566 0601 F0       		.byte	-16
+ 1567 0602 E6       		.byte	-26
+ 1568 0603 10       		.byte	16
+ 1569 0604 02       		.byte	2
+ 1570 0605 01       		.byte	1
+ 1571 0606 14       		.byte	20
+ 1572 0607 04       		.byte	4
+ 1573 0608 15       		.byte	21
+ 1574 0609 01       		.byte	1
+ 1575 060a 18       		.byte	24
+ 1576 060b 01       		.byte	1
+ 1577 060c 19       		.byte	25
+ 1578 060d 03       		.byte	3
+ 1579 060e 1D       		.byte	29
+ 1580 060f 08       		.byte	8
+ 1581 0610 1E       		.byte	30
+ 1582 0611 03       		.byte	3
+ 1583 0612 21       		.byte	33
+ 1584 0613 03       		.byte	3
+ 1585 0614 22       		.byte	34
+ 1586 0615 0C       		.byte	12
+ 1587 0616 23       		.byte	35
+ 1588 0617 0C       		.byte	12
+ 1589 0618 30       		.byte	48
+ 1590 0619 01       		.byte	1
+ 1591 061a 31       		.byte	49
+ 1592 061b 01       		.byte	1
+ 1593 061c 32       		.byte	50
+ 1594 061d 08       		.byte	8
+ 1595 061e 33       		.byte	51
+ 1596 061f 02       		.byte	2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 29
+
+
+ 1597 0620 34       		.byte	52
+ 1598 0621 02       		.byte	2
+ 1599 0622 35       		.byte	53
+ 1600 0623 08       		.byte	8
+ 1601 0624 36       		.byte	54
+ 1602 0625 04       		.byte	4
+ 1603 0626 37       		.byte	55
+ 1604 0627 04       		.byte	4
+ 1605 0628 39       		.byte	57
+ 1606 0629 0A       		.byte	10
+ 1607 062a 3E       		.byte	62
+ 1608 062b 41       		.byte	65
+ 1609 062c 3F       		.byte	63
+ 1610 062d 11       		.byte	17
+ 1611 062e 40       		.byte	64
+ 1612 062f 41       		.byte	65
+ 1613 0630 41       		.byte	65
+ 1614 0631 03       		.byte	3
+ 1615 0632 49       		.byte	73
+ 1616 0633 FF       		.byte	-1
+ 1617 0634 4A       		.byte	74
+ 1618 0635 FF       		.byte	-1
+ 1619 0636 4B       		.byte	75
+ 1620 0637 FF       		.byte	-1
+ 1621 0638 4D       		.byte	77
+ 1622 0639 A0       		.byte	-96
+ 1623 063a 4F       		.byte	79
+ 1624 063b 01       		.byte	1
+ 1625 063c 50       		.byte	80
+ 1626 063d 18       		.byte	24
+ 1627 063e 52       		.byte	82
+ 1628 063f 80       		.byte	-128
+ 1629 0640 58       		.byte	88
+ 1630 0641 04       		.byte	4
+ 1631 0642 59       		.byte	89
+ 1632 0643 04       		.byte	4
+ 1633 0644 5A       		.byte	90
+ 1634 0645 04       		.byte	4
+ 1635 0646 5B       		.byte	91
+ 1636 0647 04       		.byte	4
+ 1637 0648 5F       		.byte	95
+ 1638 0649 01       		.byte	1
+ 1639 064a 60       		.byte	96
+ 1640 064b 40       		.byte	64
+ 1641 064c 62       		.byte	98
+ 1642 064d 80       		.byte	-128
+ 1643 064e 64       		.byte	100
+ 1644 064f 40       		.byte	64
+ 1645 0650 65       		.byte	101
+ 1646 0651 40       		.byte	64
+ 1647 0652 66       		.byte	102
+ 1648 0653 80       		.byte	-128
+ 1649 0654 68       		.byte	104
+ 1650 0655 40       		.byte	64
+ 1651 0656 6A       		.byte	106
+ 1652 0657 80       		.byte	-128
+ 1653 0658 6C       		.byte	108
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 30
+
+
+ 1654 0659 40       		.byte	64
+ 1655 065a 6D       		.byte	109
+ 1656 065b 20       		.byte	32
+ 1657 065c 6E       		.byte	110
+ 1658 065d 80       		.byte	-128
+ 1659 065e 81       		.byte	-127
+ 1660 065f 28       		.byte	40
+ 1661 0660 83       		.byte	-125
+ 1662 0661 50       		.byte	80
+ 1663 0662 85       		.byte	-123
+ 1664 0663 18       		.byte	24
+ 1665 0664 86       		.byte	-122
+ 1666 0665 0F       		.byte	15
+ 1667 0666 87       		.byte	-121
+ 1668 0667 60       		.byte	96
+ 1669 0668 88       		.byte	-120
+ 1670 0669 94       		.byte	-108
+ 1671 066a 89       		.byte	-119
+ 1672 066b 7D       		.byte	125
+ 1673 066c 8A       		.byte	-118
+ 1674 066d 60       		.byte	96
+ 1675 066e 8C       		.byte	-116
+ 1676 066f CF       		.byte	-49
+ 1677 0670 8E       		.byte	-114
+ 1678 0671 30       		.byte	48
+ 1679 0672 94       		.byte	-108
+ 1680 0673 9E       		.byte	-98
+ 1681 0674 95       		.byte	-107
+ 1682 0675 3B       		.byte	59
+ 1683 0676 96       		.byte	-106
+ 1684 0677 60       		.byte	96
+ 1685 0678 99       		.byte	-103
+ 1686 0679 56       		.byte	86
+ 1687 067a 9B       		.byte	-101
+ 1688 067b 28       		.byte	40
+ 1689 067c 9C       		.byte	-100
+ 1690 067d 30       		.byte	48
+ 1691 067e 9E       		.byte	-98
+ 1692 067f C9       		.byte	-55
+ 1693 0680 A4       		.byte	-92
+ 1694 0681 FD       		.byte	-3
+ 1695 0682 A6       		.byte	-90
+ 1696 0683 02       		.byte	2
+ 1697 0684 A8       		.byte	-88
+ 1698 0685 73       		.byte	115
+ 1699 0686 AD       		.byte	-83
+ 1700 0687 66       		.byte	102
+ 1701 0688 AF       		.byte	-81
+ 1702 0689 18       		.byte	24
+ 1703 068a B0       		.byte	-80
+ 1704 068b FF       		.byte	-1
+ 1705 068c B3       		.byte	-77
+ 1706 068d 07       		.byte	7
+ 1707 068e B5       		.byte	-75
+ 1708 068f 78       		.byte	120
+ 1709 0690 B9       		.byte	-71
+ 1710 0691 08       		.byte	8
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 31
+
+
+ 1711 0692 BE       		.byte	-66
+ 1712 0693 01       		.byte	1
+ 1713 0694 C0       		.byte	-64
+ 1714 0695 41       		.byte	65
+ 1715 0696 C1       		.byte	-63
+ 1716 0697 02       		.byte	2
+ 1717 0698 C5       		.byte	-59
+ 1718 0699 02       		.byte	2
+ 1719 069a C6       		.byte	-58
+ 1720 069b C3       		.byte	-61
+ 1721 069c C7       		.byte	-57
+ 1722 069d 4E       		.byte	78
+ 1723 069e C8       		.byte	-56
+ 1724 069f 3D       		.byte	61
+ 1725 06a0 C9       		.byte	-55
+ 1726 06a1 FF       		.byte	-1
+ 1727 06a2 CA       		.byte	-54
+ 1728 06a3 FF       		.byte	-1
+ 1729 06a4 CB       		.byte	-53
+ 1730 06a5 FF       		.byte	-1
+ 1731 06a6 CD       		.byte	-51
+ 1732 06a7 AF       		.byte	-81
+ 1733 06a8 CE       		.byte	-50
+ 1734 06a9 07       		.byte	7
+ 1735 06aa CF       		.byte	-49
+ 1736 06ab 01       		.byte	1
+ 1737 06ac D0       		.byte	-48
+ 1738 06ad 18       		.byte	24
+ 1739 06ae D4       		.byte	-44
+ 1740 06af 0F       		.byte	15
+ 1741 06b0 D8       		.byte	-40
+ 1742 06b1 04       		.byte	4
+ 1743 06b2 D9       		.byte	-39
+ 1744 06b3 04       		.byte	4
+ 1745 06b4 DA       		.byte	-38
+ 1746 06b5 04       		.byte	4
+ 1747 06b6 DB       		.byte	-37
+ 1748 06b7 04       		.byte	4
+ 1749 06b8 DF       		.byte	-33
+ 1750 06b9 05       		.byte	5
+ 1751 06ba E0       		.byte	-32
+ 1752 06bb 40       		.byte	64
+ 1753 06bc E2       		.byte	-30
+ 1754 06bd 80       		.byte	-128
+ 1755 06be E4       		.byte	-28
+ 1756 06bf 40       		.byte	64
+ 1757 06c0 E5       		.byte	-27
+ 1758 06c1 40       		.byte	64
+ 1759 06c2 E6       		.byte	-26
+ 1760 06c3 80       		.byte	-128
+ 1761 06c4 E8       		.byte	-24
+ 1762 06c5 40       		.byte	64
+ 1763 06c6 EA       		.byte	-22
+ 1764 06c7 80       		.byte	-128
+ 1765 06c8 EC       		.byte	-20
+ 1766 06c9 40       		.byte	64
+ 1767 06ca ED       		.byte	-19
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 32
+
+
+ 1768 06cb 20       		.byte	32
+ 1769 06cc EE       		.byte	-18
+ 1770 06cd 80       		.byte	-128
+ 1771 06ce 00       		.byte	0
+ 1772 06cf 24       		.byte	36
+ 1773 06d0 01       		.byte	1
+ 1774 06d1 C0       		.byte	-64
+ 1775 06d2 06       		.byte	6
+ 1776 06d3 80       		.byte	-128
+ 1777 06d4 0A       		.byte	10
+ 1778 06d5 21       		.byte	33
+ 1779 06d6 0E       		.byte	14
+ 1780 06d7 18       		.byte	24
+ 1781 06d8 0F       		.byte	15
+ 1782 06d9 02       		.byte	2
+ 1783 06da 12       		.byte	18
+ 1784 06db 08       		.byte	8
+ 1785 06dc 13       		.byte	19
+ 1786 06dd 04       		.byte	4
+ 1787 06de 15       		.byte	21
+ 1788 06df 02       		.byte	2
+ 1789 06e0 19       		.byte	25
+ 1790 06e1 02       		.byte	2
+ 1791 06e2 1D       		.byte	29
+ 1792 06e3 42       		.byte	66
+ 1793 06e4 1E       		.byte	30
+ 1794 06e5 18       		.byte	24
+ 1795 06e6 21       		.byte	33
+ 1796 06e7 10       		.byte	16
+ 1797 06e8 22       		.byte	34
+ 1798 06e9 2C       		.byte	44
+ 1799 06ea 23       		.byte	35
+ 1800 06eb 24       		.byte	36
+ 1801 06ec 25       		.byte	37
+ 1802 06ed 04       		.byte	4
+ 1803 06ee 26       		.byte	38
+ 1804 06ef 80       		.byte	-128
+ 1805 06f0 27       		.byte	39
+ 1806 06f1 44       		.byte	68
+ 1807 06f2 29       		.byte	41
+ 1808 06f3 80       		.byte	-128
+ 1809 06f4 2F       		.byte	47
+ 1810 06f5 80       		.byte	-128
+ 1811 06f6 32       		.byte	50
+ 1812 06f7 14       		.byte	20
+ 1813 06f8 34       		.byte	52
+ 1814 06f9 18       		.byte	24
+ 1815 06fa 36       		.byte	54
+ 1816 06fb 98       		.byte	-104
+ 1817 06fc 38       		.byte	56
+ 1818 06fd 02       		.byte	2
+ 1819 06fe 39       		.byte	57
+ 1820 06ff 28       		.byte	40
+ 1821 0700 40       		.byte	64
+ 1822 0701 04       		.byte	4
+ 1823 0702 41       		.byte	65
+ 1824 0703 02       		.byte	2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 33
+
+
+ 1825 0704 43       		.byte	67
+ 1826 0705 40       		.byte	64
+ 1827 0706 45       		.byte	69
+ 1828 0707 02       		.byte	2
+ 1829 0708 47       		.byte	71
+ 1830 0709 48       		.byte	72
+ 1831 070a 49       		.byte	73
+ 1832 070b 04       		.byte	4
+ 1833 070c 4A       		.byte	74
+ 1834 070d 10       		.byte	16
+ 1835 070e 51       		.byte	81
+ 1836 070f 01       		.byte	1
+ 1837 0710 52       		.byte	82
+ 1838 0711 14       		.byte	20
+ 1839 0712 53       		.byte	83
+ 1840 0713 80       		.byte	-128
+ 1841 0714 58       		.byte	88
+ 1842 0715 10       		.byte	16
+ 1843 0716 59       		.byte	89
+ 1844 0717 40       		.byte	64
+ 1845 0718 5B       		.byte	91
+ 1846 0719 06       		.byte	6
+ 1847 071a 62       		.byte	98
+ 1848 071b 14       		.byte	20
+ 1849 071c 76       		.byte	118
+ 1850 071d 80       		.byte	-128
+ 1851 071e 7A       		.byte	122
+ 1852 071f 08       		.byte	8
+ 1853 0720 82       		.byte	-126
+ 1854 0721 21       		.byte	33
+ 1855 0722 90       		.byte	-112
+ 1856 0723 04       		.byte	4
+ 1857 0724 93       		.byte	-109
+ 1858 0725 40       		.byte	64
+ 1859 0726 94       		.byte	-108
+ 1860 0727 02       		.byte	2
+ 1861 0728 95       		.byte	-107
+ 1862 0729 28       		.byte	40
+ 1863 072a 96       		.byte	-106
+ 1864 072b 39       		.byte	57
+ 1865 072c 97       		.byte	-105
+ 1866 072d 14       		.byte	20
+ 1867 072e 99       		.byte	-103
+ 1868 072f 80       		.byte	-128
+ 1869 0730 9B       		.byte	-101
+ 1870 0731 0A       		.byte	10
+ 1871 0732 9C       		.byte	-100
+ 1872 0733 08       		.byte	8
+ 1873 0734 9D       		.byte	-99
+ 1874 0735 06       		.byte	6
+ 1875 0736 9F       		.byte	-97
+ 1876 0737 20       		.byte	32
+ 1877 0738 A3       		.byte	-93
+ 1878 0739 01       		.byte	1
+ 1879 073a A5       		.byte	-91
+ 1880 073b 04       		.byte	4
+ 1881 073c A6       		.byte	-90
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 34
+
+
+ 1882 073d 01       		.byte	1
+ 1883 073e B0       		.byte	-80
+ 1884 073f 80       		.byte	-128
+ 1885 0740 C0       		.byte	-64
+ 1886 0741 17       		.byte	23
+ 1887 0742 C2       		.byte	-62
+ 1888 0743 E5       		.byte	-27
+ 1889 0744 C4       		.byte	-60
+ 1890 0745 16       		.byte	22
+ 1891 0746 CA       		.byte	-54
+ 1892 0747 88       		.byte	-120
+ 1893 0748 CC       		.byte	-52
+ 1894 0749 76       		.byte	118
+ 1895 074a CE       		.byte	-50
+ 1896 074b 07       		.byte	7
+ 1897 074c D0       		.byte	-48
+ 1898 074d DD       		.byte	-35
+ 1899 074e D6       		.byte	-42
+ 1900 074f 0F       		.byte	15
+ 1901 0750 D8       		.byte	-40
+ 1902 0751 06       		.byte	6
+ 1903 0752 DE       		.byte	-34
+ 1904 0753 04       		.byte	4
+ 1905 0754 EA       		.byte	-22
+ 1906 0755 20       		.byte	32
+ 1907 0756 30       		.byte	48
+ 1908 0757 10       		.byte	16
+ 1909 0758 36       		.byte	54
+ 1910 0759 10       		.byte	16
+ 1911 075a CC       		.byte	-52
+ 1912 075b 30       		.byte	48
+ 1913 075c 03       		.byte	3
+ 1914 075d 80       		.byte	-128
+ 1915 075e 07       		.byte	7
+ 1916 075f 20       		.byte	32
+ 1917 0760 8A       		.byte	-118
+ 1918 0761 10       		.byte	16
+ 1919 0762 9C       		.byte	-100
+ 1920 0763 10       		.byte	16
+ 1921 0764 A6       		.byte	-90
+ 1922 0765 10       		.byte	16
+ 1923 0766 C0       		.byte	-64
+ 1924 0767 30       		.byte	48
+ 1925 0768 52       		.byte	82
+ 1926 0769 80       		.byte	-128
+ 1927 076a 56       		.byte	86
+ 1928 076b 80       		.byte	-128
+ 1929 076c 82       		.byte	-126
+ 1930 076d 80       		.byte	-128
+ 1931 076e 89       		.byte	-119
+ 1932 076f 02       		.byte	2
+ 1933 0770 9C       		.byte	-100
+ 1934 0771 10       		.byte	16
+ 1935 0772 AF       		.byte	-81
+ 1936 0773 A0       		.byte	-96
+ 1937 0774 D4       		.byte	-44
+ 1938 0775 60       		.byte	96
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 35
+
+
+ 1939 0776 E2       		.byte	-30
+ 1940 0777 80       		.byte	-128
+ 1941 0778 E8       		.byte	-24
+ 1942 0779 40       		.byte	64
+ 1943 077a EC       		.byte	-20
+ 1944 077b 10       		.byte	16
+ 1945 077c 9C       		.byte	-100
+ 1946 077d 10       		.byte	16
+ 1947 077e 9D       		.byte	-99
+ 1948 077f 02       		.byte	2
+ 1949 0780 AE       		.byte	-82
+ 1950 0781 80       		.byte	-128
+ 1951 0782 EE       		.byte	-18
+ 1952 0783 10       		.byte	16
+ 1953 0784 03       		.byte	3
+ 1954 0785 40       		.byte	64
+ 1955 0786 05       		.byte	5
+ 1956 0787 02       		.byte	2
+ 1957 0788 9D       		.byte	-99
+ 1958 0789 02       		.byte	2
+ 1959 078a B0       		.byte	-80
+ 1960 078b 10       		.byte	16
+ 1961 078c C0       		.byte	-64
+ 1962 078d 30       		.byte	48
+ 1963 078e 63       		.byte	99
+ 1964 078f 02       		.byte	2
+ 1965 0790 66       		.byte	102
+ 1966 0791 04       		.byte	4
+ 1967 0792 87       		.byte	-121
+ 1968 0793 01       		.byte	1
+ 1969 0794 8E       		.byte	-114
+ 1970 0795 04       		.byte	4
+ 1971 0796 AB       		.byte	-85
+ 1972 0797 40       		.byte	64
+ 1973 0798 D6       		.byte	-42
+ 1974 0799 40       		.byte	64
+ 1975 079a D8       		.byte	-40
+ 1976 079b 80       		.byte	-128
+ 1977 079c E6       		.byte	-26
+ 1978 079d 10       		.byte	16
+ 1979 079e EC       		.byte	-20
+ 1980 079f 80       		.byte	-128
+ 1981 07a0 00       		.byte	0
+ 1982 07a1 03       		.byte	3
+ 1983 07a2 08       		.byte	8
+ 1984 07a3 03       		.byte	3
+ 1985 07a4 0A       		.byte	10
+ 1986 07a5 03       		.byte	3
+ 1987 07a6 10       		.byte	16
+ 1988 07a7 03       		.byte	3
+ 1989 07a8 1A       		.byte	26
+ 1990 07a9 03       		.byte	3
+ 1991 07aa 00       		.byte	0
+ 1992 07ab 0F       		.byte	15
+ 1993 07ac 03       		.byte	3
+ 1994 07ad 00       		.byte	0
+ 1995 07ae 00       		.byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 36
+
+
+ 1996 07af 03       		.byte	3
+ 1997 07b0 00       		.byte	0
+ 1998 07b1 00       		.byte	0
+ 1999 07b2 00       		.byte	0
+ 2000 07b3 00       		.byte	0
+ 2001 07b4 00       		.byte	0
+ 2002 07b5 00       		.byte	0
+ 2003 07b6 00       		.byte	0
+ 2004 07b7 00       		.byte	0
+ 2005 07b8 00       		.byte	0
+ 2006 07b9 1C       		.byte	28
+ 2007 07ba 1C       		.byte	28
+ 2008 07bb 00       		.byte	0
+ 2009 07bc 1C       		.byte	28
+ 2010 07bd 00       		.byte	0
+ 2011 07be 00       		.byte	0
+ 2012 07bf 00       		.byte	0
+ 2013 07c0 03       		.byte	3
+ 2014 07c1 00       		.byte	0
+ 2015 07c2 00       		.byte	0
+ 2016 07c3 03       		.byte	3
+ 2017 07c4 00       		.byte	0
+ 2018 07c5 00       		.byte	0
+ 2019 07c6 00       		.byte	0
+ 2020 07c7 00       		.byte	0
+ 2021 07c8 00       		.byte	0
+ 2022 07c9 00       		.byte	0
+ 2023 07ca 00       		.byte	0
+ 2024 07cb 00       		.byte	0
+ 2025 07cc E0       		.byte	-32
+ 2026 07cd 0B       		.byte	11
+ 2027 07ce 0B       		.byte	11
+ 2028 07cf 00       		.byte	0
+ 2029 07d0 00       		.byte	0
+ 2030 07d1 00       		.byte	0
+ 2031 07d2 00       		.byte	0
+ 2032 07d3 00       		.byte	0
+ 2033 07d4 04       		.byte	4
+ 2034 07d5 00       		.byte	0
+ 2035 07d6 E0       		.byte	-32
+ 2036 07d7 06       		.byte	6
+ 2037 07d8 02       		.byte	2
+ 2038 07d9 00       		.byte	0
+ 2039 07da 00       		.byte	0
+ 2040 07db 00       		.byte	0
+ 2041 07dc 00       		.byte	0
+ 2042 07dd 00       		.byte	0
+ 2043 07de 00       		.byte	0
+ 2044 07df 00       		.byte	0
+ 2045 07e0 00       		.byte	0
+ 2046 07e1 38       		.byte	56
+ 2047 07e2 38       		.byte	56
+ 2048 07e3 00       		.byte	0
+ 2049 07e4 38       		.byte	56
+ 2050 07e5 00       		.byte	0
+ 2051 07e6 00       		.byte	0
+ 2052 07e7 00       		.byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 37
+
+
+ 2053              		.section	.cywolatch,"a",%progbits
+ 2054              		.align	2
+ 2055              		.type	cy_meta_wonvl, %object
+ 2056              		.size	cy_meta_wonvl, 4
+ 2057              	cy_meta_wonvl:
+ 2058 0000 BC       		.byte	-68
+ 2059 0001 90       		.byte	-112
+ 2060 0002 AC       		.byte	-84
+ 2061 0003 AF       		.byte	-81
+ 2062              		.section	.cycustnvl,"a",%progbits
+ 2063              		.align	2
+ 2064              		.type	cy_meta_custnvl, %object
+ 2065              		.size	cy_meta_custnvl, 4
+ 2066              	cy_meta_custnvl:
+ 2067 0000 00       		.byte	0
+ 2068 0001 00       		.byte	0
+ 2069 0002 40       		.byte	64
+ 2070 0003 05       		.byte	5
+ 2071              		.section	.cymeta,"a",%progbits
+ 2072              		.align	2
+ 2073              		.type	cy_metadata, %object
+ 2074              		.size	cy_metadata, 12
+ 2075              	cy_metadata:
+ 2076 0000 00       		.byte	0
+ 2077 0001 01       		.byte	1
+ 2078 0002 2E       		.byte	46
+ 2079 0003 16       		.byte	22
+ 2080 0004 10       		.byte	16
+ 2081 0005 69       		.byte	105
+ 2082 0006 00       		.byte	0
+ 2083 0007 01       		.byte	1
+ 2084 0008 00       		.byte	0
+ 2085 0009 00       		.byte	0
+ 2086 000a 00       		.byte	0
+ 2087 000b 00       		.byte	0
+ 2088              		.section	.cyflashprotect,"a",%progbits
+ 2089              		.align	2
+ 2090              		.type	cy_meta_flashprotect, %object
+ 2091              		.size	cy_meta_flashprotect, 256
+ 2092              	cy_meta_flashprotect:
+ 2093 0000 00000000 		.space	256
+ 2093      00000000 
+ 2093      00000000 
+ 2093      00000000 
+ 2093      00000000 
+ 2094              		.text
+ 2095              	.Letext0:
+ 2096              		.file 1 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2097              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2098              		.file 3 "Generated_Source\\PSoC5\\cymetadata.c"
+ 2099              		.section	.debug_info,"",%progbits
+ 2100              	.Ldebug_info0:
+ 2101 0000 35010000 		.4byte	0x135
+ 2102 0004 0400     		.2byte	0x4
+ 2103 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 2104 000a 04       		.byte	0x4
+ 2105 000b 01       		.uleb128 0x1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 38
+
+
+ 2106 000c 24000000 		.4byte	.LASF17
+ 2107 0010 0C       		.byte	0xc
+ 2108 0011 BB010000 		.4byte	.LASF18
+ 2109 0015 06010000 		.4byte	.LASF19
+ 2110 0019 00000000 		.4byte	.Ldebug_line0
+ 2111 001d 02       		.uleb128 0x2
+ 2112 001e 01       		.byte	0x1
+ 2113 001f 06       		.byte	0x6
+ 2114 0020 AF010000 		.4byte	.LASF0
+ 2115 0024 03       		.uleb128 0x3
+ 2116 0025 00000000 		.4byte	.LASF9
+ 2117 0029 01       		.byte	0x1
+ 2118 002a 1D       		.byte	0x1d
+ 2119 002b 2F000000 		.4byte	0x2f
+ 2120 002f 02       		.uleb128 0x2
+ 2121 0030 01       		.byte	0x1
+ 2122 0031 08       		.byte	0x8
+ 2123 0032 16000000 		.4byte	.LASF1
+ 2124 0036 02       		.uleb128 0x2
+ 2125 0037 02       		.byte	0x2
+ 2126 0038 05       		.byte	0x5
+ 2127 0039 9C010000 		.4byte	.LASF2
+ 2128 003d 02       		.uleb128 0x2
+ 2129 003e 02       		.byte	0x2
+ 2130 003f 07       		.byte	0x7
+ 2131 0040 C4000000 		.4byte	.LASF3
+ 2132 0044 02       		.uleb128 0x2
+ 2133 0045 04       		.byte	0x4
+ 2134 0046 05       		.byte	0x5
+ 2135 0047 A6010000 		.4byte	.LASF4
+ 2136 004b 02       		.uleb128 0x2
+ 2137 004c 04       		.byte	0x4
+ 2138 004d 07       		.byte	0x7
+ 2139 004e B2000000 		.4byte	.LASF5
+ 2140 0052 02       		.uleb128 0x2
+ 2141 0053 08       		.byte	0x8
+ 2142 0054 05       		.byte	0x5
+ 2143 0055 8E010000 		.4byte	.LASF6
+ 2144 0059 02       		.uleb128 0x2
+ 2145 005a 08       		.byte	0x8
+ 2146 005b 07       		.byte	0x7
+ 2147 005c 43010000 		.4byte	.LASF7
+ 2148 0060 04       		.uleb128 0x4
+ 2149 0061 04       		.byte	0x4
+ 2150 0062 05       		.byte	0x5
+ 2151 0063 696E7400 		.ascii	"int\000"
+ 2152 0067 02       		.uleb128 0x2
+ 2153 0068 04       		.byte	0x4
+ 2154 0069 07       		.byte	0x7
+ 2155 006a F9000000 		.4byte	.LASF8
+ 2156 006e 03       		.uleb128 0x3
+ 2157 006f 5A010000 		.4byte	.LASF10
+ 2158 0073 02       		.byte	0x2
+ 2159 0074 18       		.byte	0x18
+ 2160 0075 24000000 		.4byte	0x24
+ 2161 0079 05       		.uleb128 0x5
+ 2162 007a 91000000 		.4byte	0x91
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 39
+
+
+ 2163 007e 8A000000 		.4byte	0x8a
+ 2164 0082 06       		.uleb128 0x6
+ 2165 0083 8A000000 		.4byte	0x8a
+ 2166 0087 E707     		.2byte	0x7e7
+ 2167 0089 00       		.byte	0
+ 2168 008a 02       		.uleb128 0x2
+ 2169 008b 04       		.byte	0x4
+ 2170 008c 07       		.byte	0x7
+ 2171 008d 85010000 		.4byte	.LASF11
+ 2172 0091 07       		.uleb128 0x7
+ 2173 0092 6E000000 		.4byte	0x6e
+ 2174 0096 08       		.uleb128 0x8
+ 2175 0097 E7000000 		.4byte	.LASF12
+ 2176 009b 03       		.byte	0x3
+ 2177 009c 1F       		.byte	0x1f
+ 2178 009d A7000000 		.4byte	0xa7
+ 2179 00a1 05       		.uleb128 0x5
+ 2180 00a2 03       		.byte	0x3
+ 2181 00a3 00000000 		.4byte	cy_meta_configecc
+ 2182 00a7 07       		.uleb128 0x7
+ 2183 00a8 79000000 		.4byte	0x79
+ 2184 00ac 05       		.uleb128 0x5
+ 2185 00ad 91000000 		.4byte	0x91
+ 2186 00b1 BC000000 		.4byte	0xbc
+ 2187 00b5 09       		.uleb128 0x9
+ 2188 00b6 8A000000 		.4byte	0x8a
+ 2189 00ba 03       		.byte	0x3
+ 2190 00bb 00       		.byte	0
+ 2191 00bc 0A       		.uleb128 0xa
+ 2192 00bd D7000000 		.4byte	.LASF13
+ 2193 00c1 03       		.byte	0x3
+ 2194 00c2 2901     		.2byte	0x129
+ 2195 00c4 CE000000 		.4byte	0xce
+ 2196 00c8 05       		.uleb128 0x5
+ 2197 00c9 03       		.byte	0x3
+ 2198 00ca 00000000 		.4byte	cy_meta_custnvl
+ 2199 00ce 07       		.uleb128 0x7
+ 2200 00cf AC000000 		.4byte	0xac
+ 2201 00d3 0A       		.uleb128 0xa
+ 2202 00d4 77010000 		.4byte	.LASF14
+ 2203 00d8 03       		.byte	0x3
+ 2204 00d9 3701     		.2byte	0x137
+ 2205 00db E5000000 		.4byte	0xe5
+ 2206 00df 05       		.uleb128 0x5
+ 2207 00e0 03       		.byte	0x3
+ 2208 00e1 00000000 		.4byte	cy_meta_wonvl
+ 2209 00e5 07       		.uleb128 0x7
+ 2210 00e6 AC000000 		.4byte	0xac
+ 2211 00ea 05       		.uleb128 0x5
+ 2212 00eb 91000000 		.4byte	0x91
+ 2213 00ef FA000000 		.4byte	0xfa
+ 2214 00f3 09       		.uleb128 0x9
+ 2215 00f4 8A000000 		.4byte	0x8a
+ 2216 00f8 FF       		.byte	0xff
+ 2217 00f9 00       		.byte	0
+ 2218 00fa 0A       		.uleb128 0xa
+ 2219 00fb 62010000 		.4byte	.LASF15
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 40
+
+
+ 2220 00ff 03       		.byte	0x3
+ 2221 0100 4501     		.2byte	0x145
+ 2222 0102 0C010000 		.4byte	0x10c
+ 2223 0106 05       		.uleb128 0x5
+ 2224 0107 03       		.byte	0x3
+ 2225 0108 00000000 		.4byte	cy_meta_flashprotect
+ 2226 010c 07       		.uleb128 0x7
+ 2227 010d EA000000 		.4byte	0xea
+ 2228 0111 05       		.uleb128 0x5
+ 2229 0112 91000000 		.4byte	0x91
+ 2230 0116 21010000 		.4byte	0x121
+ 2231 011a 09       		.uleb128 0x9
+ 2232 011b 8A000000 		.4byte	0x8a
+ 2233 011f 0B       		.byte	0xb
+ 2234 0120 00       		.byte	0
+ 2235 0121 0A       		.uleb128 0xa
+ 2236 0122 0A000000 		.4byte	.LASF16
+ 2237 0126 03       		.byte	0x3
+ 2238 0127 7201     		.2byte	0x172
+ 2239 0129 33010000 		.4byte	0x133
+ 2240 012d 05       		.uleb128 0x5
+ 2241 012e 03       		.byte	0x3
+ 2242 012f 00000000 		.4byte	cy_metadata
+ 2243 0133 07       		.uleb128 0x7
+ 2244 0134 11010000 		.4byte	0x111
+ 2245 0138 00       		.byte	0
+ 2246              		.section	.debug_abbrev,"",%progbits
+ 2247              	.Ldebug_abbrev0:
+ 2248 0000 01       		.uleb128 0x1
+ 2249 0001 11       		.uleb128 0x11
+ 2250 0002 01       		.byte	0x1
+ 2251 0003 25       		.uleb128 0x25
+ 2252 0004 0E       		.uleb128 0xe
+ 2253 0005 13       		.uleb128 0x13
+ 2254 0006 0B       		.uleb128 0xb
+ 2255 0007 03       		.uleb128 0x3
+ 2256 0008 0E       		.uleb128 0xe
+ 2257 0009 1B       		.uleb128 0x1b
+ 2258 000a 0E       		.uleb128 0xe
+ 2259 000b 10       		.uleb128 0x10
+ 2260 000c 17       		.uleb128 0x17
+ 2261 000d 00       		.byte	0
+ 2262 000e 00       		.byte	0
+ 2263 000f 02       		.uleb128 0x2
+ 2264 0010 24       		.uleb128 0x24
+ 2265 0011 00       		.byte	0
+ 2266 0012 0B       		.uleb128 0xb
+ 2267 0013 0B       		.uleb128 0xb
+ 2268 0014 3E       		.uleb128 0x3e
+ 2269 0015 0B       		.uleb128 0xb
+ 2270 0016 03       		.uleb128 0x3
+ 2271 0017 0E       		.uleb128 0xe
+ 2272 0018 00       		.byte	0
+ 2273 0019 00       		.byte	0
+ 2274 001a 03       		.uleb128 0x3
+ 2275 001b 16       		.uleb128 0x16
+ 2276 001c 00       		.byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 41
+
+
+ 2277 001d 03       		.uleb128 0x3
+ 2278 001e 0E       		.uleb128 0xe
+ 2279 001f 3A       		.uleb128 0x3a
+ 2280 0020 0B       		.uleb128 0xb
+ 2281 0021 3B       		.uleb128 0x3b
+ 2282 0022 0B       		.uleb128 0xb
+ 2283 0023 49       		.uleb128 0x49
+ 2284 0024 13       		.uleb128 0x13
+ 2285 0025 00       		.byte	0
+ 2286 0026 00       		.byte	0
+ 2287 0027 04       		.uleb128 0x4
+ 2288 0028 24       		.uleb128 0x24
+ 2289 0029 00       		.byte	0
+ 2290 002a 0B       		.uleb128 0xb
+ 2291 002b 0B       		.uleb128 0xb
+ 2292 002c 3E       		.uleb128 0x3e
+ 2293 002d 0B       		.uleb128 0xb
+ 2294 002e 03       		.uleb128 0x3
+ 2295 002f 08       		.uleb128 0x8
+ 2296 0030 00       		.byte	0
+ 2297 0031 00       		.byte	0
+ 2298 0032 05       		.uleb128 0x5
+ 2299 0033 01       		.uleb128 0x1
+ 2300 0034 01       		.byte	0x1
+ 2301 0035 49       		.uleb128 0x49
+ 2302 0036 13       		.uleb128 0x13
+ 2303 0037 01       		.uleb128 0x1
+ 2304 0038 13       		.uleb128 0x13
+ 2305 0039 00       		.byte	0
+ 2306 003a 00       		.byte	0
+ 2307 003b 06       		.uleb128 0x6
+ 2308 003c 21       		.uleb128 0x21
+ 2309 003d 00       		.byte	0
+ 2310 003e 49       		.uleb128 0x49
+ 2311 003f 13       		.uleb128 0x13
+ 2312 0040 2F       		.uleb128 0x2f
+ 2313 0041 05       		.uleb128 0x5
+ 2314 0042 00       		.byte	0
+ 2315 0043 00       		.byte	0
+ 2316 0044 07       		.uleb128 0x7
+ 2317 0045 26       		.uleb128 0x26
+ 2318 0046 00       		.byte	0
+ 2319 0047 49       		.uleb128 0x49
+ 2320 0048 13       		.uleb128 0x13
+ 2321 0049 00       		.byte	0
+ 2322 004a 00       		.byte	0
+ 2323 004b 08       		.uleb128 0x8
+ 2324 004c 34       		.uleb128 0x34
+ 2325 004d 00       		.byte	0
+ 2326 004e 03       		.uleb128 0x3
+ 2327 004f 0E       		.uleb128 0xe
+ 2328 0050 3A       		.uleb128 0x3a
+ 2329 0051 0B       		.uleb128 0xb
+ 2330 0052 3B       		.uleb128 0x3b
+ 2331 0053 0B       		.uleb128 0xb
+ 2332 0054 49       		.uleb128 0x49
+ 2333 0055 13       		.uleb128 0x13
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 42
+
+
+ 2334 0056 3F       		.uleb128 0x3f
+ 2335 0057 19       		.uleb128 0x19
+ 2336 0058 02       		.uleb128 0x2
+ 2337 0059 18       		.uleb128 0x18
+ 2338 005a 00       		.byte	0
+ 2339 005b 00       		.byte	0
+ 2340 005c 09       		.uleb128 0x9
+ 2341 005d 21       		.uleb128 0x21
+ 2342 005e 00       		.byte	0
+ 2343 005f 49       		.uleb128 0x49
+ 2344 0060 13       		.uleb128 0x13
+ 2345 0061 2F       		.uleb128 0x2f
+ 2346 0062 0B       		.uleb128 0xb
+ 2347 0063 00       		.byte	0
+ 2348 0064 00       		.byte	0
+ 2349 0065 0A       		.uleb128 0xa
+ 2350 0066 34       		.uleb128 0x34
+ 2351 0067 00       		.byte	0
+ 2352 0068 03       		.uleb128 0x3
+ 2353 0069 0E       		.uleb128 0xe
+ 2354 006a 3A       		.uleb128 0x3a
+ 2355 006b 0B       		.uleb128 0xb
+ 2356 006c 3B       		.uleb128 0x3b
+ 2357 006d 05       		.uleb128 0x5
+ 2358 006e 49       		.uleb128 0x49
+ 2359 006f 13       		.uleb128 0x13
+ 2360 0070 3F       		.uleb128 0x3f
+ 2361 0071 19       		.uleb128 0x19
+ 2362 0072 02       		.uleb128 0x2
+ 2363 0073 18       		.uleb128 0x18
+ 2364 0074 00       		.byte	0
+ 2365 0075 00       		.byte	0
+ 2366 0076 00       		.byte	0
+ 2367              		.section	.debug_aranges,"",%progbits
+ 2368 0000 14000000 		.4byte	0x14
+ 2369 0004 0200     		.2byte	0x2
+ 2370 0006 00000000 		.4byte	.Ldebug_info0
+ 2371 000a 04       		.byte	0x4
+ 2372 000b 00       		.byte	0
+ 2373 000c 0000     		.2byte	0
+ 2374 000e 0000     		.2byte	0
+ 2375 0010 00000000 		.4byte	0
+ 2376 0014 00000000 		.4byte	0
+ 2377              		.section	.debug_line,"",%progbits
+ 2378              	.Ldebug_line0:
+ 2379 0000 3D010000 		.section	.debug_str,"MS",%progbits,1
+ 2379      02003701 
+ 2379      00000201 
+ 2379      FB0E0D00 
+ 2379      01010101 
+ 2380              	.LASF9:
+ 2381 0000 5F5F7569 		.ascii	"__uint8_t\000"
+ 2381      6E74385F 
+ 2381      7400
+ 2382              	.LASF16:
+ 2383 000a 63795F6D 		.ascii	"cy_metadata\000"
+ 2383      65746164 
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 43
+
+
+ 2383      61746100 
+ 2384              	.LASF1:
+ 2385 0016 756E7369 		.ascii	"unsigned char\000"
+ 2385      676E6564 
+ 2385      20636861 
+ 2385      7200
+ 2386              	.LASF17:
+ 2387 0024 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2387      43313120 
+ 2387      352E342E 
+ 2387      31203230 
+ 2387      31363036 
+ 2388 0057 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2388      20726576 
+ 2388      6973696F 
+ 2388      6E203233 
+ 2388      37373135 
+ 2389 008a 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2389      66756E63 
+ 2389      74696F6E 
+ 2389      2D736563 
+ 2389      74696F6E 
+ 2390              	.LASF5:
+ 2391 00b2 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2391      20756E73 
+ 2391      69676E65 
+ 2391      6420696E 
+ 2391      7400
+ 2392              	.LASF3:
+ 2393 00c4 73686F72 		.ascii	"short unsigned int\000"
+ 2393      7420756E 
+ 2393      7369676E 
+ 2393      65642069 
+ 2393      6E7400
+ 2394              	.LASF13:
+ 2395 00d7 63795F6D 		.ascii	"cy_meta_custnvl\000"
+ 2395      6574615F 
+ 2395      63757374 
+ 2395      6E766C00 
+ 2396              	.LASF12:
+ 2397 00e7 63795F6D 		.ascii	"cy_meta_configecc\000"
+ 2397      6574615F 
+ 2397      636F6E66 
+ 2397      69676563 
+ 2397      6300
+ 2398              	.LASF8:
+ 2399 00f9 756E7369 		.ascii	"unsigned int\000"
+ 2399      676E6564 
+ 2399      20696E74 
+ 2399      00
+ 2400              	.LASF19:
+ 2401 0106 433A5C54 		.ascii	"C:\\TEMP\\Compsys-301-Design-Project\\Motor_test\\D"
+ 2401      454D505C 
+ 2401      436F6D70 
+ 2401      7379732D 
+ 2401      3330312D 
+ 2402 0135 65736967 		.ascii	"esign01.cydsn\000"
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\cctxfe9v.s 			page 44
+
+
+ 2402      6E30312E 
+ 2402      63796473 
+ 2402      6E00
+ 2403              	.LASF7:
+ 2404 0143 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2404      206C6F6E 
+ 2404      6720756E 
+ 2404      7369676E 
+ 2404      65642069 
+ 2405              	.LASF10:
+ 2406 015a 75696E74 		.ascii	"uint8_t\000"
+ 2406      385F7400 
+ 2407              	.LASF15:
+ 2408 0162 63795F6D 		.ascii	"cy_meta_flashprotect\000"
+ 2408      6574615F 
+ 2408      666C6173 
+ 2408      6870726F 
+ 2408      74656374 
+ 2409              	.LASF14:
+ 2410 0177 63795F6D 		.ascii	"cy_meta_wonvl\000"
+ 2410      6574615F 
+ 2410      776F6E76 
+ 2410      6C00
+ 2411              	.LASF11:
+ 2412 0185 73697A65 		.ascii	"sizetype\000"
+ 2412      74797065 
+ 2412      00
+ 2413              	.LASF6:
+ 2414 018e 6C6F6E67 		.ascii	"long long int\000"
+ 2414      206C6F6E 
+ 2414      6720696E 
+ 2414      7400
+ 2415              	.LASF2:
+ 2416 019c 73686F72 		.ascii	"short int\000"
+ 2416      7420696E 
+ 2416      7400
+ 2417              	.LASF4:
+ 2418 01a6 6C6F6E67 		.ascii	"long int\000"
+ 2418      20696E74 
+ 2418      00
+ 2419              	.LASF0:
+ 2420 01af 7369676E 		.ascii	"signed char\000"
+ 2420      65642063 
+ 2420      68617200 
+ 2421              	.LASF18:
+ 2422 01bb 47656E65 		.ascii	"Generated_Source\\PSoC5\\cymetadata.c\000"
+ 2422      72617465 
+ 2422      645F536F 
+ 2422      75726365 
+ 2422      5C50536F 
+ 2423              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

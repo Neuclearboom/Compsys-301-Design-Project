@@ -1,0 +1,6 @@
+C:\TEMP\Compsys-301-Design-Project\Motor_test\Design01.cydsn\Design01.cyprj|bb65ffd4-20ba-4925-b94b-251a54d53efb
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|e2ae97a9-2506-4260-9e51-ae66f788ec22
+C:\Users\tlen226\OneDrive - The University of Auckland\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|6c35866e-3110-4d89-9d91-46792bf35d42
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|0b032685-1dac-4f97-9eb4-8a37657ae21f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|47531c36-f3d3-4c97-987c-e067f45b802a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|7709f815-64ce-4487-89a6-a370101e5fc9

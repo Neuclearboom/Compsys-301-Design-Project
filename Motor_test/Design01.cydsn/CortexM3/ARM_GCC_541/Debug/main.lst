@@ -1,0 +1,3159 @@
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.ReadSensor,"ax",%progbits
+  20              		.align	2
+  21              		.thumb
+  22              		.thumb_func
+  23              		.type	ReadSensor, %function
+  24              	ReadSensor:
+  25              	.LFB63:
+  26              		.file 1 "main.c"
+   1:main.c        **** /* ==========================================================================
+   2:main.c        ****  * Line-Following Robot
+   3:main.c        ****  * ==========================================================================
+   4:main.c        ****  * Sensor pins:
+   5:main.c        ****  *   S1 = P1.5    S2 = P1.6    S3 = P1.7
+   6:main.c        ****  *   S4 = P2.5    S5 = P2.6    S6 = P2.7
+   7:main.c        ****  *
+   8:main.c        ****  * Physical role assignment:
+   9:main.c        ****  *   S3 = front-left     S2 = front-right
+  10:main.c        ****  *   S6 = mid            S4 = back
+  11:main.c        ****  *   S5 = left           S1 = right   (swapped - matched turning the correct
+  12:main.c        ****  *                                     direction on the bench)
+  13:main.c        ****  * ========================================================================== */
+  14:main.c        **** 
+  15:main.c        **** #include "project.h"
+  16:main.c        **** #include <stdint.h>
+  17:main.c        **** 
+  18:main.c        **** /* ---------------- Configuration ---------------- */
+  19:main.c        **** 
+  20:main.c        **** #define SENSOR_ACTIVE_LEVEL   0u
+  21:main.c        **** #define PWM_MAX_COMPARE       255u
+  22:main.c        **** #define SPEED_BASE            30u
+  23:main.c        **** #define SPEED_TURN            60u
+  24:main.c        **** #define SPEED_TURN_AROUND     40u         /* spin speed for the dead-end 180 only - the normal left
+  25:main.c        ****                                             * turns keep using SPEED_TURN */
+  26:main.c        **** 
+  27:main.c        **** #define LINE_LOST_THRESHOLD   20u
+  28:main.c        **** #define TURN_TIMEOUT          60u
+  29:main.c        **** #define TURN_COOLDOWN         30u
+  30:main.c        **** #define POST_TURN_COOLDOWN    20u
+  31:main.c        **** 
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 2
+
+
+  32:main.c        **** #define DEAD_END_CONFIRM_ITERATIONS  3u   /* back-only must hold this many ticks in a row before th
+  33:main.c        **** #define U_TURN_TIMEOUT        120u        /* safety cap for the 180 - roughly 2x TURN_TIMEOUT since
+  34:main.c        **** 
+  35:main.c        **** #define TURN_BACKUP_BRAKE_MS      50u
+  36:main.c        **** #define TURN_BACKUP_ITERATIONS    15u
+  37:main.c        **** #define POST_TURN_ADJUST_ITERATIONS  6u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below
+  38:main.c        **** 
+  39:main.c        **** #define DRIFT_CORRECTION_OFFSET   5u  /* how much slower the inside wheel runs during a drift-corre
+  40:main.c        ****                                         * nudge (straight-line AND post-turn adjust). Small on purp
+  41:main.c        ****                                         * this used to be a 33% cut (SPEED_BASE / 1.5), which was s
+  42:main.c        ****                                         * enough to overshoot past center and oscillate. Bump it up
+  43:main.c        ****                                         * little at a time if corrections now feel too weak/slow. *
+  44:main.c        **** 
+  45:main.c        **** /* ---------------- Sensor reading ---------------- */
+  46:main.c        **** 
+  47:main.c        **** typedef struct {
+  48:main.c        ****     uint8_t frontLeft;
+  49:main.c        ****     uint8_t frontRight;
+  50:main.c        ****     uint8_t mid;
+  51:main.c        ****     uint8_t back;
+  52:main.c        ****     uint8_t left;
+  53:main.c        ****     uint8_t right;
+  54:main.c        **** } SensorState;
+  55:main.c        **** 
+  56:main.c        **** static uint8_t ReadSensor(uint8_t rawPinValue)
+  57:main.c        **** {
+  27              		.loc 1 57 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              	.LVL0:
+  58:main.c        ****     return (rawPinValue == SENSOR_ACTIVE_LEVEL) ? 1u : 0u;
+  33              		.loc 1 58 0
+  34 0000 08B9     		cbnz	r0, .L3
+  35 0002 0120     		movs	r0, #1
+  36              	.LVL1:
+  37 0004 7047     		bx	lr
+  38              	.LVL2:
+  39              	.L3:
+  40 0006 0020     		movs	r0, #0
+  41              	.LVL3:
+  59:main.c        **** }
+  42              		.loc 1 59 0
+  43 0008 7047     		bx	lr
+  44              		.cfi_endproc
+  45              	.LFE63:
+  46              		.size	ReadSensor, .-ReadSensor
+  47 000a 00BF     		.section	.text.Motor_Left_SetSpeed,"ax",%progbits
+  48              		.align	2
+  49              		.thumb
+  50              		.thumb_func
+  51              		.type	Motor_Left_SetSpeed, %function
+  52              	Motor_Left_SetSpeed:
+  53              	.LFB65:
+  60:main.c        **** 
+  61:main.c        **** static void Sensors_Read(SensorState *s)
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 3
+
+
+  62:main.c        **** {
+  63:main.c        ****     s->frontLeft  = ReadSensor(S3_Read());
+  64:main.c        ****     s->frontRight = ReadSensor(S2_Read());
+  65:main.c        ****     s->mid        = ReadSensor(S6_Read());
+  66:main.c        ****     s->back       = ReadSensor(S4_Read());
+  67:main.c        ****     s->left       = ReadSensor(S5_Read());
+  68:main.c        ****     s->right      = ReadSensor(S1_Read());
+  69:main.c        **** }
+  70:main.c        **** 
+  71:main.c        **** /* ---------------- Motor drive ---------------- */
+  72:main.c        **** 
+  73:main.c        **** /* positive = forward, negative = reverse */
+  74:main.c        **** static void Motor_Left_SetSpeed(int16_t speed)
+  75:main.c        **** {
+  54              		.loc 1 75 0
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 0, uses_anonymous_args = 0
+  58              	.LVL4:
+  59 0000 10B5     		push	{r4, lr}
+  60              		.cfi_def_cfa_offset 8
+  61              		.cfi_offset 4, -8
+  62              		.cfi_offset 14, -4
+  63 0002 0446     		mov	r4, r0
+  76:main.c        ****     if (speed > (int16_t)PWM_MAX_COMPARE)  { speed = (int16_t)PWM_MAX_COMPARE; }
+  64              		.loc 1 76 0
+  65 0004 FF28     		cmp	r0, #255
+  66 0006 00DD     		ble	.L5
+  67 0008 FF24     		movs	r4, #255
+  68              	.L5:
+  69              	.LVL5:
+  77:main.c        ****     if (speed < -(int16_t)PWM_MAX_COMPARE) { speed = -(int16_t)PWM_MAX_COMPARE; }
+  70              		.loc 1 77 0
+  71 000a 14F1FF0F 		cmn	r4, #255
+  72 000e 01DA     		bge	.L6
+  73 0010 6FF0FE04 		mvn	r4, #254
+  74              	.LVL6:
+  75              	.L6:
+  78:main.c        **** 
+  79:main.c        ****     if (speed >= 0) {
+  76              		.loc 1 79 0
+  77 0014 002C     		cmp	r4, #0
+  78 0016 06DB     		blt	.L7
+  80:main.c        ****         PWM_1_WriteCompare1((uint8_t)speed);
+  79              		.loc 1 80 0
+  80 0018 E0B2     		uxtb	r0, r4
+  81 001a FFF7FEFF 		bl	PWM_1_WriteCompare1
+  82              	.LVL7:
+  81:main.c        ****         PWM_1_WriteCompare2(0u);
+  83              		.loc 1 81 0
+  84 001e 0020     		movs	r0, #0
+  85 0020 FFF7FEFF 		bl	PWM_1_WriteCompare2
+  86              	.LVL8:
+  87 0024 10BD     		pop	{r4, pc}
+  88              	.LVL9:
+  89              	.L7:
+  82:main.c        ****     } else {
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 4
+
+
+  83:main.c        ****         PWM_1_WriteCompare1(0u);
+  90              		.loc 1 83 0
+  91 0026 0020     		movs	r0, #0
+  92 0028 FFF7FEFF 		bl	PWM_1_WriteCompare1
+  93              	.LVL10:
+  84:main.c        ****         PWM_1_WriteCompare2((uint8_t)(-speed));
+  94              		.loc 1 84 0
+  95 002c 6042     		negs	r0, r4
+  96 002e C0B2     		uxtb	r0, r0
+  97 0030 FFF7FEFF 		bl	PWM_1_WriteCompare2
+  98              	.LVL11:
+  99 0034 10BD     		pop	{r4, pc}
+ 100              		.cfi_endproc
+ 101              	.LFE65:
+ 102              		.size	Motor_Left_SetSpeed, .-Motor_Left_SetSpeed
+ 103 0036 00BF     		.section	.text.Motor_Right_SetSpeed,"ax",%progbits
+ 104              		.align	2
+ 105              		.thumb
+ 106              		.thumb_func
+ 107              		.type	Motor_Right_SetSpeed, %function
+ 108              	Motor_Right_SetSpeed:
+ 109              	.LFB66:
+  85:main.c        ****     }
+  86:main.c        **** }
+  87:main.c        **** 
+  88:main.c        **** static void Motor_Right_SetSpeed(int16_t speed)
+  89:main.c        **** {
+ 110              		.loc 1 89 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 0
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114              	.LVL12:
+ 115 0000 10B5     		push	{r4, lr}
+ 116              		.cfi_def_cfa_offset 8
+ 117              		.cfi_offset 4, -8
+ 118              		.cfi_offset 14, -4
+ 119 0002 0446     		mov	r4, r0
+  90:main.c        ****     if (speed > (int16_t)PWM_MAX_COMPARE)  { speed = (int16_t)PWM_MAX_COMPARE; }
+ 120              		.loc 1 90 0
+ 121 0004 FF28     		cmp	r0, #255
+ 122 0006 00DD     		ble	.L13
+ 123 0008 FF24     		movs	r4, #255
+ 124              	.L13:
+ 125              	.LVL13:
+  91:main.c        ****     if (speed < -(int16_t)PWM_MAX_COMPARE) { speed = -(int16_t)PWM_MAX_COMPARE; }
+ 126              		.loc 1 91 0
+ 127 000a 14F1FF0F 		cmn	r4, #255
+ 128 000e 01DA     		bge	.L14
+ 129 0010 6FF0FE04 		mvn	r4, #254
+ 130              	.LVL14:
+ 131              	.L14:
+  92:main.c        **** 
+  93:main.c        ****     if (speed >= 0) {
+ 132              		.loc 1 93 0
+ 133 0014 002C     		cmp	r4, #0
+ 134 0016 06DB     		blt	.L15
+  94:main.c        ****         PWM_2_WriteCompare1((uint8_t)speed);
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 5
+
+
+ 135              		.loc 1 94 0
+ 136 0018 E0B2     		uxtb	r0, r4
+ 137 001a FFF7FEFF 		bl	PWM_2_WriteCompare1
+ 138              	.LVL15:
+  95:main.c        ****         PWM_2_WriteCompare2(0u);
+ 139              		.loc 1 95 0
+ 140 001e 0020     		movs	r0, #0
+ 141 0020 FFF7FEFF 		bl	PWM_2_WriteCompare2
+ 142              	.LVL16:
+ 143 0024 10BD     		pop	{r4, pc}
+ 144              	.LVL17:
+ 145              	.L15:
+  96:main.c        ****     } else {
+  97:main.c        ****         PWM_2_WriteCompare1(0u);
+ 146              		.loc 1 97 0
+ 147 0026 0020     		movs	r0, #0
+ 148 0028 FFF7FEFF 		bl	PWM_2_WriteCompare1
+ 149              	.LVL18:
+  98:main.c        ****         PWM_2_WriteCompare2((uint8_t)(-speed));
+ 150              		.loc 1 98 0
+ 151 002c 6042     		negs	r0, r4
+ 152 002e C0B2     		uxtb	r0, r0
+ 153 0030 FFF7FEFF 		bl	PWM_2_WriteCompare2
+ 154              	.LVL19:
+ 155 0034 10BD     		pop	{r4, pc}
+ 156              		.cfi_endproc
+ 157              	.LFE66:
+ 158              		.size	Motor_Right_SetSpeed, .-Motor_Right_SetSpeed
+ 159 0036 00BF     		.section	.text.Motor_SetSpeed,"ax",%progbits
+ 160              		.align	2
+ 161              		.thumb
+ 162              		.thumb_func
+ 163              		.type	Motor_SetSpeed, %function
+ 164              	Motor_SetSpeed:
+ 165              	.LFB67:
+  99:main.c        ****     }
+ 100:main.c        **** }
+ 101:main.c        **** 
+ 102:main.c        **** static void Motor_SetSpeed(int16_t leftSpeed, int16_t rightSpeed)
+ 103:main.c        **** {
+ 166              		.loc 1 103 0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170              	.LVL20:
+ 171 0000 10B5     		push	{r4, lr}
+ 172              		.cfi_def_cfa_offset 8
+ 173              		.cfi_offset 4, -8
+ 174              		.cfi_offset 14, -4
+ 175 0002 0C46     		mov	r4, r1
+ 104:main.c        ****     Motor_Left_SetSpeed(leftSpeed);
+ 176              		.loc 1 104 0
+ 177 0004 FFF7FEFF 		bl	Motor_Left_SetSpeed
+ 178              	.LVL21:
+ 105:main.c        ****     Motor_Right_SetSpeed(rightSpeed);
+ 179              		.loc 1 105 0
+ 180 0008 2046     		mov	r0, r4
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 6
+
+
+ 181 000a FFF7FEFF 		bl	Motor_Right_SetSpeed
+ 182              	.LVL22:
+ 183 000e 10BD     		pop	{r4, pc}
+ 184              		.cfi_endproc
+ 185              	.LFE67:
+ 186              		.size	Motor_SetSpeed, .-Motor_SetSpeed
+ 187              		.section	.text.Motor_Stop,"ax",%progbits
+ 188              		.align	2
+ 189              		.thumb
+ 190              		.thumb_func
+ 191              		.type	Motor_Stop, %function
+ 192              	Motor_Stop:
+ 193              	.LFB68:
+ 106:main.c        **** }
+ 107:main.c        **** 
+ 108:main.c        **** static void Motor_Stop(void)
+ 109:main.c        **** {
+ 194              		.loc 1 109 0
+ 195              		.cfi_startproc
+ 196              		@ args = 0, pretend = 0, frame = 0
+ 197              		@ frame_needed = 0, uses_anonymous_args = 0
+ 198 0000 08B5     		push	{r3, lr}
+ 199              		.cfi_def_cfa_offset 8
+ 200              		.cfi_offset 3, -8
+ 201              		.cfi_offset 14, -4
+ 110:main.c        ****     Motor_SetSpeed(0, 0);
+ 202              		.loc 1 110 0
+ 203 0002 0021     		movs	r1, #0
+ 204 0004 0846     		mov	r0, r1
+ 205 0006 FFF7FEFF 		bl	Motor_SetSpeed
+ 206              	.LVL23:
+ 207 000a 08BD     		pop	{r3, pc}
+ 208              		.cfi_endproc
+ 209              	.LFE68:
+ 210              		.size	Motor_Stop, .-Motor_Stop
+ 211              		.section	.text.RunLineFollower,"ax",%progbits
+ 212              		.align	2
+ 213              		.thumb
+ 214              		.thumb_func
+ 215              		.type	RunLineFollower, %function
+ 216              	RunLineFollower:
+ 217              	.LFB69:
+ 111:main.c        **** }
+ 112:main.c        **** 
+ 113:main.c        **** /* ---------------- Line-following state machine ---------------- */
+ 114:main.c        **** 
+ 115:main.c        **** typedef enum {
+ 116:main.c        ****     STATE_DRIVE_STRAIGHT,
+ 117:main.c        ****     STATE_TURN_BACKUP,   /* brief brake + reverse, entered right before a turn */
+ 118:main.c        ****     STATE_TURN_LEFT,
+ 119:main.c        ****     STATE_TURN_RIGHT,
+ 120:main.c        ****     STATE_ADJUST_LEFT,   /* brief re-centering nudge after STATE_TURN_LEFT's sensor trigger */
+ 121:main.c        ****     STATE_ADJUST_RIGHT,  /* same, mirrored, after STATE_TURN_RIGHT's sensor trigger */
+ 122:main.c        ****     STATE_TURN_AROUND,   /* dead-end 180 - entered when the line is seen only on the back sensor */
+ 123:main.c        ****     STATE_LINE_LOST
+ 124:main.c        **** } RobotState;
+ 125:main.c        **** 
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 7
+
+
+ 126:main.c        **** static RobotState state             = STATE_DRIVE_STRAIGHT;
+ 127:main.c        **** static RobotState pendingTurnState  = STATE_DRIVE_STRAIGHT;  /* which turn to enter once backup fin
+ 128:main.c        **** static uint16_t   lineLostCounter   = 0;
+ 129:main.c        **** static uint16_t   turnCounter       = 0;
+ 130:main.c        **** static uint16_t   backupCounter     = 0;
+ 131:main.c        **** static uint16_t   adjustCounter     = 0;
+ 132:main.c        **** static uint16_t   suppressSideCounter = 0;  /* set on a timed-out turn, forces a clean straight per
+ 133:main.c        **** static uint16_t   deadEndCounter    = 0;    /* consecutive ticks where ONLY the back sensor sees th
+ 134:main.c        **** 
+ 135:main.c        **** static void RunLineFollower(const SensorState *s)
+ 136:main.c        **** {
+ 218              		.loc 1 136 0
+ 219              		.cfi_startproc
+ 220              		@ args = 0, pretend = 0, frame = 0
+ 221              		@ frame_needed = 0, uses_anonymous_args = 0
+ 222              	.LVL24:
+ 223 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 224              		.cfi_def_cfa_offset 24
+ 225              		.cfi_offset 3, -24
+ 226              		.cfi_offset 4, -20
+ 227              		.cfi_offset 5, -16
+ 228              		.cfi_offset 6, -12
+ 229              		.cfi_offset 7, -8
+ 230              		.cfi_offset 14, -4
+ 231 0002 0546     		mov	r5, r0
+ 137:main.c        ****     uint8_t anyOnLine = s->left | s->frontLeft | s->mid | s->frontRight | s->right | s->back;
+ 232              		.loc 1 137 0
+ 233 0004 0179     		ldrb	r1, [r0, #4]	@ zero_extendqisi2
+ 234 0006 0078     		ldrb	r0, [r0]	@ zero_extendqisi2
+ 235              	.LVL25:
+ 236 0008 95F802E0 		ldrb	lr, [r5, #2]	@ zero_extendqisi2
+ 237 000c 6E78     		ldrb	r6, [r5, #1]	@ zero_extendqisi2
+ 238 000e 6F79     		ldrb	r7, [r5, #5]	@ zero_extendqisi2
+ 239 0010 EA78     		ldrb	r2, [r5, #3]	@ zero_extendqisi2
+ 240 0012 41EA0003 		orr	r3, r1, r0
+ 241 0016 4EEA0303 		orr	r3, lr, r3
+ 242 001a 3343     		orrs	r3, r3, r6
+ 243 001c 3B43     		orrs	r3, r3, r7
+ 244 001e 42EA0304 		orr	r4, r2, r3
+ 245              	.LVL26:
+ 138:main.c        ****     uint8_t onlyBack  = s->back && !s->left && !s->frontLeft && !s->mid && !s->frontRight && !s->ri
+ 246              		.loc 1 138 0
+ 247 0022 42B1     		cbz	r2, .L53
+ 248              		.loc 1 138 0 is_stmt 0 discriminator 1
+ 249 0024 49B9     		cbnz	r1, .L54
+ 250              		.loc 1 138 0 discriminator 3
+ 251 0026 50B9     		cbnz	r0, .L55
+ 252              		.loc 1 138 0 discriminator 5
+ 253 0028 BEF1000F 		cmp	lr, #0
+ 254 002c 09D1     		bne	.L56
+ 255              		.loc 1 138 0 discriminator 7
+ 256 002e 56B9     		cbnz	r6, .L57
+ 257              		.loc 1 138 0 discriminator 9
+ 258 0030 5FB1     		cbz	r7, .L58
+ 259              		.loc 1 138 0
+ 260 0032 0023     		movs	r3, #0
+ 261 0034 0AE0     		b	.L25
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 8
+
+
+ 262              	.L53:
+ 263 0036 0023     		movs	r3, #0
+ 264 0038 08E0     		b	.L25
+ 265              	.L54:
+ 266 003a 0023     		movs	r3, #0
+ 267 003c 06E0     		b	.L25
+ 268              	.L55:
+ 269 003e 0023     		movs	r3, #0
+ 270 0040 04E0     		b	.L25
+ 271              	.L56:
+ 272 0042 0023     		movs	r3, #0
+ 273 0044 02E0     		b	.L25
+ 274              	.L57:
+ 275 0046 0023     		movs	r3, #0
+ 276 0048 00E0     		b	.L25
+ 277              	.L58:
+ 278 004a 0123     		movs	r3, #1
+ 279              	.L25:
+ 280              	.LVL27:
+ 139:main.c        **** 
+ 140:main.c        ****     /* dead-end detector: counts consecutive ticks of "back sensor only" while driving straight */
+ 141:main.c        ****     deadEndCounter = (onlyBack && state == STATE_DRIVE_STRAIGHT) ? (deadEndCounter + 1u) : 0u;
+ 281              		.loc 1 141 0 is_stmt 1 discriminator 14
+ 282 004c 13F0FF0F 		tst	r3, #255
+ 283 0050 07D0     		beq	.L59
+ 284              		.loc 1 141 0 is_stmt 0 discriminator 1
+ 285 0052 904B     		ldr	r3, .L62
+ 286              	.LVL28:
+ 287 0054 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 288 0056 33B9     		cbnz	r3, .L60
+ 289              		.loc 1 141 0 discriminator 3
+ 290 0058 8E4B     		ldr	r3, .L62
+ 291 005a 5A88     		ldrh	r2, [r3, #2]
+ 292 005c 0132     		adds	r2, r2, #1
+ 293 005e 92B2     		uxth	r2, r2
+ 294 0060 02E0     		b	.L26
+ 295              	.LVL29:
+ 296              	.L59:
+ 297              		.loc 1 141 0
+ 298 0062 0022     		movs	r2, #0
+ 299 0064 00E0     		b	.L26
+ 300              	.LVL30:
+ 301              	.L60:
+ 302 0066 0022     		movs	r2, #0
+ 303              	.L26:
+ 304              		.loc 1 141 0 discriminator 6
+ 305 0068 8A4B     		ldr	r3, .L62
+ 306 006a 5A80     		strh	r2, [r3, #2]	@ movhi
+ 142:main.c        **** 
+ 143:main.c        ****     if (state != STATE_TURN_LEFT && state != STATE_TURN_RIGHT && state != STATE_TURN_BACKUP
+ 144:main.c        ****         && state != STATE_ADJUST_LEFT && state != STATE_ADJUST_RIGHT && state != STATE_TURN_AROUND)
+ 307              		.loc 1 144 0 is_stmt 1 discriminator 6
+ 308 006c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 309 006e 013B     		subs	r3, r3, #1
+ 310 0070 DBB2     		uxtb	r3, r3
+ 143:main.c        ****         && state != STATE_ADJUST_LEFT && state != STATE_ADJUST_RIGHT && state != STATE_TURN_AROUND)
+ 311              		.loc 1 143 0 discriminator 6
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 9
+
+
+ 312 0072 052B     		cmp	r3, #5
+ 313 0074 16D9     		bls	.L27
+ 145:main.c        ****         if (!anyOnLine) {
+ 314              		.loc 1 145 0
+ 315 0076 7CB9     		cbnz	r4, .L28
+ 146:main.c        ****             lineLostCounter++;
+ 316              		.loc 1 146 0
+ 317 0078 DFF818E2 		ldr	lr, .L62
+ 318 007c BEF80430 		ldrh	r3, [lr, #4]
+ 319 0080 0133     		adds	r3, r3, #1
+ 320 0082 9BB2     		uxth	r3, r3
+ 321 0084 AEF80430 		strh	r3, [lr, #4]	@ movhi
+ 147:main.c        ****             if (lineLostCounter >= LINE_LOST_THRESHOLD) {
+ 322              		.loc 1 147 0
+ 323 0088 132B     		cmp	r3, #19
+ 324 008a 10D9     		bls	.L29
+ 148:main.c        ****                 state = STATE_LINE_LOST;
+ 325              		.loc 1 148 0
+ 326 008c 4FF0070E 		mov	lr, #7
+ 327 0090 804B     		ldr	r3, .L62
+ 328 0092 83F800E0 		strb	lr, [r3]
+ 329 0096 0AE0     		b	.L29
+ 330              	.L28:
+ 149:main.c        ****             }
+ 150:main.c        ****             /* else treat a short all-off read as a gap, not a loss */
+ 151:main.c        ****         } else {
+ 152:main.c        ****             lineLostCounter = 0;
+ 331              		.loc 1 152 0
+ 332 0098 4FF0000E 		mov	lr, #0
+ 333 009c 7D4B     		ldr	r3, .L62
+ 334 009e A3F804E0 		strh	lr, [r3, #4]	@ movhi
+ 335 00a2 04E0     		b	.L29
+ 336              	.L27:
+ 153:main.c        ****         }
+ 154:main.c        ****     } else {
+ 155:main.c        ****         lineLostCounter = 0;
+ 337              		.loc 1 155 0
+ 338 00a4 4FF0000E 		mov	lr, #0
+ 339 00a8 7A4B     		ldr	r3, .L62
+ 340 00aa A3F804E0 		strh	lr, [r3, #4]	@ movhi
+ 341              	.L29:
+ 156:main.c        ****     }
+ 157:main.c        **** 
+ 158:main.c        ****     switch (state) {
+ 342              		.loc 1 158 0
+ 343 00ae 794B     		ldr	r3, .L62
+ 344 00b0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 345 00b2 072B     		cmp	r3, #7
+ 346 00b4 00F2EC80 		bhi	.L24
+ 347 00b8 DFE813F0 		tbh	[pc, r3, lsl #1]
+ 348              	.L32:
+ 349 00bc 0800     		.2byte	(.L31-.L32)/2
+ 350 00be 4B00     		.2byte	(.L33-.L32)/2
+ 351 00c0 5F00     		.2byte	(.L34-.L32)/2
+ 352 00c2 7D00     		.2byte	(.L35-.L32)/2
+ 353 00c4 B700     		.2byte	(.L36-.L32)/2
+ 354 00c6 CD00     		.2byte	(.L37-.L32)/2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 10
+
+
+ 355 00c8 9B00     		.2byte	(.L38-.L32)/2
+ 356 00ca E300     		.2byte	(.L39-.L32)/2
+ 357              		.p2align 1
+ 358              	.L31:
+ 159:main.c        **** 
+ 160:main.c        ****         case STATE_DRIVE_STRAIGHT:
+ 161:main.c        ****             if (suppressSideCounter > 0) {
+ 359              		.loc 1 161 0
+ 360 00cc 714B     		ldr	r3, .L62
+ 361 00ce DB88     		ldrh	r3, [r3, #6]
+ 362 00d0 3BB1     		cbz	r3, .L40
+ 162:main.c        ****                 /* just forced out of a turn that never cleared on its own -
+ 163:main.c        ****                  * ignore left/right for a bit so a chronically-triggered
+ 164:main.c        ****                  * sensor can't instantly throw us back into the same turn */
+ 165:main.c        ****                 suppressSideCounter--;
+ 363              		.loc 1 165 0
+ 364 00d2 013B     		subs	r3, r3, #1
+ 365 00d4 6F4A     		ldr	r2, .L62
+ 366 00d6 D380     		strh	r3, [r2, #6]	@ movhi
+ 166:main.c        ****                 Motor_SetSpeed(SPEED_BASE, SPEED_BASE);
+ 367              		.loc 1 166 0
+ 368 00d8 1E21     		movs	r1, #30
+ 369 00da 0846     		mov	r0, r1
+ 370 00dc FFF7FEFF 		bl	Motor_SetSpeed
+ 371              	.LVL31:
+ 372 00e0 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 373              	.LVL32:
+ 374              	.L40:
+ 167:main.c        ****             } else if (s->left) {
+ 375              		.loc 1 167 0
+ 376 00e2 61B1     		cbz	r1, .L41
+ 168:main.c        ****                 /* brake, then back up before attempting the turn - by the
+ 169:main.c        ****                  * time this side sensor sees the branch the robot has
+ 170:main.c        ****                  * usually already driven past the actual junction */
+ 171:main.c        ****                 Motor_Stop();
+ 377              		.loc 1 171 0
+ 378 00e4 FFF7FEFF 		bl	Motor_Stop
+ 379              	.LVL33:
+ 172:main.c        ****                 CyDelay(TURN_BACKUP_BRAKE_MS);
+ 380              		.loc 1 172 0
+ 381 00e8 3220     		movs	r0, #50
+ 382 00ea FFF7FEFF 		bl	CyDelay
+ 383              	.LVL34:
+ 173:main.c        ****                 pendingTurnState = STATE_TURN_LEFT;
+ 384              		.loc 1 173 0
+ 385 00ee 694B     		ldr	r3, .L62
+ 386 00f0 0222     		movs	r2, #2
+ 387 00f2 1A72     		strb	r2, [r3, #8]
+ 174:main.c        ****                 backupCounter = 0;
+ 388              		.loc 1 174 0
+ 389 00f4 0022     		movs	r2, #0
+ 390 00f6 5A81     		strh	r2, [r3, #10]	@ movhi
+ 175:main.c        ****                 state = STATE_TURN_BACKUP;
+ 391              		.loc 1 175 0
+ 392 00f8 0122     		movs	r2, #1
+ 393 00fa 1A70     		strb	r2, [r3]
+ 394 00fc F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 11
+
+
+ 395              	.LVL35:
+ 396              	.L41:
+ 176:main.c        ****             } else if (s->right) {
+ 397              		.loc 1 176 0
+ 398 00fe 67B1     		cbz	r7, .L42
+ 177:main.c        ****                 Motor_Stop();
+ 399              		.loc 1 177 0
+ 400 0100 FFF7FEFF 		bl	Motor_Stop
+ 401              	.LVL36:
+ 178:main.c        ****                 CyDelay(TURN_BACKUP_BRAKE_MS);
+ 402              		.loc 1 178 0
+ 403 0104 3220     		movs	r0, #50
+ 404 0106 FFF7FEFF 		bl	CyDelay
+ 405              	.LVL37:
+ 179:main.c        ****                 pendingTurnState = STATE_TURN_RIGHT;
+ 406              		.loc 1 179 0
+ 407 010a 624B     		ldr	r3, .L62
+ 408 010c 0322     		movs	r2, #3
+ 409 010e 1A72     		strb	r2, [r3, #8]
+ 180:main.c        ****                 backupCounter = 0;
+ 410              		.loc 1 180 0
+ 411 0110 0022     		movs	r2, #0
+ 412 0112 5A81     		strh	r2, [r3, #10]	@ movhi
+ 181:main.c        ****                 state = STATE_TURN_BACKUP;
+ 413              		.loc 1 181 0
+ 414 0114 0122     		movs	r2, #1
+ 415 0116 1A70     		strb	r2, [r3]
+ 416 0118 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 417              	.LVL38:
+ 418              	.L42:
+ 182:main.c        ****             } else if (deadEndCounter >= DEAD_END_CONFIRM_ITERATIONS) {
+ 419              		.loc 1 182 0
+ 420 011a 022A     		cmp	r2, #2
+ 421 011c 06D9     		bls	.L43
+ 183:main.c        ****                 /* line seen ONLY on the back sensor - dead end, spin around */
+ 184:main.c        ****                 state = STATE_TURN_AROUND;
+ 422              		.loc 1 184 0
+ 423 011e 5D4B     		ldr	r3, .L62
+ 424 0120 0622     		movs	r2, #6
+ 425 0122 1A70     		strb	r2, [r3]
+ 185:main.c        ****                 turnCounter = 0;
+ 426              		.loc 1 185 0
+ 427 0124 0022     		movs	r2, #0
+ 428 0126 9A81     		strh	r2, [r3, #12]	@ movhi
+ 186:main.c        ****                 deadEndCounter = 0;
+ 429              		.loc 1 186 0
+ 430 0128 5A80     		strh	r2, [r3, #2]	@ movhi
+ 431 012a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 432              	.LVL39:
+ 433              	.L43:
+ 187:main.c        ****             } else if (s->frontLeft && !s->frontRight) {
+ 434              		.loc 1 187 0
+ 435 012c 28B1     		cbz	r0, .L44
+ 436              		.loc 1 187 0 is_stmt 0 discriminator 1
+ 437 012e 26B9     		cbnz	r6, .L44
+ 188:main.c        ****                 Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET); /* line drifted r
+ 438              		.loc 1 188 0 is_stmt 1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 12
+
+
+ 439 0130 1921     		movs	r1, #25
+ 440 0132 1E20     		movs	r0, #30
+ 441 0134 FFF7FEFF 		bl	Motor_SetSpeed
+ 442              	.LVL40:
+ 443 0138 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 444              	.LVL41:
+ 445              	.L44:
+ 189:main.c        ****             } else if (s->frontRight && !s->frontLeft) {
+ 446              		.loc 1 189 0
+ 447 013a 2EB1     		cbz	r6, .L45
+ 448              		.loc 1 189 0 is_stmt 0 discriminator 1
+ 449 013c 20B9     		cbnz	r0, .L45
+ 190:main.c        ****                 Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE); /* line drifted l
+ 450              		.loc 1 190 0 is_stmt 1
+ 451 013e 1E21     		movs	r1, #30
+ 452 0140 1920     		movs	r0, #25
+ 453 0142 FFF7FEFF 		bl	Motor_SetSpeed
+ 454              	.LVL42:
+ 455 0146 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 456              	.LVL43:
+ 457              	.L45:
+ 191:main.c        ****             } else {
+ 192:main.c        ****                 Motor_SetSpeed(SPEED_BASE, SPEED_BASE); /* centered, or only mid/back still seeing 
+ 458              		.loc 1 192 0
+ 459 0148 1E21     		movs	r1, #30
+ 460 014a 0846     		mov	r0, r1
+ 461 014c FFF7FEFF 		bl	Motor_SetSpeed
+ 462              	.LVL44:
+ 463 0150 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 464              	.LVL45:
+ 465              	.L33:
+ 193:main.c        ****             }
+ 194:main.c        ****             break;
+ 195:main.c        **** 
+ 196:main.c        ****         case STATE_TURN_BACKUP:
+ 197:main.c        ****             Motor_SetSpeed(-(int16_t)SPEED_BASE, -(int16_t)SPEED_BASE);
+ 466              		.loc 1 197 0
+ 467 0152 6FF01D01 		mvn	r1, #29
+ 468 0156 0846     		mov	r0, r1
+ 469 0158 FFF7FEFF 		bl	Motor_SetSpeed
+ 470              	.LVL46:
+ 198:main.c        ****             backupCounter++;
+ 471              		.loc 1 198 0
+ 472 015c 4D4A     		ldr	r2, .L62
+ 473 015e 5389     		ldrh	r3, [r2, #10]
+ 474 0160 0133     		adds	r3, r3, #1
+ 475 0162 9BB2     		uxth	r3, r3
+ 476 0164 5381     		strh	r3, [r2, #10]	@ movhi
+ 199:main.c        ****             if (backupCounter >= TURN_BACKUP_ITERATIONS) {
+ 477              		.loc 1 199 0
+ 478 0166 0E2B     		cmp	r3, #14
+ 479 0168 40F29280 		bls	.L24
+ 200:main.c        ****                 state = pendingTurnState;   /* backed up - now actually attempt the turn */
+ 480              		.loc 1 200 0
+ 481 016c 1346     		mov	r3, r2
+ 482 016e 127A     		ldrb	r2, [r2, #8]	@ zero_extendqisi2
+ 483 0170 1A70     		strb	r2, [r3]
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 13
+
+
+ 201:main.c        ****                 turnCounter = 0;
+ 484              		.loc 1 201 0
+ 485 0172 0022     		movs	r2, #0
+ 486 0174 9A81     		strh	r2, [r3, #12]	@ movhi
+ 202:main.c        ****                 backupCounter = 0;
+ 487              		.loc 1 202 0
+ 488 0176 5A81     		strh	r2, [r3, #10]	@ movhi
+ 489 0178 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 490              	.LVL47:
+ 491              	.L34:
+ 203:main.c        ****             }
+ 204:main.c        ****             break;
+ 205:main.c        **** 
+ 206:main.c        ****         case STATE_TURN_LEFT:
+ 207:main.c        ****             Motor_SetSpeed(-(int16_t)SPEED_TURN, (int16_t)SPEED_TURN);
+ 492              		.loc 1 207 0
+ 493 017a 3C21     		movs	r1, #60
+ 494 017c 6FF03B00 		mvn	r0, #59
+ 495 0180 FFF7FEFF 		bl	Motor_SetSpeed
+ 496              	.LVL48:
+ 208:main.c        ****             turnCounter++;
+ 497              		.loc 1 208 0
+ 498 0184 434A     		ldr	r2, .L62
+ 499 0186 9389     		ldrh	r3, [r2, #12]
+ 500 0188 0133     		adds	r3, r3, #1
+ 501 018a 9BB2     		uxth	r3, r3
+ 502 018c 9381     		strh	r3, [r2, #12]	@ movhi
+ 209:main.c        ****             /* exit as soon as the OPPOSITE front sensor sees the line -
+ 210:main.c        ****              * doesn't wait for mid too, so it can still be off-center at
+ 211:main.c        ****              * the exact instant this fires. STATE_ADJUST_LEFT closes that
+ 212:main.c        ****              * remaining gap before handing off to straight driving. */
+ 213:main.c        ****             if (s->frontRight) {
+ 503              		.loc 1 213 0
+ 504 018e 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 505 0190 42B1     		cbz	r2, .L46
+ 214:main.c        ****                 state = STATE_ADJUST_LEFT;
+ 506              		.loc 1 214 0
+ 507 0192 404B     		ldr	r3, .L62
+ 508 0194 0422     		movs	r2, #4
+ 509 0196 1A70     		strb	r2, [r3]
+ 215:main.c        ****                 turnCounter = 0;
+ 510              		.loc 1 215 0
+ 511 0198 0022     		movs	r2, #0
+ 512 019a 9A81     		strh	r2, [r3, #12]	@ movhi
+ 216:main.c        ****                 adjustCounter = 0;
+ 513              		.loc 1 216 0
+ 514 019c DA81     		strh	r2, [r3, #14]	@ movhi
+ 217:main.c        ****                 suppressSideCounter = POST_TURN_COOLDOWN;
+ 515              		.loc 1 217 0
+ 516 019e 1422     		movs	r2, #20
+ 517 01a0 DA80     		strh	r2, [r3, #6]	@ movhi
+ 518 01a2 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 519              	.LVL49:
+ 520              	.L46:
+ 218:main.c        ****             } else if (turnCounter >= TURN_TIMEOUT) {
+ 521              		.loc 1 218 0
+ 522 01a4 3B2B     		cmp	r3, #59
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 14
+
+
+ 523 01a6 73D9     		bls	.L24
+ 219:main.c        ****                 /* frontRight never lit up - force a clean break instead of
+ 220:main.c        ****                  * hanging here forever */
+ 221:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 524              		.loc 1 221 0
+ 525 01a8 3A4B     		ldr	r3, .L62
+ 526 01aa 0022     		movs	r2, #0
+ 527 01ac 1A70     		strb	r2, [r3]
+ 222:main.c        ****                 turnCounter = 0;
+ 528              		.loc 1 222 0
+ 529 01ae 9A81     		strh	r2, [r3, #12]	@ movhi
+ 223:main.c        ****                 suppressSideCounter = TURN_COOLDOWN;
+ 530              		.loc 1 223 0
+ 531 01b0 1E22     		movs	r2, #30
+ 532 01b2 DA80     		strh	r2, [r3, #6]	@ movhi
+ 533 01b4 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 534              	.LVL50:
+ 535              	.L35:
+ 224:main.c        ****             }
+ 225:main.c        ****             break;
+ 226:main.c        **** 
+ 227:main.c        ****         case STATE_TURN_RIGHT:
+ 228:main.c        ****             Motor_SetSpeed((int16_t)SPEED_TURN, -(int16_t)SPEED_TURN);
+ 536              		.loc 1 228 0
+ 537 01b6 6FF03B01 		mvn	r1, #59
+ 538 01ba 3C20     		movs	r0, #60
+ 539 01bc FFF7FEFF 		bl	Motor_SetSpeed
+ 540              	.LVL51:
+ 229:main.c        ****             turnCounter++;
+ 541              		.loc 1 229 0
+ 542 01c0 344A     		ldr	r2, .L62
+ 543 01c2 9389     		ldrh	r3, [r2, #12]
+ 544 01c4 0133     		adds	r3, r3, #1
+ 545 01c6 9BB2     		uxth	r3, r3
+ 546 01c8 9381     		strh	r3, [r2, #12]	@ movhi
+ 230:main.c        ****             if (s->frontLeft) {
+ 547              		.loc 1 230 0
+ 548 01ca 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 549 01cc 42B1     		cbz	r2, .L47
+ 231:main.c        ****                 state = STATE_ADJUST_RIGHT;
+ 550              		.loc 1 231 0
+ 551 01ce 314B     		ldr	r3, .L62
+ 552 01d0 0522     		movs	r2, #5
+ 553 01d2 1A70     		strb	r2, [r3]
+ 232:main.c        ****                 turnCounter = 0;
+ 554              		.loc 1 232 0
+ 555 01d4 0022     		movs	r2, #0
+ 556 01d6 9A81     		strh	r2, [r3, #12]	@ movhi
+ 233:main.c        ****                 adjustCounter = 0;
+ 557              		.loc 1 233 0
+ 558 01d8 DA81     		strh	r2, [r3, #14]	@ movhi
+ 234:main.c        ****                 suppressSideCounter = POST_TURN_COOLDOWN;
+ 559              		.loc 1 234 0
+ 560 01da 1422     		movs	r2, #20
+ 561 01dc DA80     		strh	r2, [r3, #6]	@ movhi
+ 562 01de F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 563              	.LVL52:
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 15
+
+
+ 564              	.L47:
+ 235:main.c        ****             } else if (turnCounter >= TURN_TIMEOUT) {
+ 565              		.loc 1 235 0
+ 566 01e0 3B2B     		cmp	r3, #59
+ 567 01e2 55D9     		bls	.L24
+ 236:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 568              		.loc 1 236 0
+ 569 01e4 2B4B     		ldr	r3, .L62
+ 570 01e6 0022     		movs	r2, #0
+ 571 01e8 1A70     		strb	r2, [r3]
+ 237:main.c        ****                 turnCounter = 0;
+ 572              		.loc 1 237 0
+ 573 01ea 9A81     		strh	r2, [r3, #12]	@ movhi
+ 238:main.c        ****                 suppressSideCounter = TURN_COOLDOWN;
+ 574              		.loc 1 238 0
+ 575 01ec 1E22     		movs	r2, #30
+ 576 01ee DA80     		strh	r2, [r3, #6]	@ movhi
+ 577 01f0 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 578              	.LVL53:
+ 579              	.L38:
+ 239:main.c        ****             }
+ 240:main.c        ****             break;
+ 241:main.c        **** 
+ 242:main.c        ****         case STATE_TURN_AROUND:
+ 243:main.c        ****             /* in-place spin left; exits as soon as the OPPOSITE front sensor
+ 244:main.c        ****              * (frontRight) sees the line, straight into driving - no adjust
+ 245:main.c        ****              * step */
+ 246:main.c        ****             Motor_SetSpeed(-(int16_t)SPEED_TURN_AROUND, (int16_t)SPEED_TURN_AROUND);
+ 580              		.loc 1 246 0
+ 581 01f2 2821     		movs	r1, #40
+ 582 01f4 6FF02700 		mvn	r0, #39
+ 583 01f8 FFF7FEFF 		bl	Motor_SetSpeed
+ 584              	.LVL54:
+ 247:main.c        ****             turnCounter++;
+ 585              		.loc 1 247 0
+ 586 01fc 254A     		ldr	r2, .L62
+ 587 01fe 9389     		ldrh	r3, [r2, #12]
+ 588 0200 0133     		adds	r3, r3, #1
+ 589 0202 9BB2     		uxth	r3, r3
+ 590 0204 9381     		strh	r3, [r2, #12]	@ movhi
+ 248:main.c        ****             if (s->frontRight) {
+ 591              		.loc 1 248 0
+ 592 0206 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 593 0208 32B1     		cbz	r2, .L48
+ 249:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 594              		.loc 1 249 0
+ 595 020a 224B     		ldr	r3, .L62
+ 596 020c 0022     		movs	r2, #0
+ 597 020e 1A70     		strb	r2, [r3]
+ 250:main.c        ****                 turnCounter = 0;
+ 598              		.loc 1 250 0
+ 599 0210 9A81     		strh	r2, [r3, #12]	@ movhi
+ 251:main.c        ****                 suppressSideCounter = POST_TURN_COOLDOWN;
+ 600              		.loc 1 251 0
+ 601 0212 1422     		movs	r2, #20
+ 602 0214 DA80     		strh	r2, [r3, #6]	@ movhi
+ 603 0216 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 16
+
+
+ 604              	.LVL55:
+ 605              	.L48:
+ 252:main.c        ****             } else if (turnCounter >= U_TURN_TIMEOUT) {
+ 606              		.loc 1 252 0
+ 607 0218 772B     		cmp	r3, #119
+ 608 021a 39D9     		bls	.L24
+ 253:main.c        ****                 /* frontRight never lit up - force a clean break */
+ 254:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 609              		.loc 1 254 0
+ 610 021c 1D4B     		ldr	r3, .L62
+ 611 021e 0022     		movs	r2, #0
+ 612 0220 1A70     		strb	r2, [r3]
+ 255:main.c        ****                 turnCounter = 0;
+ 613              		.loc 1 255 0
+ 614 0222 9A81     		strh	r2, [r3, #12]	@ movhi
+ 256:main.c        ****                 suppressSideCounter = TURN_COOLDOWN;
+ 615              		.loc 1 256 0
+ 616 0224 1E22     		movs	r2, #30
+ 617 0226 DA80     		strh	r2, [r3, #6]	@ movhi
+ 618 0228 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 619              	.LVL56:
+ 620              	.L36:
+ 257:main.c        ****             }
+ 258:main.c        ****             break;
+ 259:main.c        **** 
+ 260:main.c        ****         case STATE_ADJUST_LEFT:
+ 261:main.c        ****             /* same direction as the turn just taken, but gentle and still
+ 262:main.c        ****              * moving forward. Sensor-reactive: exits the instant mid or
+ 263:main.c        ****              * BOTH front sensors confirm it's actually centered, instead of
+ 264:main.c        ****              * blindly running the full duration and driving past center -
+ 265:main.c        ****              * POST_TURN_ADJUST_ITERATIONS is now just a backstop in case
+ 266:main.c        ****              * neither condition is ever met. */
+ 267:main.c        ****             Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE);
+ 621              		.loc 1 267 0
+ 622 022a 1E21     		movs	r1, #30
+ 623 022c 1920     		movs	r0, #25
+ 624 022e FFF7FEFF 		bl	Motor_SetSpeed
+ 625              	.LVL57:
+ 268:main.c        ****             adjustCounter++;
+ 626              		.loc 1 268 0
+ 627 0232 184A     		ldr	r2, .L62
+ 628 0234 D389     		ldrh	r3, [r2, #14]
+ 629 0236 0133     		adds	r3, r3, #1
+ 630 0238 9BB2     		uxth	r3, r3
+ 631 023a D381     		strh	r3, [r2, #14]	@ movhi
+ 269:main.c        ****             if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITE
+ 632              		.loc 1 269 0
+ 633 023c AA78     		ldrb	r2, [r5, #2]	@ zero_extendqisi2
+ 634 023e 2AB9     		cbnz	r2, .L49
+ 635              		.loc 1 269 0 is_stmt 0 discriminator 1
+ 636 0240 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 637 0242 0AB1     		cbz	r2, .L50
+ 638              		.loc 1 269 0 discriminator 2
+ 639 0244 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 640 0246 0AB9     		cbnz	r2, .L49
+ 641              	.L50:
+ 642              		.loc 1 269 0 discriminator 4
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 17
+
+
+ 643 0248 052B     		cmp	r3, #5
+ 644 024a 21D9     		bls	.L24
+ 645              	.L49:
+ 270:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 646              		.loc 1 270 0 is_stmt 1
+ 647 024c 114B     		ldr	r3, .L62
+ 648 024e 0022     		movs	r2, #0
+ 649 0250 1A70     		strb	r2, [r3]
+ 271:main.c        ****                 adjustCounter = 0;
+ 650              		.loc 1 271 0
+ 651 0252 DA81     		strh	r2, [r3, #14]	@ movhi
+ 652 0254 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 653              	.LVL58:
+ 654              	.L37:
+ 272:main.c        ****             }
+ 273:main.c        ****             break;
+ 274:main.c        **** 
+ 275:main.c        ****         case STATE_ADJUST_RIGHT:
+ 276:main.c        ****             Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET);
+ 655              		.loc 1 276 0
+ 656 0256 1921     		movs	r1, #25
+ 657 0258 1E20     		movs	r0, #30
+ 658 025a FFF7FEFF 		bl	Motor_SetSpeed
+ 659              	.LVL59:
+ 277:main.c        ****             adjustCounter++;
+ 660              		.loc 1 277 0
+ 661 025e 0D4A     		ldr	r2, .L62
+ 662 0260 D389     		ldrh	r3, [r2, #14]
+ 663 0262 0133     		adds	r3, r3, #1
+ 664 0264 9BB2     		uxth	r3, r3
+ 665 0266 D381     		strh	r3, [r2, #14]	@ movhi
+ 278:main.c        ****             if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITE
+ 666              		.loc 1 278 0
+ 667 0268 AA78     		ldrb	r2, [r5, #2]	@ zero_extendqisi2
+ 668 026a 2AB9     		cbnz	r2, .L51
+ 669              		.loc 1 278 0 is_stmt 0 discriminator 1
+ 670 026c 2A78     		ldrb	r2, [r5]	@ zero_extendqisi2
+ 671 026e 0AB1     		cbz	r2, .L52
+ 672              		.loc 1 278 0 discriminator 2
+ 673 0270 6A78     		ldrb	r2, [r5, #1]	@ zero_extendqisi2
+ 674 0272 0AB9     		cbnz	r2, .L51
+ 675              	.L52:
+ 676              		.loc 1 278 0 discriminator 4
+ 677 0274 052B     		cmp	r3, #5
+ 678 0276 0BD9     		bls	.L24
+ 679              	.L51:
+ 279:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 680              		.loc 1 279 0 is_stmt 1
+ 681 0278 064B     		ldr	r3, .L62
+ 682 027a 0022     		movs	r2, #0
+ 683 027c 1A70     		strb	r2, [r3]
+ 280:main.c        ****                 adjustCounter = 0;
+ 684              		.loc 1 280 0
+ 685 027e DA81     		strh	r2, [r3, #14]	@ movhi
+ 686 0280 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 687              	.LVL60:
+ 688              	.L39:
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 18
+
+
+ 281:main.c        ****             }
+ 282:main.c        ****             break;
+ 283:main.c        **** 
+ 284:main.c        ****         case STATE_LINE_LOST:
+ 285:main.c        ****             Motor_Stop();
+ 689              		.loc 1 285 0
+ 690 0282 FFF7FEFF 		bl	Motor_Stop
+ 691              	.LVL61:
+ 286:main.c        ****             if (anyOnLine) {
+ 692              		.loc 1 286 0
+ 693 0286 1CB1     		cbz	r4, .L24
+ 287:main.c        ****                 state = STATE_DRIVE_STRAIGHT;
+ 694              		.loc 1 287 0
+ 695 0288 024B     		ldr	r3, .L62
+ 696 028a 0022     		movs	r2, #0
+ 697 028c 1A70     		strb	r2, [r3]
+ 288:main.c        ****                 lineLostCounter = 0;
+ 698              		.loc 1 288 0
+ 699 028e 9A80     		strh	r2, [r3, #4]	@ movhi
+ 700              	.L24:
+ 701 0290 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 702              	.LVL62:
+ 703              	.L63:
+ 704 0292 00BF     		.align	2
+ 705              	.L62:
+ 706 0294 00000000 		.word	.LANCHOR0
+ 707              		.cfi_endproc
+ 708              	.LFE69:
+ 709              		.size	RunLineFollower, .-RunLineFollower
+ 710              		.section	.text.Sensors_Read,"ax",%progbits
+ 711              		.align	2
+ 712              		.thumb
+ 713              		.thumb_func
+ 714              		.type	Sensors_Read, %function
+ 715              	Sensors_Read:
+ 716              	.LFB64:
+  62:main.c        ****     s->frontLeft  = ReadSensor(S3_Read());
+ 717              		.loc 1 62 0
+ 718              		.cfi_startproc
+ 719              		@ args = 0, pretend = 0, frame = 0
+ 720              		@ frame_needed = 0, uses_anonymous_args = 0
+ 721              	.LVL63:
+ 722 0000 10B5     		push	{r4, lr}
+ 723              		.cfi_def_cfa_offset 8
+ 724              		.cfi_offset 4, -8
+ 725              		.cfi_offset 14, -4
+ 726 0002 0446     		mov	r4, r0
+  63:main.c        ****     s->frontRight = ReadSensor(S2_Read());
+ 727              		.loc 1 63 0
+ 728 0004 FFF7FEFF 		bl	S3_Read
+ 729              	.LVL64:
+ 730 0008 FFF7FEFF 		bl	ReadSensor
+ 731              	.LVL65:
+ 732 000c 2070     		strb	r0, [r4]
+  64:main.c        ****     s->mid        = ReadSensor(S6_Read());
+ 733              		.loc 1 64 0
+ 734 000e FFF7FEFF 		bl	S2_Read
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 19
+
+
+ 735              	.LVL66:
+ 736 0012 FFF7FEFF 		bl	ReadSensor
+ 737              	.LVL67:
+ 738 0016 6070     		strb	r0, [r4, #1]
+  65:main.c        ****     s->back       = ReadSensor(S4_Read());
+ 739              		.loc 1 65 0
+ 740 0018 FFF7FEFF 		bl	S6_Read
+ 741              	.LVL68:
+ 742 001c FFF7FEFF 		bl	ReadSensor
+ 743              	.LVL69:
+ 744 0020 A070     		strb	r0, [r4, #2]
+  66:main.c        ****     s->left       = ReadSensor(S5_Read());
+ 745              		.loc 1 66 0
+ 746 0022 FFF7FEFF 		bl	S4_Read
+ 747              	.LVL70:
+ 748 0026 FFF7FEFF 		bl	ReadSensor
+ 749              	.LVL71:
+ 750 002a E070     		strb	r0, [r4, #3]
+  67:main.c        ****     s->right      = ReadSensor(S1_Read());
+ 751              		.loc 1 67 0
+ 752 002c FFF7FEFF 		bl	S5_Read
+ 753              	.LVL72:
+ 754 0030 FFF7FEFF 		bl	ReadSensor
+ 755              	.LVL73:
+ 756 0034 2071     		strb	r0, [r4, #4]
+  68:main.c        **** }
+ 757              		.loc 1 68 0
+ 758 0036 FFF7FEFF 		bl	S1_Read
+ 759              	.LVL74:
+ 760 003a FFF7FEFF 		bl	ReadSensor
+ 761              	.LVL75:
+ 762 003e 6071     		strb	r0, [r4, #5]
+ 763 0040 10BD     		pop	{r4, pc}
+ 764              		.cfi_endproc
+ 765              	.LFE64:
+ 766              		.size	Sensors_Read, .-Sensors_Read
+ 767 0042 00BF     		.section	.text.main,"ax",%progbits
+ 768              		.align	2
+ 769              		.global	main
+ 770              		.thumb
+ 771              		.thumb_func
+ 772              		.type	main, %function
+ 773              	main:
+ 774              	.LFB70:
+ 289:main.c        ****             }
+ 290:main.c        ****             break;
+ 291:main.c        ****     }
+ 292:main.c        **** }
+ 293:main.c        **** 
+ 294:main.c        **** /* ---------------- Main ---------------- */
+ 295:main.c        **** 
+ 296:main.c        **** int main(void)
+ 297:main.c        **** {
+ 775              		.loc 1 297 0
+ 776              		.cfi_startproc
+ 777              		@ args = 0, pretend = 0, frame = 8
+ 778              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 20
+
+
+ 779 0000 00B5     		push	{lr}
+ 780              		.cfi_def_cfa_offset 4
+ 781              		.cfi_offset 14, -4
+ 782 0002 83B0     		sub	sp, sp, #12
+ 783              		.cfi_def_cfa_offset 16
+ 298:main.c        ****     CyGlobalIntEnable;
+ 784              		.loc 1 298 0
+ 785              		.syntax unified
+ 786              	@ 298 "main.c" 1
+ 787 0004 62B6     		CPSIE   i
+ 788              	@ 0 "" 2
+ 299:main.c        **** 
+ 300:main.c        ****     Clock_1_Start();
+ 789              		.loc 1 300 0
+ 790              		.thumb
+ 791              		.syntax unified
+ 792 0006 FFF7FEFF 		bl	Clock_1_Start
+ 793              	.LVL76:
+ 301:main.c        ****     Clock_2_Start();
+ 794              		.loc 1 301 0
+ 795 000a FFF7FEFF 		bl	Clock_2_Start
+ 796              	.LVL77:
+ 302:main.c        ****     PWM_1_Start();
+ 797              		.loc 1 302 0
+ 798 000e FFF7FEFF 		bl	PWM_1_Start
+ 799              	.LVL78:
+ 303:main.c        ****     PWM_2_Start();
+ 800              		.loc 1 303 0
+ 801 0012 FFF7FEFF 		bl	PWM_2_Start
+ 802              	.LVL79:
+ 304:main.c        ****     Motor_Stop();
+ 803              		.loc 1 304 0
+ 804 0016 FFF7FEFF 		bl	Motor_Stop
+ 805              	.LVL80:
+ 806              	.L67:
+ 807              	.LBB2:
+ 305:main.c        **** 
+ 306:main.c        ****     for (;;) {
+ 307:main.c        ****         SensorState sensors;
+ 308:main.c        ****         Sensors_Read(&sensors);
+ 808              		.loc 1 308 0 discriminator 1
+ 809 001a 6846     		mov	r0, sp
+ 810 001c FFF7FEFF 		bl	Sensors_Read
+ 811              	.LVL81:
+ 309:main.c        ****         RunLineFollower(&sensors);
+ 812              		.loc 1 309 0 discriminator 1
+ 813 0020 6846     		mov	r0, sp
+ 814 0022 FFF7FEFF 		bl	RunLineFollower
+ 815              	.LVL82:
+ 310:main.c        ****         CyDelay(10); /* ~100 Hz control loop */
+ 816              		.loc 1 310 0 discriminator 1
+ 817 0026 0A20     		movs	r0, #10
+ 818 0028 FFF7FEFF 		bl	CyDelay
+ 819              	.LVL83:
+ 820 002c F5E7     		b	.L67
+ 821              	.LBE2:
+ 822              		.cfi_endproc
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 21
+
+
+ 823              	.LFE70:
+ 824              		.size	main, .-main
+ 825 002e 00BF     		.bss
+ 826              		.align	1
+ 827              		.set	.LANCHOR0,. + 0
+ 828              		.type	state, %object
+ 829              		.size	state, 1
+ 830              	state:
+ 831 0000 00       		.space	1
+ 832 0001 00       		.space	1
+ 833              		.type	deadEndCounter, %object
+ 834              		.size	deadEndCounter, 2
+ 835              	deadEndCounter:
+ 836 0002 0000     		.space	2
+ 837              		.type	lineLostCounter, %object
+ 838              		.size	lineLostCounter, 2
+ 839              	lineLostCounter:
+ 840 0004 0000     		.space	2
+ 841              		.type	suppressSideCounter, %object
+ 842              		.size	suppressSideCounter, 2
+ 843              	suppressSideCounter:
+ 844 0006 0000     		.space	2
+ 845              		.type	pendingTurnState, %object
+ 846              		.size	pendingTurnState, 1
+ 847              	pendingTurnState:
+ 848 0008 00       		.space	1
+ 849 0009 00       		.space	1
+ 850              		.type	backupCounter, %object
+ 851              		.size	backupCounter, 2
+ 852              	backupCounter:
+ 853 000a 0000     		.space	2
+ 854              		.type	turnCounter, %object
+ 855              		.size	turnCounter, 2
+ 856              	turnCounter:
+ 857 000c 0000     		.space	2
+ 858              		.type	adjustCounter, %object
+ 859              		.size	adjustCounter, 2
+ 860              	adjustCounter:
+ 861 000e 0000     		.space	2
+ 862              		.text
+ 863              	.Letext0:
+ 864              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 865              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.2\\psoc creator\\import\\gnu\\arm\\5.4.
+ 866              		.file 4 "Generated_Source\\PSoC5/PWM_1.h"
+ 867              		.file 5 "Generated_Source\\PSoC5/PWM_2.h"
+ 868              		.file 6 "Generated_Source\\PSoC5/CyLib.h"
+ 869              		.file 7 "Generated_Source\\PSoC5/S3.h"
+ 870              		.file 8 "Generated_Source\\PSoC5/S2.h"
+ 871              		.file 9 "Generated_Source\\PSoC5/S6.h"
+ 872              		.file 10 "Generated_Source\\PSoC5/S4.h"
+ 873              		.file 11 "Generated_Source\\PSoC5/S5.h"
+ 874              		.file 12 "Generated_Source\\PSoC5/S1.h"
+ 875              		.file 13 "Generated_Source\\PSoC5/Clock_1.h"
+ 876              		.file 14 "Generated_Source\\PSoC5/Clock_2.h"
+ 877              		.file 15 "Generated_Source\\PSoC5/core_cm3.h"
+ 878              		.section	.debug_info,"",%progbits
+ 879              	.Ldebug_info0:
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 22
+
+
+ 880 0000 FD060000 		.4byte	0x6fd
+ 881 0004 0400     		.2byte	0x4
+ 882 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 883 000a 04       		.byte	0x4
+ 884 000b 01       		.uleb128 0x1
+ 885 000c D9030000 		.4byte	.LASF73
+ 886 0010 0C       		.byte	0xc
+ 887 0011 3C030000 		.4byte	.LASF74
+ 888 0015 57010000 		.4byte	.LASF75
+ 889 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 890 001d 00000000 		.4byte	0
+ 891 0021 00000000 		.4byte	.Ldebug_line0
+ 892 0025 02       		.uleb128 0x2
+ 893 0026 01       		.byte	0x1
+ 894 0027 06       		.byte	0x6
+ 895 0028 1D020000 		.4byte	.LASF0
+ 896 002c 03       		.uleb128 0x3
+ 897 002d 94010000 		.4byte	.LASF2
+ 898 0031 02       		.byte	0x2
+ 899 0032 1D       		.byte	0x1d
+ 900 0033 37000000 		.4byte	0x37
+ 901 0037 02       		.uleb128 0x2
+ 902 0038 01       		.byte	0x1
+ 903 0039 08       		.byte	0x8
+ 904 003a F2010000 		.4byte	.LASF1
+ 905 003e 03       		.uleb128 0x3
+ 906 003f 94030000 		.4byte	.LASF3
+ 907 0043 02       		.byte	0x2
+ 908 0044 29       		.byte	0x29
+ 909 0045 49000000 		.4byte	0x49
+ 910 0049 02       		.uleb128 0x2
+ 911 004a 02       		.byte	0x2
+ 912 004b 05       		.byte	0x5
+ 913 004c 49000000 		.4byte	.LASF4
+ 914 0050 03       		.uleb128 0x3
+ 915 0051 73000000 		.4byte	.LASF5
+ 916 0055 02       		.byte	0x2
+ 917 0056 2B       		.byte	0x2b
+ 918 0057 5B000000 		.4byte	0x5b
+ 919 005b 02       		.uleb128 0x2
+ 920 005c 02       		.byte	0x2
+ 921 005d 07       		.byte	0x7
+ 922 005e 98020000 		.4byte	.LASF6
+ 923 0062 03       		.uleb128 0x3
+ 924 0063 8A030000 		.4byte	.LASF7
+ 925 0067 02       		.byte	0x2
+ 926 0068 3F       		.byte	0x3f
+ 927 0069 6D000000 		.4byte	0x6d
+ 928 006d 02       		.uleb128 0x2
+ 929 006e 04       		.byte	0x4
+ 930 006f 05       		.byte	0x5
+ 931 0070 3D010000 		.4byte	.LASF8
+ 932 0074 02       		.uleb128 0x2
+ 933 0075 04       		.byte	0x4
+ 934 0076 07       		.byte	0x7
+ 935 0077 7E000000 		.4byte	.LASF9
+ 936 007b 02       		.uleb128 0x2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 23
+
+
+ 937 007c 08       		.byte	0x8
+ 938 007d 05       		.byte	0x5
+ 939 007e 05010000 		.4byte	.LASF10
+ 940 0082 02       		.uleb128 0x2
+ 941 0083 08       		.byte	0x8
+ 942 0084 07       		.byte	0x7
+ 943 0085 31020000 		.4byte	.LASF11
+ 944 0089 04       		.uleb128 0x4
+ 945 008a 04       		.byte	0x4
+ 946 008b 05       		.byte	0x5
+ 947 008c 696E7400 		.ascii	"int\000"
+ 948 0090 02       		.uleb128 0x2
+ 949 0091 04       		.byte	0x4
+ 950 0092 07       		.byte	0x7
+ 951 0093 48020000 		.4byte	.LASF12
+ 952 0097 03       		.uleb128 0x3
+ 953 0098 B6000000 		.4byte	.LASF13
+ 954 009c 03       		.byte	0x3
+ 955 009d 18       		.byte	0x18
+ 956 009e 2C000000 		.4byte	0x2c
+ 957 00a2 03       		.uleb128 0x3
+ 958 00a3 0D030000 		.4byte	.LASF14
+ 959 00a7 03       		.byte	0x3
+ 960 00a8 20       		.byte	0x20
+ 961 00a9 3E000000 		.4byte	0x3e
+ 962 00ad 03       		.uleb128 0x3
+ 963 00ae 5F020000 		.4byte	.LASF15
+ 964 00b2 03       		.byte	0x3
+ 965 00b3 24       		.byte	0x24
+ 966 00b4 50000000 		.4byte	0x50
+ 967 00b8 03       		.uleb128 0x3
+ 968 00b9 29020000 		.4byte	.LASF16
+ 969 00bd 03       		.byte	0x3
+ 970 00be 2C       		.byte	0x2c
+ 971 00bf 62000000 		.4byte	0x62
+ 972 00c3 02       		.uleb128 0x2
+ 973 00c4 04       		.byte	0x4
+ 974 00c5 04       		.byte	0x4
+ 975 00c6 F1000000 		.4byte	.LASF17
+ 976 00ca 02       		.uleb128 0x2
+ 977 00cb 08       		.byte	0x8
+ 978 00cc 04       		.byte	0x4
+ 979 00cd 55030000 		.4byte	.LASF18
+ 980 00d1 02       		.uleb128 0x2
+ 981 00d2 01       		.byte	0x1
+ 982 00d3 08       		.byte	0x8
+ 983 00d4 CB020000 		.4byte	.LASF19
+ 984 00d8 02       		.uleb128 0x2
+ 985 00d9 08       		.byte	0x8
+ 986 00da 04       		.byte	0x4
+ 987 00db DD010000 		.4byte	.LASF20
+ 988 00df 02       		.uleb128 0x2
+ 989 00e0 04       		.byte	0x4
+ 990 00e1 07       		.byte	0x7
+ 991 00e2 4E010000 		.4byte	.LASF21
+ 992 00e6 05       		.uleb128 0x5
+ 993 00e7 06       		.byte	0x6
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 24
+
+
+ 994 00e8 01       		.byte	0x1
+ 995 00e9 2F       		.byte	0x2f
+ 996 00ea 37010000 		.4byte	0x137
+ 997 00ee 06       		.uleb128 0x6
+ 998 00ef 80030000 		.4byte	.LASF22
+ 999 00f3 01       		.byte	0x1
+ 1000 00f4 30       		.byte	0x30
+ 1001 00f5 97000000 		.4byte	0x97
+ 1002 00f9 00       		.byte	0
+ 1003 00fa 06       		.uleb128 0x6
+ 1004 00fb 53000000 		.4byte	.LASF23
+ 1005 00ff 01       		.byte	0x1
+ 1006 0100 31       		.byte	0x31
+ 1007 0101 97000000 		.4byte	0x97
+ 1008 0105 01       		.byte	0x1
+ 1009 0106 07       		.uleb128 0x7
+ 1010 0107 6D696400 		.ascii	"mid\000"
+ 1011 010b 01       		.byte	0x1
+ 1012 010c 32       		.byte	0x32
+ 1013 010d 97000000 		.4byte	0x97
+ 1014 0111 02       		.byte	0x2
+ 1015 0112 06       		.uleb128 0x6
+ 1016 0113 25030000 		.4byte	.LASF24
+ 1017 0117 01       		.byte	0x1
+ 1018 0118 33       		.byte	0x33
+ 1019 0119 97000000 		.4byte	0x97
+ 1020 011d 03       		.byte	0x3
+ 1021 011e 06       		.uleb128 0x6
+ 1022 011f E4020000 		.4byte	.LASF25
+ 1023 0123 01       		.byte	0x1
+ 1024 0124 34       		.byte	0x34
+ 1025 0125 97000000 		.4byte	0x97
+ 1026 0129 04       		.byte	0x4
+ 1027 012a 06       		.uleb128 0x6
+ 1028 012b 19000000 		.4byte	.LASF26
+ 1029 012f 01       		.byte	0x1
+ 1030 0130 35       		.byte	0x35
+ 1031 0131 97000000 		.4byte	0x97
+ 1032 0135 05       		.byte	0x5
+ 1033 0136 00       		.byte	0
+ 1034 0137 03       		.uleb128 0x3
+ 1035 0138 C0030000 		.4byte	.LASF27
+ 1036 013c 01       		.byte	0x1
+ 1037 013d 36       		.byte	0x36
+ 1038 013e E6000000 		.4byte	0xe6
+ 1039 0142 08       		.uleb128 0x8
+ 1040 0143 01       		.byte	0x1
+ 1041 0144 37000000 		.4byte	0x37
+ 1042 0148 01       		.byte	0x1
+ 1043 0149 73       		.byte	0x73
+ 1044 014a 7F010000 		.4byte	0x17f
+ 1045 014e 09       		.uleb128 0x9
+ 1046 014f B6020000 		.4byte	.LASF28
+ 1047 0153 00       		.byte	0
+ 1048 0154 09       		.uleb128 0x9
+ 1049 0155 90000000 		.4byte	.LASF29
+ 1050 0159 01       		.byte	0x1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 25
+
+
+ 1051 015a 09       		.uleb128 0x9
+ 1052 015b E9020000 		.4byte	.LASF30
+ 1053 015f 02       		.byte	0x2
+ 1054 0160 09       		.uleb128 0x9
+ 1055 0161 5C030000 		.4byte	.LASF31
+ 1056 0165 03       		.byte	0x3
+ 1057 0166 09       		.uleb128 0x9
+ 1058 0167 43030000 		.4byte	.LASF32
+ 1059 016b 04       		.byte	0x4
+ 1060 016c 09       		.uleb128 0x9
+ 1061 016d 6D030000 		.4byte	.LASF33
+ 1062 0171 05       		.byte	0x5
+ 1063 0172 09       		.uleb128 0x9
+ 1064 0173 2A030000 		.4byte	.LASF34
+ 1065 0177 06       		.byte	0x6
+ 1066 0178 09       		.uleb128 0x9
+ 1067 0179 6F040000 		.4byte	.LASF35
+ 1068 017d 07       		.byte	0x7
+ 1069 017e 00       		.byte	0
+ 1070 017f 03       		.uleb128 0x3
+ 1071 0180 2B000000 		.4byte	.LASF36
+ 1072 0184 01       		.byte	0x1
+ 1073 0185 7C       		.byte	0x7c
+ 1074 0186 42010000 		.4byte	0x142
+ 1075 018a 0A       		.uleb128 0xa
+ 1076 018b 00000000 		.4byte	.LASF76
+ 1077 018f 01       		.byte	0x1
+ 1078 0190 38       		.byte	0x38
+ 1079 0191 97000000 		.4byte	0x97
+ 1080 0195 00000000 		.4byte	.LFB63
+ 1081 0199 0A000000 		.4byte	.LFE63-.LFB63
+ 1082 019d 01       		.uleb128 0x1
+ 1083 019e 9C       		.byte	0x9c
+ 1084 019f B3010000 		.4byte	0x1b3
+ 1085 01a3 0B       		.uleb128 0xb
+ 1086 01a4 00020000 		.4byte	.LASF37
+ 1087 01a8 01       		.byte	0x1
+ 1088 01a9 38       		.byte	0x38
+ 1089 01aa 97000000 		.4byte	0x97
+ 1090 01ae 00000000 		.4byte	.LLST0
+ 1091 01b2 00       		.byte	0
+ 1092 01b3 0C       		.uleb128 0xc
+ 1093 01b4 F9020000 		.4byte	.LASF39
+ 1094 01b8 01       		.byte	0x1
+ 1095 01b9 4A       		.byte	0x4a
+ 1096 01ba 00000000 		.4byte	.LFB65
+ 1097 01be 36000000 		.4byte	.LFE65-.LFB65
+ 1098 01c2 01       		.uleb128 0x1
+ 1099 01c3 9C       		.byte	0x9c
+ 1100 01c4 23020000 		.4byte	0x223
+ 1101 01c8 0B       		.uleb128 0xb
+ 1102 01c9 76020000 		.4byte	.LASF38
+ 1103 01cd 01       		.byte	0x1
+ 1104 01ce 4A       		.byte	0x4a
+ 1105 01cf A2000000 		.4byte	0xa2
+ 1106 01d3 3A000000 		.4byte	.LLST1
+ 1107 01d7 0D       		.uleb128 0xd
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 26
+
+
+ 1108 01d8 1E000000 		.4byte	.LVL7
+ 1109 01dc 5B060000 		.4byte	0x65b
+ 1110 01e0 EB010000 		.4byte	0x1eb
+ 1111 01e4 0E       		.uleb128 0xe
+ 1112 01e5 01       		.uleb128 0x1
+ 1113 01e6 50       		.byte	0x50
+ 1114 01e7 02       		.uleb128 0x2
+ 1115 01e8 74       		.byte	0x74
+ 1116 01e9 00       		.sleb128 0
+ 1117 01ea 00       		.byte	0
+ 1118 01eb 0D       		.uleb128 0xd
+ 1119 01ec 24000000 		.4byte	.LVL8
+ 1120 01f0 66060000 		.4byte	0x666
+ 1121 01f4 FE010000 		.4byte	0x1fe
+ 1122 01f8 0E       		.uleb128 0xe
+ 1123 01f9 01       		.uleb128 0x1
+ 1124 01fa 50       		.byte	0x50
+ 1125 01fb 01       		.uleb128 0x1
+ 1126 01fc 30       		.byte	0x30
+ 1127 01fd 00       		.byte	0
+ 1128 01fe 0D       		.uleb128 0xd
+ 1129 01ff 2C000000 		.4byte	.LVL10
+ 1130 0203 5B060000 		.4byte	0x65b
+ 1131 0207 11020000 		.4byte	0x211
+ 1132 020b 0E       		.uleb128 0xe
+ 1133 020c 01       		.uleb128 0x1
+ 1134 020d 50       		.byte	0x50
+ 1135 020e 01       		.uleb128 0x1
+ 1136 020f 30       		.byte	0x30
+ 1137 0210 00       		.byte	0
+ 1138 0211 0F       		.uleb128 0xf
+ 1139 0212 34000000 		.4byte	.LVL11
+ 1140 0216 66060000 		.4byte	0x666
+ 1141 021a 0E       		.uleb128 0xe
+ 1142 021b 01       		.uleb128 0x1
+ 1143 021c 50       		.byte	0x50
+ 1144 021d 03       		.uleb128 0x3
+ 1145 021e 74       		.byte	0x74
+ 1146 021f 00       		.sleb128 0
+ 1147 0220 1F       		.byte	0x1f
+ 1148 0221 00       		.byte	0
+ 1149 0222 00       		.byte	0
+ 1150 0223 0C       		.uleb128 0xc
+ 1151 0224 CD000000 		.4byte	.LASF40
+ 1152 0228 01       		.byte	0x1
+ 1153 0229 58       		.byte	0x58
+ 1154 022a 00000000 		.4byte	.LFB66
+ 1155 022e 36000000 		.4byte	.LFE66-.LFB66
+ 1156 0232 01       		.uleb128 0x1
+ 1157 0233 9C       		.byte	0x9c
+ 1158 0234 93020000 		.4byte	0x293
+ 1159 0238 0B       		.uleb128 0xb
+ 1160 0239 76020000 		.4byte	.LASF38
+ 1161 023d 01       		.byte	0x1
+ 1162 023e 58       		.byte	0x58
+ 1163 023f A2000000 		.4byte	0xa2
+ 1164 0243 58000000 		.4byte	.LLST2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 27
+
+
+ 1165 0247 0D       		.uleb128 0xd
+ 1166 0248 1E000000 		.4byte	.LVL15
+ 1167 024c 71060000 		.4byte	0x671
+ 1168 0250 5B020000 		.4byte	0x25b
+ 1169 0254 0E       		.uleb128 0xe
+ 1170 0255 01       		.uleb128 0x1
+ 1171 0256 50       		.byte	0x50
+ 1172 0257 02       		.uleb128 0x2
+ 1173 0258 74       		.byte	0x74
+ 1174 0259 00       		.sleb128 0
+ 1175 025a 00       		.byte	0
+ 1176 025b 0D       		.uleb128 0xd
+ 1177 025c 24000000 		.4byte	.LVL16
+ 1178 0260 7C060000 		.4byte	0x67c
+ 1179 0264 6E020000 		.4byte	0x26e
+ 1180 0268 0E       		.uleb128 0xe
+ 1181 0269 01       		.uleb128 0x1
+ 1182 026a 50       		.byte	0x50
+ 1183 026b 01       		.uleb128 0x1
+ 1184 026c 30       		.byte	0x30
+ 1185 026d 00       		.byte	0
+ 1186 026e 0D       		.uleb128 0xd
+ 1187 026f 2C000000 		.4byte	.LVL18
+ 1188 0273 71060000 		.4byte	0x671
+ 1189 0277 81020000 		.4byte	0x281
+ 1190 027b 0E       		.uleb128 0xe
+ 1191 027c 01       		.uleb128 0x1
+ 1192 027d 50       		.byte	0x50
+ 1193 027e 01       		.uleb128 0x1
+ 1194 027f 30       		.byte	0x30
+ 1195 0280 00       		.byte	0
+ 1196 0281 0F       		.uleb128 0xf
+ 1197 0282 34000000 		.4byte	.LVL19
+ 1198 0286 7C060000 		.4byte	0x67c
+ 1199 028a 0E       		.uleb128 0xe
+ 1200 028b 01       		.uleb128 0x1
+ 1201 028c 50       		.byte	0x50
+ 1202 028d 03       		.uleb128 0x3
+ 1203 028e 74       		.byte	0x74
+ 1204 028f 00       		.sleb128 0
+ 1205 0290 1F       		.byte	0x1f
+ 1206 0291 00       		.byte	0
+ 1207 0292 00       		.byte	0
+ 1208 0293 0C       		.uleb128 0xc
+ 1209 0294 BE000000 		.4byte	.LASF41
+ 1210 0298 01       		.byte	0x1
+ 1211 0299 66       		.byte	0x66
+ 1212 029a 00000000 		.4byte	.LFB67
+ 1213 029e 10000000 		.4byte	.LFE67-.LFB67
+ 1214 02a2 01       		.uleb128 0x1
+ 1215 02a3 9C       		.byte	0x9c
+ 1216 02a4 E0020000 		.4byte	0x2e0
+ 1217 02a8 0B       		.uleb128 0xb
+ 1218 02a9 55020000 		.4byte	.LASF42
+ 1219 02ad 01       		.byte	0x1
+ 1220 02ae 66       		.byte	0x66
+ 1221 02af A2000000 		.4byte	0xa2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 28
+
+
+ 1222 02b3 76000000 		.4byte	.LLST3
+ 1223 02b7 0B       		.uleb128 0xb
+ 1224 02b8 AB020000 		.4byte	.LASF43
+ 1225 02bc 01       		.byte	0x1
+ 1226 02bd 66       		.byte	0x66
+ 1227 02be A2000000 		.4byte	0xa2
+ 1228 02c2 97000000 		.4byte	.LLST4
+ 1229 02c6 10       		.uleb128 0x10
+ 1230 02c7 08000000 		.4byte	.LVL21
+ 1231 02cb B3010000 		.4byte	0x1b3
+ 1232 02cf 0F       		.uleb128 0xf
+ 1233 02d0 0E000000 		.4byte	.LVL22
+ 1234 02d4 23020000 		.4byte	0x223
+ 1235 02d8 0E       		.uleb128 0xe
+ 1236 02d9 01       		.uleb128 0x1
+ 1237 02da 50       		.byte	0x50
+ 1238 02db 02       		.uleb128 0x2
+ 1239 02dc 74       		.byte	0x74
+ 1240 02dd 00       		.sleb128 0
+ 1241 02de 00       		.byte	0
+ 1242 02df 00       		.byte	0
+ 1243 02e0 0C       		.uleb128 0xc
+ 1244 02e1 9E010000 		.4byte	.LASF44
+ 1245 02e5 01       		.byte	0x1
+ 1246 02e6 6C       		.byte	0x6c
+ 1247 02e7 00000000 		.4byte	.LFB68
+ 1248 02eb 0C000000 		.4byte	.LFE68-.LFB68
+ 1249 02ef 01       		.uleb128 0x1
+ 1250 02f0 9C       		.byte	0x9c
+ 1251 02f1 0A030000 		.4byte	0x30a
+ 1252 02f5 0F       		.uleb128 0xf
+ 1253 02f6 0A000000 		.4byte	.LVL23
+ 1254 02fa 93020000 		.4byte	0x293
+ 1255 02fe 0E       		.uleb128 0xe
+ 1256 02ff 01       		.uleb128 0x1
+ 1257 0300 50       		.byte	0x50
+ 1258 0301 01       		.uleb128 0x1
+ 1259 0302 30       		.byte	0x30
+ 1260 0303 0E       		.uleb128 0xe
+ 1261 0304 01       		.uleb128 0x1
+ 1262 0305 51       		.byte	0x51
+ 1263 0306 01       		.uleb128 0x1
+ 1264 0307 30       		.byte	0x30
+ 1265 0308 00       		.byte	0
+ 1266 0309 00       		.byte	0
+ 1267 030a 0C       		.uleb128 0xc
+ 1268 030b 7C020000 		.4byte	.LASF45
+ 1269 030f 01       		.byte	0x1
+ 1270 0310 87       		.byte	0x87
+ 1271 0311 00000000 		.4byte	.LFB69
+ 1272 0315 98020000 		.4byte	.LFE69-.LFB69
+ 1273 0319 01       		.uleb128 0x1
+ 1274 031a 9C       		.byte	0x9c
+ 1275 031b 86040000 		.4byte	0x486
+ 1276 031f 11       		.uleb128 0x11
+ 1277 0320 7300     		.ascii	"s\000"
+ 1278 0322 01       		.byte	0x1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 29
+
+
+ 1279 0323 87       		.byte	0x87
+ 1280 0324 86040000 		.4byte	0x486
+ 1281 0328 B8000000 		.4byte	.LLST5
+ 1282 032c 12       		.uleb128 0x12
+ 1283 032d AE030000 		.4byte	.LASF46
+ 1284 0331 01       		.byte	0x1
+ 1285 0332 89       		.byte	0x89
+ 1286 0333 97000000 		.4byte	0x97
+ 1287 0337 E4000000 		.4byte	.LLST6
+ 1288 033b 12       		.uleb128 0x12
+ 1289 033c E9010000 		.4byte	.LASF47
+ 1290 0340 01       		.byte	0x1
+ 1291 0341 8A       		.byte	0x8a
+ 1292 0342 97000000 		.4byte	0x97
+ 1293 0346 F7000000 		.4byte	.LLST7
+ 1294 034a 0D       		.uleb128 0xd
+ 1295 034b E0000000 		.4byte	.LVL31
+ 1296 034f 93020000 		.4byte	0x293
+ 1297 0353 62030000 		.4byte	0x362
+ 1298 0357 0E       		.uleb128 0xe
+ 1299 0358 01       		.uleb128 0x1
+ 1300 0359 50       		.byte	0x50
+ 1301 035a 01       		.uleb128 0x1
+ 1302 035b 4E       		.byte	0x4e
+ 1303 035c 0E       		.uleb128 0xe
+ 1304 035d 01       		.uleb128 0x1
+ 1305 035e 51       		.byte	0x51
+ 1306 035f 01       		.uleb128 0x1
+ 1307 0360 4E       		.byte	0x4e
+ 1308 0361 00       		.byte	0
+ 1309 0362 10       		.uleb128 0x10
+ 1310 0363 E8000000 		.4byte	.LVL33
+ 1311 0367 E0020000 		.4byte	0x2e0
+ 1312 036b 0D       		.uleb128 0xd
+ 1313 036c EE000000 		.4byte	.LVL34
+ 1314 0370 87060000 		.4byte	0x687
+ 1315 0374 7F030000 		.4byte	0x37f
+ 1316 0378 0E       		.uleb128 0xe
+ 1317 0379 01       		.uleb128 0x1
+ 1318 037a 50       		.byte	0x50
+ 1319 037b 02       		.uleb128 0x2
+ 1320 037c 08       		.byte	0x8
+ 1321 037d 32       		.byte	0x32
+ 1322 037e 00       		.byte	0
+ 1323 037f 10       		.uleb128 0x10
+ 1324 0380 04010000 		.4byte	.LVL36
+ 1325 0384 E0020000 		.4byte	0x2e0
+ 1326 0388 0D       		.uleb128 0xd
+ 1327 0389 0A010000 		.4byte	.LVL37
+ 1328 038d 87060000 		.4byte	0x687
+ 1329 0391 9C030000 		.4byte	0x39c
+ 1330 0395 0E       		.uleb128 0xe
+ 1331 0396 01       		.uleb128 0x1
+ 1332 0397 50       		.byte	0x50
+ 1333 0398 02       		.uleb128 0x2
+ 1334 0399 08       		.byte	0x8
+ 1335 039a 32       		.byte	0x32
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 30
+
+
+ 1336 039b 00       		.byte	0
+ 1337 039c 0D       		.uleb128 0xd
+ 1338 039d 38010000 		.4byte	.LVL40
+ 1339 03a1 93020000 		.4byte	0x293
+ 1340 03a5 B4030000 		.4byte	0x3b4
+ 1341 03a9 0E       		.uleb128 0xe
+ 1342 03aa 01       		.uleb128 0x1
+ 1343 03ab 50       		.byte	0x50
+ 1344 03ac 01       		.uleb128 0x1
+ 1345 03ad 4E       		.byte	0x4e
+ 1346 03ae 0E       		.uleb128 0xe
+ 1347 03af 01       		.uleb128 0x1
+ 1348 03b0 51       		.byte	0x51
+ 1349 03b1 01       		.uleb128 0x1
+ 1350 03b2 49       		.byte	0x49
+ 1351 03b3 00       		.byte	0
+ 1352 03b4 0D       		.uleb128 0xd
+ 1353 03b5 46010000 		.4byte	.LVL42
+ 1354 03b9 93020000 		.4byte	0x293
+ 1355 03bd CC030000 		.4byte	0x3cc
+ 1356 03c1 0E       		.uleb128 0xe
+ 1357 03c2 01       		.uleb128 0x1
+ 1358 03c3 50       		.byte	0x50
+ 1359 03c4 01       		.uleb128 0x1
+ 1360 03c5 49       		.byte	0x49
+ 1361 03c6 0E       		.uleb128 0xe
+ 1362 03c7 01       		.uleb128 0x1
+ 1363 03c8 51       		.byte	0x51
+ 1364 03c9 01       		.uleb128 0x1
+ 1365 03ca 4E       		.byte	0x4e
+ 1366 03cb 00       		.byte	0
+ 1367 03cc 0D       		.uleb128 0xd
+ 1368 03cd 50010000 		.4byte	.LVL44
+ 1369 03d1 93020000 		.4byte	0x293
+ 1370 03d5 E4030000 		.4byte	0x3e4
+ 1371 03d9 0E       		.uleb128 0xe
+ 1372 03da 01       		.uleb128 0x1
+ 1373 03db 50       		.byte	0x50
+ 1374 03dc 01       		.uleb128 0x1
+ 1375 03dd 4E       		.byte	0x4e
+ 1376 03de 0E       		.uleb128 0xe
+ 1377 03df 01       		.uleb128 0x1
+ 1378 03e0 51       		.byte	0x51
+ 1379 03e1 01       		.uleb128 0x1
+ 1380 03e2 4E       		.byte	0x4e
+ 1381 03e3 00       		.byte	0
+ 1382 03e4 0D       		.uleb128 0xd
+ 1383 03e5 5C010000 		.4byte	.LVL46
+ 1384 03e9 93020000 		.4byte	0x293
+ 1385 03ed FE030000 		.4byte	0x3fe
+ 1386 03f1 0E       		.uleb128 0xe
+ 1387 03f2 01       		.uleb128 0x1
+ 1388 03f3 50       		.byte	0x50
+ 1389 03f4 02       		.uleb128 0x2
+ 1390 03f5 09       		.byte	0x9
+ 1391 03f6 E2       		.byte	0xe2
+ 1392 03f7 0E       		.uleb128 0xe
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 31
+
+
+ 1393 03f8 01       		.uleb128 0x1
+ 1394 03f9 51       		.byte	0x51
+ 1395 03fa 02       		.uleb128 0x2
+ 1396 03fb 09       		.byte	0x9
+ 1397 03fc E2       		.byte	0xe2
+ 1398 03fd 00       		.byte	0
+ 1399 03fe 0D       		.uleb128 0xd
+ 1400 03ff 84010000 		.4byte	.LVL48
+ 1401 0403 93020000 		.4byte	0x293
+ 1402 0407 18040000 		.4byte	0x418
+ 1403 040b 0E       		.uleb128 0xe
+ 1404 040c 01       		.uleb128 0x1
+ 1405 040d 50       		.byte	0x50
+ 1406 040e 02       		.uleb128 0x2
+ 1407 040f 09       		.byte	0x9
+ 1408 0410 C4       		.byte	0xc4
+ 1409 0411 0E       		.uleb128 0xe
+ 1410 0412 01       		.uleb128 0x1
+ 1411 0413 51       		.byte	0x51
+ 1412 0414 02       		.uleb128 0x2
+ 1413 0415 08       		.byte	0x8
+ 1414 0416 3C       		.byte	0x3c
+ 1415 0417 00       		.byte	0
+ 1416 0418 0D       		.uleb128 0xd
+ 1417 0419 C0010000 		.4byte	.LVL51
+ 1418 041d 93020000 		.4byte	0x293
+ 1419 0421 32040000 		.4byte	0x432
+ 1420 0425 0E       		.uleb128 0xe
+ 1421 0426 01       		.uleb128 0x1
+ 1422 0427 50       		.byte	0x50
+ 1423 0428 02       		.uleb128 0x2
+ 1424 0429 08       		.byte	0x8
+ 1425 042a 3C       		.byte	0x3c
+ 1426 042b 0E       		.uleb128 0xe
+ 1427 042c 01       		.uleb128 0x1
+ 1428 042d 51       		.byte	0x51
+ 1429 042e 02       		.uleb128 0x2
+ 1430 042f 09       		.byte	0x9
+ 1431 0430 C4       		.byte	0xc4
+ 1432 0431 00       		.byte	0
+ 1433 0432 0D       		.uleb128 0xd
+ 1434 0433 FC010000 		.4byte	.LVL54
+ 1435 0437 93020000 		.4byte	0x293
+ 1436 043b 4C040000 		.4byte	0x44c
+ 1437 043f 0E       		.uleb128 0xe
+ 1438 0440 01       		.uleb128 0x1
+ 1439 0441 50       		.byte	0x50
+ 1440 0442 02       		.uleb128 0x2
+ 1441 0443 09       		.byte	0x9
+ 1442 0444 D8       		.byte	0xd8
+ 1443 0445 0E       		.uleb128 0xe
+ 1444 0446 01       		.uleb128 0x1
+ 1445 0447 51       		.byte	0x51
+ 1446 0448 02       		.uleb128 0x2
+ 1447 0449 08       		.byte	0x8
+ 1448 044a 28       		.byte	0x28
+ 1449 044b 00       		.byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 32
+
+
+ 1450 044c 0D       		.uleb128 0xd
+ 1451 044d 32020000 		.4byte	.LVL57
+ 1452 0451 93020000 		.4byte	0x293
+ 1453 0455 64040000 		.4byte	0x464
+ 1454 0459 0E       		.uleb128 0xe
+ 1455 045a 01       		.uleb128 0x1
+ 1456 045b 50       		.byte	0x50
+ 1457 045c 01       		.uleb128 0x1
+ 1458 045d 49       		.byte	0x49
+ 1459 045e 0E       		.uleb128 0xe
+ 1460 045f 01       		.uleb128 0x1
+ 1461 0460 51       		.byte	0x51
+ 1462 0461 01       		.uleb128 0x1
+ 1463 0462 4E       		.byte	0x4e
+ 1464 0463 00       		.byte	0
+ 1465 0464 0D       		.uleb128 0xd
+ 1466 0465 5E020000 		.4byte	.LVL59
+ 1467 0469 93020000 		.4byte	0x293
+ 1468 046d 7C040000 		.4byte	0x47c
+ 1469 0471 0E       		.uleb128 0xe
+ 1470 0472 01       		.uleb128 0x1
+ 1471 0473 50       		.byte	0x50
+ 1472 0474 01       		.uleb128 0x1
+ 1473 0475 4E       		.byte	0x4e
+ 1474 0476 0E       		.uleb128 0xe
+ 1475 0477 01       		.uleb128 0x1
+ 1476 0478 51       		.byte	0x51
+ 1477 0479 01       		.uleb128 0x1
+ 1478 047a 49       		.byte	0x49
+ 1479 047b 00       		.byte	0
+ 1480 047c 10       		.uleb128 0x10
+ 1481 047d 86020000 		.4byte	.LVL61
+ 1482 0481 E0020000 		.4byte	0x2e0
+ 1483 0485 00       		.byte	0
+ 1484 0486 13       		.uleb128 0x13
+ 1485 0487 04       		.byte	0x4
+ 1486 0488 8C040000 		.4byte	0x48c
+ 1487 048c 14       		.uleb128 0x14
+ 1488 048d 37010000 		.4byte	0x137
+ 1489 0491 0C       		.uleb128 0xc
+ 1490 0492 36000000 		.4byte	.LASF48
+ 1491 0496 01       		.byte	0x1
+ 1492 0497 3D       		.byte	0x3d
+ 1493 0498 00000000 		.4byte	.LFB64
+ 1494 049c 42000000 		.4byte	.LFE64-.LFB64
+ 1495 04a0 01       		.uleb128 0x1
+ 1496 04a1 9C       		.byte	0x9c
+ 1497 04a2 20050000 		.4byte	0x520
+ 1498 04a6 11       		.uleb128 0x11
+ 1499 04a7 7300     		.ascii	"s\000"
+ 1500 04a9 01       		.byte	0x1
+ 1501 04aa 3D       		.byte	0x3d
+ 1502 04ab 20050000 		.4byte	0x520
+ 1503 04af 15010000 		.4byte	.LLST8
+ 1504 04b3 10       		.uleb128 0x10
+ 1505 04b4 08000000 		.4byte	.LVL64
+ 1506 04b8 92060000 		.4byte	0x692
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 33
+
+
+ 1507 04bc 10       		.uleb128 0x10
+ 1508 04bd 0C000000 		.4byte	.LVL65
+ 1509 04c1 8A010000 		.4byte	0x18a
+ 1510 04c5 10       		.uleb128 0x10
+ 1511 04c6 12000000 		.4byte	.LVL66
+ 1512 04ca 9D060000 		.4byte	0x69d
+ 1513 04ce 10       		.uleb128 0x10
+ 1514 04cf 16000000 		.4byte	.LVL67
+ 1515 04d3 8A010000 		.4byte	0x18a
+ 1516 04d7 10       		.uleb128 0x10
+ 1517 04d8 1C000000 		.4byte	.LVL68
+ 1518 04dc A8060000 		.4byte	0x6a8
+ 1519 04e0 10       		.uleb128 0x10
+ 1520 04e1 20000000 		.4byte	.LVL69
+ 1521 04e5 8A010000 		.4byte	0x18a
+ 1522 04e9 10       		.uleb128 0x10
+ 1523 04ea 26000000 		.4byte	.LVL70
+ 1524 04ee B3060000 		.4byte	0x6b3
+ 1525 04f2 10       		.uleb128 0x10
+ 1526 04f3 2A000000 		.4byte	.LVL71
+ 1527 04f7 8A010000 		.4byte	0x18a
+ 1528 04fb 10       		.uleb128 0x10
+ 1529 04fc 30000000 		.4byte	.LVL72
+ 1530 0500 BE060000 		.4byte	0x6be
+ 1531 0504 10       		.uleb128 0x10
+ 1532 0505 34000000 		.4byte	.LVL73
+ 1533 0509 8A010000 		.4byte	0x18a
+ 1534 050d 10       		.uleb128 0x10
+ 1535 050e 3A000000 		.4byte	.LVL74
+ 1536 0512 C9060000 		.4byte	0x6c9
+ 1537 0516 10       		.uleb128 0x10
+ 1538 0517 3E000000 		.4byte	.LVL75
+ 1539 051b 8A010000 		.4byte	0x18a
+ 1540 051f 00       		.byte	0
+ 1541 0520 13       		.uleb128 0x13
+ 1542 0521 04       		.byte	0x4
+ 1543 0522 37010000 		.4byte	0x137
+ 1544 0526 15       		.uleb128 0x15
+ 1545 0527 6E000000 		.4byte	.LASF77
+ 1546 052b 01       		.byte	0x1
+ 1547 052c 2801     		.2byte	0x128
+ 1548 052e 89000000 		.4byte	0x89
+ 1549 0532 00000000 		.4byte	.LFB70
+ 1550 0536 2E000000 		.4byte	.LFE70-.LFB70
+ 1551 053a 01       		.uleb128 0x1
+ 1552 053b 9C       		.byte	0x9c
+ 1553 053c C2050000 		.4byte	0x5c2
+ 1554 0540 16       		.uleb128 0x16
+ 1555 0541 1A000000 		.4byte	.LBB2
+ 1556 0545 14000000 		.4byte	.LBE2-.LBB2
+ 1557 0549 94050000 		.4byte	0x594
+ 1558 054d 17       		.uleb128 0x17
+ 1559 054e 66000000 		.4byte	.LASF49
+ 1560 0552 01       		.byte	0x1
+ 1561 0553 3301     		.2byte	0x133
+ 1562 0555 37010000 		.4byte	0x137
+ 1563 0559 02       		.uleb128 0x2
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 34
+
+
+ 1564 055a 91       		.byte	0x91
+ 1565 055b 70       		.sleb128 -16
+ 1566 055c 0D       		.uleb128 0xd
+ 1567 055d 20000000 		.4byte	.LVL81
+ 1568 0561 91040000 		.4byte	0x491
+ 1569 0565 70050000 		.4byte	0x570
+ 1570 0569 0E       		.uleb128 0xe
+ 1571 056a 01       		.uleb128 0x1
+ 1572 056b 50       		.byte	0x50
+ 1573 056c 02       		.uleb128 0x2
+ 1574 056d 7D       		.byte	0x7d
+ 1575 056e 00       		.sleb128 0
+ 1576 056f 00       		.byte	0
+ 1577 0570 0D       		.uleb128 0xd
+ 1578 0571 26000000 		.4byte	.LVL82
+ 1579 0575 0A030000 		.4byte	0x30a
+ 1580 0579 84050000 		.4byte	0x584
+ 1581 057d 0E       		.uleb128 0xe
+ 1582 057e 01       		.uleb128 0x1
+ 1583 057f 50       		.byte	0x50
+ 1584 0580 02       		.uleb128 0x2
+ 1585 0581 7D       		.byte	0x7d
+ 1586 0582 00       		.sleb128 0
+ 1587 0583 00       		.byte	0
+ 1588 0584 0F       		.uleb128 0xf
+ 1589 0585 2C000000 		.4byte	.LVL83
+ 1590 0589 87060000 		.4byte	0x687
+ 1591 058d 0E       		.uleb128 0xe
+ 1592 058e 01       		.uleb128 0x1
+ 1593 058f 50       		.byte	0x50
+ 1594 0590 01       		.uleb128 0x1
+ 1595 0591 3A       		.byte	0x3a
+ 1596 0592 00       		.byte	0
+ 1597 0593 00       		.byte	0
+ 1598 0594 10       		.uleb128 0x10
+ 1599 0595 0A000000 		.4byte	.LVL76
+ 1600 0599 D4060000 		.4byte	0x6d4
+ 1601 059d 10       		.uleb128 0x10
+ 1602 059e 0E000000 		.4byte	.LVL77
+ 1603 05a2 DF060000 		.4byte	0x6df
+ 1604 05a6 10       		.uleb128 0x10
+ 1605 05a7 12000000 		.4byte	.LVL78
+ 1606 05ab EA060000 		.4byte	0x6ea
+ 1607 05af 10       		.uleb128 0x10
+ 1608 05b0 16000000 		.4byte	.LVL79
+ 1609 05b4 F5060000 		.4byte	0x6f5
+ 1610 05b8 10       		.uleb128 0x10
+ 1611 05b9 1A000000 		.4byte	.LVL80
+ 1612 05bd E0020000 		.4byte	0x2e0
+ 1613 05c1 00       		.byte	0
+ 1614 05c2 18       		.uleb128 0x18
+ 1615 05c3 43000000 		.4byte	.LASF50
+ 1616 05c7 01       		.byte	0x1
+ 1617 05c8 7E       		.byte	0x7e
+ 1618 05c9 7F010000 		.4byte	0x17f
+ 1619 05cd 05       		.uleb128 0x5
+ 1620 05ce 03       		.byte	0x3
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 35
+
+
+ 1621 05cf 00000000 		.4byte	state
+ 1622 05d3 18       		.uleb128 0x18
+ 1623 05d4 0C020000 		.4byte	.LASF51
+ 1624 05d8 01       		.byte	0x1
+ 1625 05d9 7F       		.byte	0x7f
+ 1626 05da 7F010000 		.4byte	0x17f
+ 1627 05de 05       		.uleb128 0x5
+ 1628 05df 03       		.byte	0x3
+ 1629 05e0 08000000 		.4byte	pendingTurnState
+ 1630 05e4 18       		.uleb128 0x18
+ 1631 05e5 15030000 		.4byte	.LASF52
+ 1632 05e9 01       		.byte	0x1
+ 1633 05ea 80       		.byte	0x80
+ 1634 05eb AD000000 		.4byte	0xad
+ 1635 05ef 05       		.uleb128 0x5
+ 1636 05f0 03       		.byte	0x3
+ 1637 05f1 04000000 		.4byte	lineLostCounter
+ 1638 05f5 18       		.uleb128 0x18
+ 1639 05f6 D1010000 		.4byte	.LASF53
+ 1640 05fa 01       		.byte	0x1
+ 1641 05fb 81       		.byte	0x81
+ 1642 05fc AD000000 		.4byte	0xad
+ 1643 0600 05       		.uleb128 0x5
+ 1644 0601 03       		.byte	0x3
+ 1645 0602 0C000000 		.4byte	turnCounter
+ 1646 0606 18       		.uleb128 0x18
+ 1647 0607 13010000 		.4byte	.LASF54
+ 1648 060b 01       		.byte	0x1
+ 1649 060c 82       		.byte	0x82
+ 1650 060d AD000000 		.4byte	0xad
+ 1651 0611 05       		.uleb128 0x5
+ 1652 0612 03       		.byte	0x3
+ 1653 0613 0A000000 		.4byte	backupCounter
+ 1654 0617 18       		.uleb128 0x18
+ 1655 0618 F7000000 		.4byte	.LASF55
+ 1656 061c 01       		.byte	0x1
+ 1657 061d 83       		.byte	0x83
+ 1658 061e AD000000 		.4byte	0xad
+ 1659 0622 05       		.uleb128 0x5
+ 1660 0623 03       		.byte	0x3
+ 1661 0624 0E000000 		.4byte	adjustCounter
+ 1662 0628 18       		.uleb128 0x18
+ 1663 0629 21010000 		.4byte	.LASF56
+ 1664 062d 01       		.byte	0x1
+ 1665 062e 84       		.byte	0x84
+ 1666 062f AD000000 		.4byte	0xad
+ 1667 0633 05       		.uleb128 0x5
+ 1668 0634 03       		.byte	0x3
+ 1669 0635 06000000 		.4byte	suppressSideCounter
+ 1670 0639 18       		.uleb128 0x18
+ 1671 063a E2000000 		.4byte	.LASF57
+ 1672 063e 01       		.byte	0x1
+ 1673 063f 85       		.byte	0x85
+ 1674 0640 AD000000 		.4byte	0xad
+ 1675 0644 05       		.uleb128 0x5
+ 1676 0645 03       		.byte	0x3
+ 1677 0646 02000000 		.4byte	deadEndCounter
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 36
+
+
+ 1678 064a 19       		.uleb128 0x19
+ 1679 064b CC030000 		.4byte	.LASF78
+ 1680 064f 0F       		.byte	0xf
+ 1681 0650 1207     		.2byte	0x712
+ 1682 0652 56060000 		.4byte	0x656
+ 1683 0656 1A       		.uleb128 0x1a
+ 1684 0657 B8000000 		.4byte	0xb8
+ 1685 065b 1B       		.uleb128 0x1b
+ 1686 065c A9010000 		.4byte	.LASF58
+ 1687 0660 A9010000 		.4byte	.LASF58
+ 1688 0664 04       		.byte	0x4
+ 1689 0665 C7       		.byte	0xc7
+ 1690 0666 1B       		.uleb128 0x1b
+ 1691 0667 BD010000 		.4byte	.LASF59
+ 1692 066b BD010000 		.4byte	.LASF59
+ 1693 066f 04       		.byte	0x4
+ 1694 0670 CA       		.byte	0xca
+ 1695 0671 1B       		.uleb128 0x1b
+ 1696 0672 D0020000 		.4byte	.LASF60
+ 1697 0676 D0020000 		.4byte	.LASF60
+ 1698 067a 05       		.byte	0x5
+ 1699 067b C7       		.byte	0xc7
+ 1700 067c 1B       		.uleb128 0x1b
+ 1701 067d A2000000 		.4byte	.LASF61
+ 1702 0681 A2000000 		.4byte	.LASF61
+ 1703 0685 05       		.byte	0x5
+ 1704 0686 CA       		.byte	0xca
+ 1705 0687 1B       		.uleb128 0x1b
+ 1706 0688 67040000 		.4byte	.LASF62
+ 1707 068c 67040000 		.4byte	.LASF62
+ 1708 0690 06       		.byte	0x6
+ 1709 0691 76       		.byte	0x76
+ 1710 0692 1B       		.uleb128 0x1b
+ 1711 0693 A6030000 		.4byte	.LASF63
+ 1712 0697 A6030000 		.4byte	.LASF63
+ 1713 069b 07       		.byte	0x7
+ 1714 069c 29       		.byte	0x29
+ 1715 069d 1B       		.uleb128 0x1b
+ 1716 069e 5E000000 		.4byte	.LASF64
+ 1717 06a2 5E000000 		.4byte	.LASF64
+ 1718 06a6 08       		.byte	0x8
+ 1719 06a7 29       		.byte	0x29
+ 1720 06a8 1B       		.uleb128 0x1b
+ 1721 06a9 9E030000 		.4byte	.LASF65
+ 1722 06ad 9E030000 		.4byte	.LASF65
+ 1723 06b1 09       		.byte	0x9
+ 1724 06b2 29       		.byte	0x29
+ 1725 06b3 1B       		.uleb128 0x1b
+ 1726 06b4 35010000 		.4byte	.LASF66
+ 1727 06b8 35010000 		.4byte	.LASF66
+ 1728 06bc 0A       		.byte	0xa
+ 1729 06bd 29       		.byte	0x29
+ 1730 06be 1B       		.uleb128 0x1b
+ 1731 06bf B8030000 		.4byte	.LASF67
+ 1732 06c3 B8030000 		.4byte	.LASF67
+ 1733 06c7 0B       		.byte	0xb
+ 1734 06c8 29       		.byte	0x29
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 37
+
+
+ 1735 06c9 1B       		.uleb128 0x1b
+ 1736 06ca 46010000 		.4byte	.LASF68
+ 1737 06ce 46010000 		.4byte	.LASF68
+ 1738 06d2 0C       		.byte	0xc
+ 1739 06d3 29       		.byte	0x29
+ 1740 06d4 1B       		.uleb128 0x1b
+ 1741 06d5 0B000000 		.4byte	.LASF69
+ 1742 06d9 0B000000 		.4byte	.LASF69
+ 1743 06dd 0D       		.byte	0xd
+ 1744 06de 27       		.byte	0x27
+ 1745 06df 1B       		.uleb128 0x1b
+ 1746 06e0 68020000 		.4byte	.LASF70
+ 1747 06e4 68020000 		.4byte	.LASF70
+ 1748 06e8 0E       		.byte	0xe
+ 1749 06e9 27       		.byte	0x27
+ 1750 06ea 1B       		.uleb128 0x1b
+ 1751 06eb 1F000000 		.4byte	.LASF71
+ 1752 06ef 1F000000 		.4byte	.LASF71
+ 1753 06f3 04       		.byte	0x4
+ 1754 06f4 92       		.byte	0x92
+ 1755 06f5 1B       		.uleb128 0x1b
+ 1756 06f6 8C020000 		.4byte	.LASF72
+ 1757 06fa 8C020000 		.4byte	.LASF72
+ 1758 06fe 05       		.byte	0x5
+ 1759 06ff 92       		.byte	0x92
+ 1760 0700 00       		.byte	0
+ 1761              		.section	.debug_abbrev,"",%progbits
+ 1762              	.Ldebug_abbrev0:
+ 1763 0000 01       		.uleb128 0x1
+ 1764 0001 11       		.uleb128 0x11
+ 1765 0002 01       		.byte	0x1
+ 1766 0003 25       		.uleb128 0x25
+ 1767 0004 0E       		.uleb128 0xe
+ 1768 0005 13       		.uleb128 0x13
+ 1769 0006 0B       		.uleb128 0xb
+ 1770 0007 03       		.uleb128 0x3
+ 1771 0008 0E       		.uleb128 0xe
+ 1772 0009 1B       		.uleb128 0x1b
+ 1773 000a 0E       		.uleb128 0xe
+ 1774 000b 55       		.uleb128 0x55
+ 1775 000c 17       		.uleb128 0x17
+ 1776 000d 11       		.uleb128 0x11
+ 1777 000e 01       		.uleb128 0x1
+ 1778 000f 10       		.uleb128 0x10
+ 1779 0010 17       		.uleb128 0x17
+ 1780 0011 00       		.byte	0
+ 1781 0012 00       		.byte	0
+ 1782 0013 02       		.uleb128 0x2
+ 1783 0014 24       		.uleb128 0x24
+ 1784 0015 00       		.byte	0
+ 1785 0016 0B       		.uleb128 0xb
+ 1786 0017 0B       		.uleb128 0xb
+ 1787 0018 3E       		.uleb128 0x3e
+ 1788 0019 0B       		.uleb128 0xb
+ 1789 001a 03       		.uleb128 0x3
+ 1790 001b 0E       		.uleb128 0xe
+ 1791 001c 00       		.byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 38
+
+
+ 1792 001d 00       		.byte	0
+ 1793 001e 03       		.uleb128 0x3
+ 1794 001f 16       		.uleb128 0x16
+ 1795 0020 00       		.byte	0
+ 1796 0021 03       		.uleb128 0x3
+ 1797 0022 0E       		.uleb128 0xe
+ 1798 0023 3A       		.uleb128 0x3a
+ 1799 0024 0B       		.uleb128 0xb
+ 1800 0025 3B       		.uleb128 0x3b
+ 1801 0026 0B       		.uleb128 0xb
+ 1802 0027 49       		.uleb128 0x49
+ 1803 0028 13       		.uleb128 0x13
+ 1804 0029 00       		.byte	0
+ 1805 002a 00       		.byte	0
+ 1806 002b 04       		.uleb128 0x4
+ 1807 002c 24       		.uleb128 0x24
+ 1808 002d 00       		.byte	0
+ 1809 002e 0B       		.uleb128 0xb
+ 1810 002f 0B       		.uleb128 0xb
+ 1811 0030 3E       		.uleb128 0x3e
+ 1812 0031 0B       		.uleb128 0xb
+ 1813 0032 03       		.uleb128 0x3
+ 1814 0033 08       		.uleb128 0x8
+ 1815 0034 00       		.byte	0
+ 1816 0035 00       		.byte	0
+ 1817 0036 05       		.uleb128 0x5
+ 1818 0037 13       		.uleb128 0x13
+ 1819 0038 01       		.byte	0x1
+ 1820 0039 0B       		.uleb128 0xb
+ 1821 003a 0B       		.uleb128 0xb
+ 1822 003b 3A       		.uleb128 0x3a
+ 1823 003c 0B       		.uleb128 0xb
+ 1824 003d 3B       		.uleb128 0x3b
+ 1825 003e 0B       		.uleb128 0xb
+ 1826 003f 01       		.uleb128 0x1
+ 1827 0040 13       		.uleb128 0x13
+ 1828 0041 00       		.byte	0
+ 1829 0042 00       		.byte	0
+ 1830 0043 06       		.uleb128 0x6
+ 1831 0044 0D       		.uleb128 0xd
+ 1832 0045 00       		.byte	0
+ 1833 0046 03       		.uleb128 0x3
+ 1834 0047 0E       		.uleb128 0xe
+ 1835 0048 3A       		.uleb128 0x3a
+ 1836 0049 0B       		.uleb128 0xb
+ 1837 004a 3B       		.uleb128 0x3b
+ 1838 004b 0B       		.uleb128 0xb
+ 1839 004c 49       		.uleb128 0x49
+ 1840 004d 13       		.uleb128 0x13
+ 1841 004e 38       		.uleb128 0x38
+ 1842 004f 0B       		.uleb128 0xb
+ 1843 0050 00       		.byte	0
+ 1844 0051 00       		.byte	0
+ 1845 0052 07       		.uleb128 0x7
+ 1846 0053 0D       		.uleb128 0xd
+ 1847 0054 00       		.byte	0
+ 1848 0055 03       		.uleb128 0x3
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 39
+
+
+ 1849 0056 08       		.uleb128 0x8
+ 1850 0057 3A       		.uleb128 0x3a
+ 1851 0058 0B       		.uleb128 0xb
+ 1852 0059 3B       		.uleb128 0x3b
+ 1853 005a 0B       		.uleb128 0xb
+ 1854 005b 49       		.uleb128 0x49
+ 1855 005c 13       		.uleb128 0x13
+ 1856 005d 38       		.uleb128 0x38
+ 1857 005e 0B       		.uleb128 0xb
+ 1858 005f 00       		.byte	0
+ 1859 0060 00       		.byte	0
+ 1860 0061 08       		.uleb128 0x8
+ 1861 0062 04       		.uleb128 0x4
+ 1862 0063 01       		.byte	0x1
+ 1863 0064 0B       		.uleb128 0xb
+ 1864 0065 0B       		.uleb128 0xb
+ 1865 0066 49       		.uleb128 0x49
+ 1866 0067 13       		.uleb128 0x13
+ 1867 0068 3A       		.uleb128 0x3a
+ 1868 0069 0B       		.uleb128 0xb
+ 1869 006a 3B       		.uleb128 0x3b
+ 1870 006b 0B       		.uleb128 0xb
+ 1871 006c 01       		.uleb128 0x1
+ 1872 006d 13       		.uleb128 0x13
+ 1873 006e 00       		.byte	0
+ 1874 006f 00       		.byte	0
+ 1875 0070 09       		.uleb128 0x9
+ 1876 0071 28       		.uleb128 0x28
+ 1877 0072 00       		.byte	0
+ 1878 0073 03       		.uleb128 0x3
+ 1879 0074 0E       		.uleb128 0xe
+ 1880 0075 1C       		.uleb128 0x1c
+ 1881 0076 0B       		.uleb128 0xb
+ 1882 0077 00       		.byte	0
+ 1883 0078 00       		.byte	0
+ 1884 0079 0A       		.uleb128 0xa
+ 1885 007a 2E       		.uleb128 0x2e
+ 1886 007b 01       		.byte	0x1
+ 1887 007c 03       		.uleb128 0x3
+ 1888 007d 0E       		.uleb128 0xe
+ 1889 007e 3A       		.uleb128 0x3a
+ 1890 007f 0B       		.uleb128 0xb
+ 1891 0080 3B       		.uleb128 0x3b
+ 1892 0081 0B       		.uleb128 0xb
+ 1893 0082 27       		.uleb128 0x27
+ 1894 0083 19       		.uleb128 0x19
+ 1895 0084 49       		.uleb128 0x49
+ 1896 0085 13       		.uleb128 0x13
+ 1897 0086 11       		.uleb128 0x11
+ 1898 0087 01       		.uleb128 0x1
+ 1899 0088 12       		.uleb128 0x12
+ 1900 0089 06       		.uleb128 0x6
+ 1901 008a 40       		.uleb128 0x40
+ 1902 008b 18       		.uleb128 0x18
+ 1903 008c 9742     		.uleb128 0x2117
+ 1904 008e 19       		.uleb128 0x19
+ 1905 008f 01       		.uleb128 0x1
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 40
+
+
+ 1906 0090 13       		.uleb128 0x13
+ 1907 0091 00       		.byte	0
+ 1908 0092 00       		.byte	0
+ 1909 0093 0B       		.uleb128 0xb
+ 1910 0094 05       		.uleb128 0x5
+ 1911 0095 00       		.byte	0
+ 1912 0096 03       		.uleb128 0x3
+ 1913 0097 0E       		.uleb128 0xe
+ 1914 0098 3A       		.uleb128 0x3a
+ 1915 0099 0B       		.uleb128 0xb
+ 1916 009a 3B       		.uleb128 0x3b
+ 1917 009b 0B       		.uleb128 0xb
+ 1918 009c 49       		.uleb128 0x49
+ 1919 009d 13       		.uleb128 0x13
+ 1920 009e 02       		.uleb128 0x2
+ 1921 009f 17       		.uleb128 0x17
+ 1922 00a0 00       		.byte	0
+ 1923 00a1 00       		.byte	0
+ 1924 00a2 0C       		.uleb128 0xc
+ 1925 00a3 2E       		.uleb128 0x2e
+ 1926 00a4 01       		.byte	0x1
+ 1927 00a5 03       		.uleb128 0x3
+ 1928 00a6 0E       		.uleb128 0xe
+ 1929 00a7 3A       		.uleb128 0x3a
+ 1930 00a8 0B       		.uleb128 0xb
+ 1931 00a9 3B       		.uleb128 0x3b
+ 1932 00aa 0B       		.uleb128 0xb
+ 1933 00ab 27       		.uleb128 0x27
+ 1934 00ac 19       		.uleb128 0x19
+ 1935 00ad 11       		.uleb128 0x11
+ 1936 00ae 01       		.uleb128 0x1
+ 1937 00af 12       		.uleb128 0x12
+ 1938 00b0 06       		.uleb128 0x6
+ 1939 00b1 40       		.uleb128 0x40
+ 1940 00b2 18       		.uleb128 0x18
+ 1941 00b3 9742     		.uleb128 0x2117
+ 1942 00b5 19       		.uleb128 0x19
+ 1943 00b6 01       		.uleb128 0x1
+ 1944 00b7 13       		.uleb128 0x13
+ 1945 00b8 00       		.byte	0
+ 1946 00b9 00       		.byte	0
+ 1947 00ba 0D       		.uleb128 0xd
+ 1948 00bb 898201   		.uleb128 0x4109
+ 1949 00be 01       		.byte	0x1
+ 1950 00bf 11       		.uleb128 0x11
+ 1951 00c0 01       		.uleb128 0x1
+ 1952 00c1 31       		.uleb128 0x31
+ 1953 00c2 13       		.uleb128 0x13
+ 1954 00c3 01       		.uleb128 0x1
+ 1955 00c4 13       		.uleb128 0x13
+ 1956 00c5 00       		.byte	0
+ 1957 00c6 00       		.byte	0
+ 1958 00c7 0E       		.uleb128 0xe
+ 1959 00c8 8A8201   		.uleb128 0x410a
+ 1960 00cb 00       		.byte	0
+ 1961 00cc 02       		.uleb128 0x2
+ 1962 00cd 18       		.uleb128 0x18
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 41
+
+
+ 1963 00ce 9142     		.uleb128 0x2111
+ 1964 00d0 18       		.uleb128 0x18
+ 1965 00d1 00       		.byte	0
+ 1966 00d2 00       		.byte	0
+ 1967 00d3 0F       		.uleb128 0xf
+ 1968 00d4 898201   		.uleb128 0x4109
+ 1969 00d7 01       		.byte	0x1
+ 1970 00d8 11       		.uleb128 0x11
+ 1971 00d9 01       		.uleb128 0x1
+ 1972 00da 31       		.uleb128 0x31
+ 1973 00db 13       		.uleb128 0x13
+ 1974 00dc 00       		.byte	0
+ 1975 00dd 00       		.byte	0
+ 1976 00de 10       		.uleb128 0x10
+ 1977 00df 898201   		.uleb128 0x4109
+ 1978 00e2 00       		.byte	0
+ 1979 00e3 11       		.uleb128 0x11
+ 1980 00e4 01       		.uleb128 0x1
+ 1981 00e5 31       		.uleb128 0x31
+ 1982 00e6 13       		.uleb128 0x13
+ 1983 00e7 00       		.byte	0
+ 1984 00e8 00       		.byte	0
+ 1985 00e9 11       		.uleb128 0x11
+ 1986 00ea 05       		.uleb128 0x5
+ 1987 00eb 00       		.byte	0
+ 1988 00ec 03       		.uleb128 0x3
+ 1989 00ed 08       		.uleb128 0x8
+ 1990 00ee 3A       		.uleb128 0x3a
+ 1991 00ef 0B       		.uleb128 0xb
+ 1992 00f0 3B       		.uleb128 0x3b
+ 1993 00f1 0B       		.uleb128 0xb
+ 1994 00f2 49       		.uleb128 0x49
+ 1995 00f3 13       		.uleb128 0x13
+ 1996 00f4 02       		.uleb128 0x2
+ 1997 00f5 17       		.uleb128 0x17
+ 1998 00f6 00       		.byte	0
+ 1999 00f7 00       		.byte	0
+ 2000 00f8 12       		.uleb128 0x12
+ 2001 00f9 34       		.uleb128 0x34
+ 2002 00fa 00       		.byte	0
+ 2003 00fb 03       		.uleb128 0x3
+ 2004 00fc 0E       		.uleb128 0xe
+ 2005 00fd 3A       		.uleb128 0x3a
+ 2006 00fe 0B       		.uleb128 0xb
+ 2007 00ff 3B       		.uleb128 0x3b
+ 2008 0100 0B       		.uleb128 0xb
+ 2009 0101 49       		.uleb128 0x49
+ 2010 0102 13       		.uleb128 0x13
+ 2011 0103 02       		.uleb128 0x2
+ 2012 0104 17       		.uleb128 0x17
+ 2013 0105 00       		.byte	0
+ 2014 0106 00       		.byte	0
+ 2015 0107 13       		.uleb128 0x13
+ 2016 0108 0F       		.uleb128 0xf
+ 2017 0109 00       		.byte	0
+ 2018 010a 0B       		.uleb128 0xb
+ 2019 010b 0B       		.uleb128 0xb
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 42
+
+
+ 2020 010c 49       		.uleb128 0x49
+ 2021 010d 13       		.uleb128 0x13
+ 2022 010e 00       		.byte	0
+ 2023 010f 00       		.byte	0
+ 2024 0110 14       		.uleb128 0x14
+ 2025 0111 26       		.uleb128 0x26
+ 2026 0112 00       		.byte	0
+ 2027 0113 49       		.uleb128 0x49
+ 2028 0114 13       		.uleb128 0x13
+ 2029 0115 00       		.byte	0
+ 2030 0116 00       		.byte	0
+ 2031 0117 15       		.uleb128 0x15
+ 2032 0118 2E       		.uleb128 0x2e
+ 2033 0119 01       		.byte	0x1
+ 2034 011a 3F       		.uleb128 0x3f
+ 2035 011b 19       		.uleb128 0x19
+ 2036 011c 03       		.uleb128 0x3
+ 2037 011d 0E       		.uleb128 0xe
+ 2038 011e 3A       		.uleb128 0x3a
+ 2039 011f 0B       		.uleb128 0xb
+ 2040 0120 3B       		.uleb128 0x3b
+ 2041 0121 05       		.uleb128 0x5
+ 2042 0122 27       		.uleb128 0x27
+ 2043 0123 19       		.uleb128 0x19
+ 2044 0124 49       		.uleb128 0x49
+ 2045 0125 13       		.uleb128 0x13
+ 2046 0126 8701     		.uleb128 0x87
+ 2047 0128 19       		.uleb128 0x19
+ 2048 0129 11       		.uleb128 0x11
+ 2049 012a 01       		.uleb128 0x1
+ 2050 012b 12       		.uleb128 0x12
+ 2051 012c 06       		.uleb128 0x6
+ 2052 012d 40       		.uleb128 0x40
+ 2053 012e 18       		.uleb128 0x18
+ 2054 012f 9742     		.uleb128 0x2117
+ 2055 0131 19       		.uleb128 0x19
+ 2056 0132 01       		.uleb128 0x1
+ 2057 0133 13       		.uleb128 0x13
+ 2058 0134 00       		.byte	0
+ 2059 0135 00       		.byte	0
+ 2060 0136 16       		.uleb128 0x16
+ 2061 0137 0B       		.uleb128 0xb
+ 2062 0138 01       		.byte	0x1
+ 2063 0139 11       		.uleb128 0x11
+ 2064 013a 01       		.uleb128 0x1
+ 2065 013b 12       		.uleb128 0x12
+ 2066 013c 06       		.uleb128 0x6
+ 2067 013d 01       		.uleb128 0x1
+ 2068 013e 13       		.uleb128 0x13
+ 2069 013f 00       		.byte	0
+ 2070 0140 00       		.byte	0
+ 2071 0141 17       		.uleb128 0x17
+ 2072 0142 34       		.uleb128 0x34
+ 2073 0143 00       		.byte	0
+ 2074 0144 03       		.uleb128 0x3
+ 2075 0145 0E       		.uleb128 0xe
+ 2076 0146 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 43
+
+
+ 2077 0147 0B       		.uleb128 0xb
+ 2078 0148 3B       		.uleb128 0x3b
+ 2079 0149 05       		.uleb128 0x5
+ 2080 014a 49       		.uleb128 0x49
+ 2081 014b 13       		.uleb128 0x13
+ 2082 014c 02       		.uleb128 0x2
+ 2083 014d 18       		.uleb128 0x18
+ 2084 014e 00       		.byte	0
+ 2085 014f 00       		.byte	0
+ 2086 0150 18       		.uleb128 0x18
+ 2087 0151 34       		.uleb128 0x34
+ 2088 0152 00       		.byte	0
+ 2089 0153 03       		.uleb128 0x3
+ 2090 0154 0E       		.uleb128 0xe
+ 2091 0155 3A       		.uleb128 0x3a
+ 2092 0156 0B       		.uleb128 0xb
+ 2093 0157 3B       		.uleb128 0x3b
+ 2094 0158 0B       		.uleb128 0xb
+ 2095 0159 49       		.uleb128 0x49
+ 2096 015a 13       		.uleb128 0x13
+ 2097 015b 02       		.uleb128 0x2
+ 2098 015c 18       		.uleb128 0x18
+ 2099 015d 00       		.byte	0
+ 2100 015e 00       		.byte	0
+ 2101 015f 19       		.uleb128 0x19
+ 2102 0160 34       		.uleb128 0x34
+ 2103 0161 00       		.byte	0
+ 2104 0162 03       		.uleb128 0x3
+ 2105 0163 0E       		.uleb128 0xe
+ 2106 0164 3A       		.uleb128 0x3a
+ 2107 0165 0B       		.uleb128 0xb
+ 2108 0166 3B       		.uleb128 0x3b
+ 2109 0167 05       		.uleb128 0x5
+ 2110 0168 49       		.uleb128 0x49
+ 2111 0169 13       		.uleb128 0x13
+ 2112 016a 3F       		.uleb128 0x3f
+ 2113 016b 19       		.uleb128 0x19
+ 2114 016c 3C       		.uleb128 0x3c
+ 2115 016d 19       		.uleb128 0x19
+ 2116 016e 00       		.byte	0
+ 2117 016f 00       		.byte	0
+ 2118 0170 1A       		.uleb128 0x1a
+ 2119 0171 35       		.uleb128 0x35
+ 2120 0172 00       		.byte	0
+ 2121 0173 49       		.uleb128 0x49
+ 2122 0174 13       		.uleb128 0x13
+ 2123 0175 00       		.byte	0
+ 2124 0176 00       		.byte	0
+ 2125 0177 1B       		.uleb128 0x1b
+ 2126 0178 2E       		.uleb128 0x2e
+ 2127 0179 00       		.byte	0
+ 2128 017a 3F       		.uleb128 0x3f
+ 2129 017b 19       		.uleb128 0x19
+ 2130 017c 3C       		.uleb128 0x3c
+ 2131 017d 19       		.uleb128 0x19
+ 2132 017e 6E       		.uleb128 0x6e
+ 2133 017f 0E       		.uleb128 0xe
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 44
+
+
+ 2134 0180 03       		.uleb128 0x3
+ 2135 0181 0E       		.uleb128 0xe
+ 2136 0182 3A       		.uleb128 0x3a
+ 2137 0183 0B       		.uleb128 0xb
+ 2138 0184 3B       		.uleb128 0x3b
+ 2139 0185 0B       		.uleb128 0xb
+ 2140 0186 00       		.byte	0
+ 2141 0187 00       		.byte	0
+ 2142 0188 00       		.byte	0
+ 2143              		.section	.debug_loc,"",%progbits
+ 2144              	.Ldebug_loc0:
+ 2145              	.LLST0:
+ 2146 0000 00000000 		.4byte	.LVL0
+ 2147 0004 04000000 		.4byte	.LVL1
+ 2148 0008 0100     		.2byte	0x1
+ 2149 000a 50       		.byte	0x50
+ 2150 000b 04000000 		.4byte	.LVL1
+ 2151 000f 06000000 		.4byte	.LVL2
+ 2152 0013 0400     		.2byte	0x4
+ 2153 0015 F3       		.byte	0xf3
+ 2154 0016 01       		.uleb128 0x1
+ 2155 0017 50       		.byte	0x50
+ 2156 0018 9F       		.byte	0x9f
+ 2157 0019 06000000 		.4byte	.LVL2
+ 2158 001d 08000000 		.4byte	.LVL3
+ 2159 0021 0100     		.2byte	0x1
+ 2160 0023 50       		.byte	0x50
+ 2161 0024 08000000 		.4byte	.LVL3
+ 2162 0028 0A000000 		.4byte	.LFE63
+ 2163 002c 0400     		.2byte	0x4
+ 2164 002e F3       		.byte	0xf3
+ 2165 002f 01       		.uleb128 0x1
+ 2166 0030 50       		.byte	0x50
+ 2167 0031 9F       		.byte	0x9f
+ 2168 0032 00000000 		.4byte	0
+ 2169 0036 00000000 		.4byte	0
+ 2170              	.LLST1:
+ 2171 003a 00000000 		.4byte	.LVL4
+ 2172 003e 0A000000 		.4byte	.LVL5
+ 2173 0042 0100     		.2byte	0x1
+ 2174 0044 50       		.byte	0x50
+ 2175 0045 0A000000 		.4byte	.LVL5
+ 2176 0049 36000000 		.4byte	.LFE65
+ 2177 004d 0100     		.2byte	0x1
+ 2178 004f 54       		.byte	0x54
+ 2179 0050 00000000 		.4byte	0
+ 2180 0054 00000000 		.4byte	0
+ 2181              	.LLST2:
+ 2182 0058 00000000 		.4byte	.LVL12
+ 2183 005c 0A000000 		.4byte	.LVL13
+ 2184 0060 0100     		.2byte	0x1
+ 2185 0062 50       		.byte	0x50
+ 2186 0063 0A000000 		.4byte	.LVL13
+ 2187 0067 36000000 		.4byte	.LFE66
+ 2188 006b 0100     		.2byte	0x1
+ 2189 006d 54       		.byte	0x54
+ 2190 006e 00000000 		.4byte	0
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 45
+
+
+ 2191 0072 00000000 		.4byte	0
+ 2192              	.LLST3:
+ 2193 0076 00000000 		.4byte	.LVL20
+ 2194 007a 07000000 		.4byte	.LVL21-1
+ 2195 007e 0100     		.2byte	0x1
+ 2196 0080 50       		.byte	0x50
+ 2197 0081 07000000 		.4byte	.LVL21-1
+ 2198 0085 10000000 		.4byte	.LFE67
+ 2199 0089 0400     		.2byte	0x4
+ 2200 008b F3       		.byte	0xf3
+ 2201 008c 01       		.uleb128 0x1
+ 2202 008d 50       		.byte	0x50
+ 2203 008e 9F       		.byte	0x9f
+ 2204 008f 00000000 		.4byte	0
+ 2205 0093 00000000 		.4byte	0
+ 2206              	.LLST4:
+ 2207 0097 00000000 		.4byte	.LVL20
+ 2208 009b 07000000 		.4byte	.LVL21-1
+ 2209 009f 0100     		.2byte	0x1
+ 2210 00a1 51       		.byte	0x51
+ 2211 00a2 07000000 		.4byte	.LVL21-1
+ 2212 00a6 10000000 		.4byte	.LFE67
+ 2213 00aa 0400     		.2byte	0x4
+ 2214 00ac F3       		.byte	0xf3
+ 2215 00ad 01       		.uleb128 0x1
+ 2216 00ae 51       		.byte	0x51
+ 2217 00af 9F       		.byte	0x9f
+ 2218 00b0 00000000 		.4byte	0
+ 2219 00b4 00000000 		.4byte	0
+ 2220              	.LLST5:
+ 2221 00b8 00000000 		.4byte	.LVL24
+ 2222 00bc 08000000 		.4byte	.LVL25
+ 2223 00c0 0100     		.2byte	0x1
+ 2224 00c2 50       		.byte	0x50
+ 2225 00c3 08000000 		.4byte	.LVL25
+ 2226 00c7 92020000 		.4byte	.LVL62
+ 2227 00cb 0100     		.2byte	0x1
+ 2228 00cd 55       		.byte	0x55
+ 2229 00ce 92020000 		.4byte	.LVL62
+ 2230 00d2 98020000 		.4byte	.LFE69
+ 2231 00d6 0400     		.2byte	0x4
+ 2232 00d8 F3       		.byte	0xf3
+ 2233 00d9 01       		.uleb128 0x1
+ 2234 00da 50       		.byte	0x50
+ 2235 00db 9F       		.byte	0x9f
+ 2236 00dc 00000000 		.4byte	0
+ 2237 00e0 00000000 		.4byte	0
+ 2238              	.LLST6:
+ 2239 00e4 22000000 		.4byte	.LVL26
+ 2240 00e8 92020000 		.4byte	.LVL62
+ 2241 00ec 0100     		.2byte	0x1
+ 2242 00ee 54       		.byte	0x54
+ 2243 00ef 00000000 		.4byte	0
+ 2244 00f3 00000000 		.4byte	0
+ 2245              	.LLST7:
+ 2246 00f7 4C000000 		.4byte	.LVL27
+ 2247 00fb 54000000 		.4byte	.LVL28
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 46
+
+
+ 2248 00ff 0100     		.2byte	0x1
+ 2249 0101 53       		.byte	0x53
+ 2250 0102 62000000 		.4byte	.LVL29
+ 2251 0106 66000000 		.4byte	.LVL30
+ 2252 010a 0100     		.2byte	0x1
+ 2253 010c 53       		.byte	0x53
+ 2254 010d 00000000 		.4byte	0
+ 2255 0111 00000000 		.4byte	0
+ 2256              	.LLST8:
+ 2257 0115 00000000 		.4byte	.LVL63
+ 2258 0119 07000000 		.4byte	.LVL64-1
+ 2259 011d 0100     		.2byte	0x1
+ 2260 011f 50       		.byte	0x50
+ 2261 0120 07000000 		.4byte	.LVL64-1
+ 2262 0124 42000000 		.4byte	.LFE64
+ 2263 0128 0100     		.2byte	0x1
+ 2264 012a 54       		.byte	0x54
+ 2265 012b 00000000 		.4byte	0
+ 2266 012f 00000000 		.4byte	0
+ 2267              		.section	.debug_aranges,"",%progbits
+ 2268 0000 54000000 		.4byte	0x54
+ 2269 0004 0200     		.2byte	0x2
+ 2270 0006 00000000 		.4byte	.Ldebug_info0
+ 2271 000a 04       		.byte	0x4
+ 2272 000b 00       		.byte	0
+ 2273 000c 0000     		.2byte	0
+ 2274 000e 0000     		.2byte	0
+ 2275 0010 00000000 		.4byte	.LFB63
+ 2276 0014 0A000000 		.4byte	.LFE63-.LFB63
+ 2277 0018 00000000 		.4byte	.LFB65
+ 2278 001c 36000000 		.4byte	.LFE65-.LFB65
+ 2279 0020 00000000 		.4byte	.LFB66
+ 2280 0024 36000000 		.4byte	.LFE66-.LFB66
+ 2281 0028 00000000 		.4byte	.LFB67
+ 2282 002c 10000000 		.4byte	.LFE67-.LFB67
+ 2283 0030 00000000 		.4byte	.LFB68
+ 2284 0034 0C000000 		.4byte	.LFE68-.LFB68
+ 2285 0038 00000000 		.4byte	.LFB69
+ 2286 003c 98020000 		.4byte	.LFE69-.LFB69
+ 2287 0040 00000000 		.4byte	.LFB64
+ 2288 0044 42000000 		.4byte	.LFE64-.LFB64
+ 2289 0048 00000000 		.4byte	.LFB70
+ 2290 004c 2E000000 		.4byte	.LFE70-.LFB70
+ 2291 0050 00000000 		.4byte	0
+ 2292 0054 00000000 		.4byte	0
+ 2293              		.section	.debug_ranges,"",%progbits
+ 2294              	.Ldebug_ranges0:
+ 2295 0000 00000000 		.4byte	.LFB63
+ 2296 0004 0A000000 		.4byte	.LFE63
+ 2297 0008 00000000 		.4byte	.LFB65
+ 2298 000c 36000000 		.4byte	.LFE65
+ 2299 0010 00000000 		.4byte	.LFB66
+ 2300 0014 36000000 		.4byte	.LFE66
+ 2301 0018 00000000 		.4byte	.LFB67
+ 2302 001c 10000000 		.4byte	.LFE67
+ 2303 0020 00000000 		.4byte	.LFB68
+ 2304 0024 0C000000 		.4byte	.LFE68
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 47
+
+
+ 2305 0028 00000000 		.4byte	.LFB69
+ 2306 002c 98020000 		.4byte	.LFE69
+ 2307 0030 00000000 		.4byte	.LFB64
+ 2308 0034 42000000 		.4byte	.LFE64
+ 2309 0038 00000000 		.4byte	.LFB70
+ 2310 003c 2E000000 		.4byte	.LFE70
+ 2311 0040 00000000 		.4byte	0
+ 2312 0044 00000000 		.4byte	0
+ 2313              		.section	.debug_line,"",%progbits
+ 2314              	.Ldebug_line0:
+ 2315 0000 20030000 		.section	.debug_str,"MS",%progbits,1
+ 2315      0200AA01 
+ 2315      00000201 
+ 2315      FB0E0D00 
+ 2315      01010101 
+ 2316              	.LASF76:
+ 2317 0000 52656164 		.ascii	"ReadSensor\000"
+ 2317      53656E73 
+ 2317      6F7200
+ 2318              	.LASF69:
+ 2319 000b 436C6F63 		.ascii	"Clock_1_Start\000"
+ 2319      6B5F315F 
+ 2319      53746172 
+ 2319      7400
+ 2320              	.LASF26:
+ 2321 0019 72696768 		.ascii	"right\000"
+ 2321      7400
+ 2322              	.LASF71:
+ 2323 001f 50574D5F 		.ascii	"PWM_1_Start\000"
+ 2323      315F5374 
+ 2323      61727400 
+ 2324              	.LASF36:
+ 2325 002b 526F626F 		.ascii	"RobotState\000"
+ 2325      74537461 
+ 2325      746500
+ 2326              	.LASF48:
+ 2327 0036 53656E73 		.ascii	"Sensors_Read\000"
+ 2327      6F72735F 
+ 2327      52656164 
+ 2327      00
+ 2328              	.LASF50:
+ 2329 0043 73746174 		.ascii	"state\000"
+ 2329      6500
+ 2330              	.LASF4:
+ 2331 0049 73686F72 		.ascii	"short int\000"
+ 2331      7420696E 
+ 2331      7400
+ 2332              	.LASF23:
+ 2333 0053 66726F6E 		.ascii	"frontRight\000"
+ 2333      74526967 
+ 2333      687400
+ 2334              	.LASF64:
+ 2335 005e 53325F52 		.ascii	"S2_Read\000"
+ 2335      65616400 
+ 2336              	.LASF49:
+ 2337 0066 73656E73 		.ascii	"sensors\000"
+ 2337      6F727300 
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 48
+
+
+ 2338              	.LASF77:
+ 2339 006e 6D61696E 		.ascii	"main\000"
+ 2339      00
+ 2340              	.LASF5:
+ 2341 0073 5F5F7569 		.ascii	"__uint16_t\000"
+ 2341      6E743136 
+ 2341      5F7400
+ 2342              	.LASF9:
+ 2343 007e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2343      20756E73 
+ 2343      69676E65 
+ 2343      6420696E 
+ 2343      7400
+ 2344              	.LASF29:
+ 2345 0090 53544154 		.ascii	"STATE_TURN_BACKUP\000"
+ 2345      455F5455 
+ 2345      524E5F42 
+ 2345      41434B55 
+ 2345      5000
+ 2346              	.LASF61:
+ 2347 00a2 50574D5F 		.ascii	"PWM_2_WriteCompare2\000"
+ 2347      325F5772 
+ 2347      69746543 
+ 2347      6F6D7061 
+ 2347      72653200 
+ 2348              	.LASF13:
+ 2349 00b6 75696E74 		.ascii	"uint8_t\000"
+ 2349      385F7400 
+ 2350              	.LASF41:
+ 2351 00be 4D6F746F 		.ascii	"Motor_SetSpeed\000"
+ 2351      725F5365 
+ 2351      74537065 
+ 2351      656400
+ 2352              	.LASF40:
+ 2353 00cd 4D6F746F 		.ascii	"Motor_Right_SetSpeed\000"
+ 2353      725F5269 
+ 2353      6768745F 
+ 2353      53657453 
+ 2353      70656564 
+ 2354              	.LASF57:
+ 2355 00e2 64656164 		.ascii	"deadEndCounter\000"
+ 2355      456E6443 
+ 2355      6F756E74 
+ 2355      657200
+ 2356              	.LASF17:
+ 2357 00f1 666C6F61 		.ascii	"float\000"
+ 2357      7400
+ 2358              	.LASF55:
+ 2359 00f7 61646A75 		.ascii	"adjustCounter\000"
+ 2359      7374436F 
+ 2359      756E7465 
+ 2359      7200
+ 2360              	.LASF10:
+ 2361 0105 6C6F6E67 		.ascii	"long long int\000"
+ 2361      206C6F6E 
+ 2361      6720696E 
+ 2361      7400
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 49
+
+
+ 2362              	.LASF54:
+ 2363 0113 6261636B 		.ascii	"backupCounter\000"
+ 2363      7570436F 
+ 2363      756E7465 
+ 2363      7200
+ 2364              	.LASF56:
+ 2365 0121 73757070 		.ascii	"suppressSideCounter\000"
+ 2365      72657373 
+ 2365      53696465 
+ 2365      436F756E 
+ 2365      74657200 
+ 2366              	.LASF66:
+ 2367 0135 53345F52 		.ascii	"S4_Read\000"
+ 2367      65616400 
+ 2368              	.LASF8:
+ 2369 013d 6C6F6E67 		.ascii	"long int\000"
+ 2369      20696E74 
+ 2369      00
+ 2370              	.LASF68:
+ 2371 0146 53315F52 		.ascii	"S1_Read\000"
+ 2371      65616400 
+ 2372              	.LASF21:
+ 2373 014e 73697A65 		.ascii	"sizetype\000"
+ 2373      74797065 
+ 2373      00
+ 2374              	.LASF75:
+ 2375 0157 433A5C54 		.ascii	"C:\\TEMP\\Compsys-301-Design-Project\\Motor_test\\D"
+ 2375      454D505C 
+ 2375      436F6D70 
+ 2375      7379732D 
+ 2375      3330312D 
+ 2376 0186 65736967 		.ascii	"esign01.cydsn\000"
+ 2376      6E30312E 
+ 2376      63796473 
+ 2376      6E00
+ 2377              	.LASF2:
+ 2378 0194 5F5F7569 		.ascii	"__uint8_t\000"
+ 2378      6E74385F 
+ 2378      7400
+ 2379              	.LASF44:
+ 2380 019e 4D6F746F 		.ascii	"Motor_Stop\000"
+ 2380      725F5374 
+ 2380      6F7000
+ 2381              	.LASF58:
+ 2382 01a9 50574D5F 		.ascii	"PWM_1_WriteCompare1\000"
+ 2382      315F5772 
+ 2382      69746543 
+ 2382      6F6D7061 
+ 2382      72653100 
+ 2383              	.LASF59:
+ 2384 01bd 50574D5F 		.ascii	"PWM_1_WriteCompare2\000"
+ 2384      315F5772 
+ 2384      69746543 
+ 2384      6F6D7061 
+ 2384      72653200 
+ 2385              	.LASF53:
+ 2386 01d1 7475726E 		.ascii	"turnCounter\000"
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 50
+
+
+ 2386      436F756E 
+ 2386      74657200 
+ 2387              	.LASF20:
+ 2388 01dd 6C6F6E67 		.ascii	"long double\000"
+ 2388      20646F75 
+ 2388      626C6500 
+ 2389              	.LASF47:
+ 2390 01e9 6F6E6C79 		.ascii	"onlyBack\000"
+ 2390      4261636B 
+ 2390      00
+ 2391              	.LASF1:
+ 2392 01f2 756E7369 		.ascii	"unsigned char\000"
+ 2392      676E6564 
+ 2392      20636861 
+ 2392      7200
+ 2393              	.LASF37:
+ 2394 0200 72617750 		.ascii	"rawPinValue\000"
+ 2394      696E5661 
+ 2394      6C756500 
+ 2395              	.LASF51:
+ 2396 020c 70656E64 		.ascii	"pendingTurnState\000"
+ 2396      696E6754 
+ 2396      75726E53 
+ 2396      74617465 
+ 2396      00
+ 2397              	.LASF0:
+ 2398 021d 7369676E 		.ascii	"signed char\000"
+ 2398      65642063 
+ 2398      68617200 
+ 2399              	.LASF16:
+ 2400 0229 696E7433 		.ascii	"int32_t\000"
+ 2400      325F7400 
+ 2401              	.LASF11:
+ 2402 0231 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2402      206C6F6E 
+ 2402      6720756E 
+ 2402      7369676E 
+ 2402      65642069 
+ 2403              	.LASF12:
+ 2404 0248 756E7369 		.ascii	"unsigned int\000"
+ 2404      676E6564 
+ 2404      20696E74 
+ 2404      00
+ 2405              	.LASF42:
+ 2406 0255 6C656674 		.ascii	"leftSpeed\000"
+ 2406      53706565 
+ 2406      6400
+ 2407              	.LASF15:
+ 2408 025f 75696E74 		.ascii	"uint16_t\000"
+ 2408      31365F74 
+ 2408      00
+ 2409              	.LASF70:
+ 2410 0268 436C6F63 		.ascii	"Clock_2_Start\000"
+ 2410      6B5F325F 
+ 2410      53746172 
+ 2410      7400
+ 2411              	.LASF38:
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 51
+
+
+ 2412 0276 73706565 		.ascii	"speed\000"
+ 2412      6400
+ 2413              	.LASF45:
+ 2414 027c 52756E4C 		.ascii	"RunLineFollower\000"
+ 2414      696E6546 
+ 2414      6F6C6C6F 
+ 2414      77657200 
+ 2415              	.LASF72:
+ 2416 028c 50574D5F 		.ascii	"PWM_2_Start\000"
+ 2416      325F5374 
+ 2416      61727400 
+ 2417              	.LASF6:
+ 2418 0298 73686F72 		.ascii	"short unsigned int\000"
+ 2418      7420756E 
+ 2418      7369676E 
+ 2418      65642069 
+ 2418      6E7400
+ 2419              	.LASF43:
+ 2420 02ab 72696768 		.ascii	"rightSpeed\000"
+ 2420      74537065 
+ 2420      656400
+ 2421              	.LASF28:
+ 2422 02b6 53544154 		.ascii	"STATE_DRIVE_STRAIGHT\000"
+ 2422      455F4452 
+ 2422      4956455F 
+ 2422      53545241 
+ 2422      49474854 
+ 2423              	.LASF19:
+ 2424 02cb 63686172 		.ascii	"char\000"
+ 2424      00
+ 2425              	.LASF60:
+ 2426 02d0 50574D5F 		.ascii	"PWM_2_WriteCompare1\000"
+ 2426      325F5772 
+ 2426      69746543 
+ 2426      6F6D7061 
+ 2426      72653100 
+ 2427              	.LASF25:
+ 2428 02e4 6C656674 		.ascii	"left\000"
+ 2428      00
+ 2429              	.LASF30:
+ 2430 02e9 53544154 		.ascii	"STATE_TURN_LEFT\000"
+ 2430      455F5455 
+ 2430      524E5F4C 
+ 2430      45465400 
+ 2431              	.LASF39:
+ 2432 02f9 4D6F746F 		.ascii	"Motor_Left_SetSpeed\000"
+ 2432      725F4C65 
+ 2432      66745F53 
+ 2432      65745370 
+ 2432      65656400 
+ 2433              	.LASF14:
+ 2434 030d 696E7431 		.ascii	"int16_t\000"
+ 2434      365F7400 
+ 2435              	.LASF52:
+ 2436 0315 6C696E65 		.ascii	"lineLostCounter\000"
+ 2436      4C6F7374 
+ 2436      436F756E 
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 52
+
+
+ 2436      74657200 
+ 2437              	.LASF24:
+ 2438 0325 6261636B 		.ascii	"back\000"
+ 2438      00
+ 2439              	.LASF34:
+ 2440 032a 53544154 		.ascii	"STATE_TURN_AROUND\000"
+ 2440      455F5455 
+ 2440      524E5F41 
+ 2440      524F554E 
+ 2440      4400
+ 2441              	.LASF74:
+ 2442 033c 6D61696E 		.ascii	"main.c\000"
+ 2442      2E6300
+ 2443              	.LASF32:
+ 2444 0343 53544154 		.ascii	"STATE_ADJUST_LEFT\000"
+ 2444      455F4144 
+ 2444      4A555354 
+ 2444      5F4C4546 
+ 2444      5400
+ 2445              	.LASF18:
+ 2446 0355 646F7562 		.ascii	"double\000"
+ 2446      6C6500
+ 2447              	.LASF31:
+ 2448 035c 53544154 		.ascii	"STATE_TURN_RIGHT\000"
+ 2448      455F5455 
+ 2448      524E5F52 
+ 2448      49474854 
+ 2448      00
+ 2449              	.LASF33:
+ 2450 036d 53544154 		.ascii	"STATE_ADJUST_RIGHT\000"
+ 2450      455F4144 
+ 2450      4A555354 
+ 2450      5F524947 
+ 2450      485400
+ 2451              	.LASF22:
+ 2452 0380 66726F6E 		.ascii	"frontLeft\000"
+ 2452      744C6566 
+ 2452      7400
+ 2453              	.LASF7:
+ 2454 038a 5F5F696E 		.ascii	"__int32_t\000"
+ 2454      7433325F 
+ 2454      7400
+ 2455              	.LASF3:
+ 2456 0394 5F5F696E 		.ascii	"__int16_t\000"
+ 2456      7431365F 
+ 2456      7400
+ 2457              	.LASF65:
+ 2458 039e 53365F52 		.ascii	"S6_Read\000"
+ 2458      65616400 
+ 2459              	.LASF63:
+ 2460 03a6 53335F52 		.ascii	"S3_Read\000"
+ 2460      65616400 
+ 2461              	.LASF46:
+ 2462 03ae 616E794F 		.ascii	"anyOnLine\000"
+ 2462      6E4C696E 
+ 2462      6500
+ 2463              	.LASF67:
+ARM GAS  C:\Users\tlen226\AppData\Local\Temp\ccvb6PfP.s 			page 53
+
+
+ 2464 03b8 53355F52 		.ascii	"S5_Read\000"
+ 2464      65616400 
+ 2465              	.LASF27:
+ 2466 03c0 53656E73 		.ascii	"SensorState\000"
+ 2466      6F725374 
+ 2466      61746500 
+ 2467              	.LASF78:
+ 2468 03cc 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 2468      52784275 
+ 2468      66666572 
+ 2468      00
+ 2469              	.LASF73:
+ 2470 03d9 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2470      43313120 
+ 2470      352E342E 
+ 2470      31203230 
+ 2470      31363036 
+ 2471 040c 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 2471      20726576 
+ 2471      6973696F 
+ 2471      6E203233 
+ 2471      37373135 
+ 2472 043f 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2472      66756E63 
+ 2472      74696F6E 
+ 2472      2D736563 
+ 2472      74696F6E 
+ 2473              	.LASF62:
+ 2474 0467 43794465 		.ascii	"CyDelay\000"
+ 2474      6C617900 
+ 2475              	.LASF35:
+ 2476 046f 53544154 		.ascii	"STATE_LINE_LOST\000"
+ 2476      455F4C49 
+ 2476      4E455F4C 
+ 2476      4F535400 
+ 2477              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
