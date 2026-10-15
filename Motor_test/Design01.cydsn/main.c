@@ -1,48 +1,116 @@
 /* ==========================================================================
- * Line-Following Robot
+ * Line-Following Robot - RIGHT-HAND PRIORITY  (rev 2)
  * ==========================================================================
- * Sensor pins:
- *   S1 = P1.5    S2 = P1.6    S3 = P1.7
- *   S4 = P2.5    S5 = P2.6    S6 = P2.7
+ * Hardware (from top design):
+ *   PWM_1 (In1/IN2)       -> left  motor      QuadDec_L (ENCD3/ENCD4)
+ *   PWM_2 (In1_1/IN2_1)   -> right motor      QuadDec_R (ENCD1/ENCD2)
+ *   S1..S6 digital inputs, SW (start switch), LED
+ *   D1 / D1_1 are constant-0 outputs in the schematic - no code needed.
  *
- * Physical role assignment:
- *   S3 = front-left     S2 = front-right
- *   S6 = mid            S4 = back
- *   S5 = left           S1 = right   (swapped - matched turning the correct
- *                                     direction on the bench)
+ * Map: black line on white. Sensors go HIGH over white, so a sensor that
+ * sees the black line reads LOW  (SENSOR_ACTIVE_LEVEL = 0).
+ *
+ * Sensor layout:
+ *   Front pair   : frontLeft, frontRight - straddle the line (a bit wider
+ *                  than the line), so when centred NEITHER sees it.
+ *   Axle row     : left, mid, right - just behind the axle.
+ *   Rear         : back - centre of the tail.
+ *
+ * Junction rule (right-hand priority):
+ *   1. Right branch available  -> turn right
+ *   2. else straight available -> go straight
+ *   3. else left branch        -> turn left
+ *   4. else dead end           -> spin 180 (to the right)
+ *
+ * TURN PROCEDURE (every turn, 90 or 180):
+ *   ALIGN   reverse so the axle sits over the junction centre
+ *   SEEK    slow spin. Blind (coarse speed) until the minimum angle is
+ *           reached, then fine speed. The leading front sensor hits the new
+ *           line first, then the SECOND front sensor hits it.
+ *   RIGHT   the moment the second front sensor hits the line: stop, then
+ *   ITSELF  creep back the other way at fine speed until that sensor lets go
+ *           of the line, i.e. the line is back between the front pair.
+ *   Then normal line following resumes.
+ *
+ * Everything marked TUNE needs bench calibration for your robot.
  * ========================================================================== */
 
 #include "project.h"
 #include <stdint.h>
 
-/* ---------------- Configuration ---------------- */
+/* ==========================================================================
+ * Configuration
+ * ========================================================================== */
 
-#define SENSOR_ACTIVE_LEVEL   0u
-#define PWM_MAX_COMPARE       255u
-#define SPEED_BASE            30u
-#define SPEED_TURN            60u
-#define SPEED_TURN_AROUND     40u         /* spin speed for the dead-end 180 only - the normal left/right
-                                            * turns keep using SPEED_TURN */
+#define LOOP_MS                5u
+#define MS(x)                  ((uint16_t)((x) / LOOP_MS))   /* ms -> loop ticks */
 
-#define LINE_LOST_THRESHOLD   20u
-#define TURN_TIMEOUT          60u
-#define TURN_COOLDOWN         30u
-#define POST_TURN_COOLDOWN    20u
+/* ---- Sensor mapping: swap these if a sensor is on the wrong side ---------
+ * Carried over from the previous main.c (S5/S1 were swapped on the bench). */
+#define SENSOR_ACTIVE_LEVEL    0u
+#define RAW_FRONT_LEFT()       S3_Read()
+#define RAW_FRONT_RIGHT()      S2_Read()
+#define RAW_MID()              S6_Read()
+#define RAW_BACK()             S4_Read()
+#define RAW_LEFT()             S5_Read()
+#define RAW_RIGHT()            S1_Read()
 
-#define DEAD_END_CONFIRM_ITERATIONS  3u   /* back-only must hold this many ticks in a row before the 180 starts (1 = immediate) */
-#define U_TURN_TIMEOUT        120u        /* safety cap for the 180 - roughly 2x TURN_TIMEOUT since it covers about twice the angle */
+/* ---- Start switch ---------------------------------------------------------
+ * SW_PRESSED_LEVEL is the pin level when pressed (TUNE). */
+#define USE_START_SWITCH       1
+#define SW_PRESSED_LEVEL       0u
 
-#define TURN_BACKUP_BRAKE_MS      50u
-#define TURN_BACKUP_ITERATIONS    15u
-#define POST_TURN_ADJUST_ITERATIONS  6u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below */
+/* ---- Speeds (PWM compare, 0-255) ---------------------------------------- */
+#define PWM_MAX_COMPARE        255u
+#define SPEED_BASE             30u
 
-#define DRIFT_CORRECTION_OFFSET   5u  /* how much slower the inside wheel runs during a drift-correction
-                                        * nudge (straight-line AND post-turn adjust). Small on purpose -
-                                        * this used to be a 33% cut (SPEED_BASE / 1.5), which was strong
-                                        * enough to overshoot past center and oscillate. Bump it up only a
-                                        * little at a time if corrections now feel too weak/slow. */
+#define SPEED_TURN_COARSE      45u   /* spin speed before the minimum angle - nothing
+                                      * is being detected yet, so this can be quicker */
+#define SPEED_TURN_FINE        30u   /* spin speed while hunting for the line (TUNE:
+                                      * lower = less overshoot, but too low and the
+                                      * wheels stall - raise if the robot stops) */
+#define SPEED_RIGHTING         30u   /* counter-spin that re-centres after overshoot */
 
-/* ---------------- Sensor reading ---------------- */
+/* ---- Line following ------------------------------------------------------
+ * A single front sensor must stay lit this long before we steer. A side
+ * branch crossing under one front sensor is brief; real drift persists. */
+#define DRIFT_CONFIRM_TICKS    MS(15)
+#define DRIFT_CUT              6u    /* how much slower the inside wheel runs */
+
+/* ---- Junction detection ------------------------------------------------- */
+#define SIDE_CONFIRM_TICKS     MS(10)   /* side sensor must hold this long   */
+#define REARM_CLEAR_TICKS      MS(20)   /* both side sensors clear to re-arm */
+#define DEAD_END_CONFIRM_TICKS MS(30)   /* back-only must hold this long     */
+#define LINE_LOST_TICKS        MS(200)  /* all-white this long = lost        */
+
+/* ---- Encoder distances (ticks, direction-independent).  TUNE -------------
+ * Distances are measured as (|dL| + |dR|)/2 so encoder count direction does
+ * not matter.
+ * ticks_per_mm   = encoder counts per wheel rev / (pi * wheel_diameter_mm)
+ * JUNCTION_CREEP = (line width + ~5 mm) * ticks_per_mm
+ * ALIGN_BACKUP   = (axle-to-side-sensor distance - line_width/2) * ticks_per_mm
+ * TURN_90_*      = per-wheel arc for a 90 deg pivot = pi * track_width / 4
+ *                  MIN ~ 60 % of it, MAX ~ 150 % of it. 180 deg doubles both. */
+#define JUNCTION_CREEP_TICKS   40
+#define ALIGN_BACKUP_TICKS     60
+#define TURN_90_MIN_TICKS      150
+#define TURN_90_MAX_TICKS      600
+#define TURN_180_MIN_TICKS     350
+#define TURN_180_MAX_TICKS     1100
+
+/* ---- Safety timeouts ---------------------------------------------------- */
+#define JUNCTION_TIMEOUT_TICKS MS(400)
+#define ALIGN_TIMEOUT_TICKS    MS(600)
+#define TURN_90_TIMEOUT_TICKS  MS(3000)
+#define TURN_180_TIMEOUT_TICKS MS(5000)
+#define RIGHTING_TIMEOUT_TICKS MS(600)
+
+#define BRAKE_MS               50u   /* pause after stopping, before reversing */
+#define SETTLE_MS              40u   /* pause to let the wheels stop spinning  */
+
+/* ==========================================================================
+ * Sensors
+ * ========================================================================== */
 
 typedef struct {
     uint8_t frontLeft;
@@ -53,29 +121,35 @@ typedef struct {
     uint8_t right;
 } SensorState;
 
-static uint8_t ReadSensor(uint8_t rawPinValue)
+static uint8_t OnLine(uint8_t raw)
 {
-    return (rawPinValue == SENSOR_ACTIVE_LEVEL) ? 1u : 0u;
+    return (raw == SENSOR_ACTIVE_LEVEL) ? 1u : 0u;
 }
 
 static void Sensors_Read(SensorState *s)
 {
-    s->frontLeft  = ReadSensor(S3_Read());
-    s->frontRight = ReadSensor(S2_Read());
-    s->mid        = ReadSensor(S6_Read());
-    s->back       = ReadSensor(S4_Read());
-    s->left       = ReadSensor(S5_Read());
-    s->right      = ReadSensor(S1_Read());
+    s->frontLeft  = OnLine(RAW_FRONT_LEFT());
+    s->frontRight = OnLine(RAW_FRONT_RIGHT());
+    s->mid        = OnLine(RAW_MID());
+    s->back       = OnLine(RAW_BACK());
+    s->left       = OnLine(RAW_LEFT());
+    s->right      = OnLine(RAW_RIGHT());
 }
 
-/* ---------------- Motor drive ---------------- */
+/* ==========================================================================
+ * Motors  (positive = forward, negative = reverse)
+ * ========================================================================== */
 
-/* positive = forward, negative = reverse */
+static int16_t Clamp(int16_t v)
+{
+    if (v >  (int16_t)PWM_MAX_COMPARE) { return  (int16_t)PWM_MAX_COMPARE; }
+    if (v < -(int16_t)PWM_MAX_COMPARE) { return -(int16_t)PWM_MAX_COMPARE; }
+    return v;
+}
+
 static void Motor_Left_SetSpeed(int16_t speed)
 {
-    if (speed > (int16_t)PWM_MAX_COMPARE)  { speed = (int16_t)PWM_MAX_COMPARE; }
-    if (speed < -(int16_t)PWM_MAX_COMPARE) { speed = -(int16_t)PWM_MAX_COMPARE; }
-
+    speed = Clamp(speed);
     if (speed >= 0) {
         PWM_1_WriteCompare1((uint8_t)speed);
         PWM_1_WriteCompare2(0u);
@@ -87,9 +161,7 @@ static void Motor_Left_SetSpeed(int16_t speed)
 
 static void Motor_Right_SetSpeed(int16_t speed)
 {
-    if (speed > (int16_t)PWM_MAX_COMPARE)  { speed = (int16_t)PWM_MAX_COMPARE; }
-    if (speed < -(int16_t)PWM_MAX_COMPARE) { speed = -(int16_t)PWM_MAX_COMPARE; }
-
+    speed = Clamp(speed);
     if (speed >= 0) {
         PWM_2_WriteCompare1((uint8_t)speed);
         PWM_2_WriteCompare2(0u);
@@ -110,188 +182,312 @@ static void Motor_Stop(void)
     Motor_SetSpeed(0, 0);
 }
 
-/* ---------------- Line-following state machine ---------------- */
+/* dir > 0 spins right (left wheel fwd, right wheel back), dir < 0 spins left */
+static void Motor_Spin(int8_t dir, int16_t speed)
+{
+    if (dir > 0) { Motor_SetSpeed(speed, -speed); }
+    else         { Motor_SetSpeed(-speed, speed); }
+}
+
+/* ==========================================================================
+ * Encoders - distance travelled since the current state began
+ * ========================================================================== */
+
+static int32_t encL = 0;
+static int32_t encR = 0;
+static int32_t stateStartL = 0;
+static int32_t stateStartR = 0;
+
+static int32_t Abs32(int32_t v)
+{
+    return (v < 0) ? -v : v;
+}
+
+static void Enc_Update(void)
+{
+    encL = (int32_t)QuadDec_L_GetCounter();
+    encR = (int32_t)QuadDec_R_GetCounter();
+}
+
+/* ticks moved since EnterState(), whichever way the wheels turned */
+static int32_t Travel(void)
+{
+    return (Abs32(encL - stateStartL) + Abs32(encR - stateStartR)) / 2;
+}
+
+/* ==========================================================================
+ * State machine
+ * ========================================================================== */
 
 typedef enum {
-    STATE_DRIVE_STRAIGHT,
-    STATE_TURN_BACKUP,   /* brief brake + reverse, entered right before a turn */
-    STATE_TURN_LEFT,
-    STATE_TURN_RIGHT,
-    STATE_ADJUST_LEFT,   /* brief re-centering nudge after STATE_TURN_LEFT's sensor trigger */
-    STATE_ADJUST_RIGHT,  /* same, mirrored, after STATE_TURN_RIGHT's sensor trigger */
-    STATE_TURN_AROUND,   /* dead-end 180 - entered when the line is seen only on the back sensor */
-    STATE_LINE_LOST
-} RobotState;
+    ST_FOLLOW,        /* following the line, watching for junctions        */
+    ST_JUNCTION,      /* left-only branch seen: roll on to check for straight */
+    ST_ALIGN,         /* reverse so the axle is over the junction          */
+    ST_TURN_SEEK,     /* slow spin until the second front sensor hits line */
+    ST_TURN_RIGHTING, /* creep back until the line is between the front pair */
+    ST_LINE_LOST
+} State;
 
-static RobotState state             = STATE_DRIVE_STRAIGHT;
-static RobotState pendingTurnState  = STATE_DRIVE_STRAIGHT;  /* which turn to enter once backup finishes */
-static uint16_t   lineLostCounter   = 0;
-static uint16_t   turnCounter       = 0;
-static uint16_t   backupCounter     = 0;
-static uint16_t   adjustCounter     = 0;
-static uint16_t   suppressSideCounter = 0;  /* set on a timed-out turn, forces a clean straight period */
-static uint16_t   deadEndCounter    = 0;    /* consecutive ticks where ONLY the back sensor sees the line */
+static State    state       = ST_FOLLOW;
+static uint16_t stateTicks  = 0;
+
+/* turn parameters, set by BeginTurn() */
+static int8_t   turnDir        = +1;   /* +1 right, -1 left */
+static int32_t  turnMinTicks   = 0;
+static int32_t  turnMaxTicks   = 0;
+static uint16_t turnTimeout    = 0;
+
+/* pending 90-degree turn and how far to reverse before it */
+static int8_t   pendingDir     = +1;
+static int32_t  alignTarget    = 0;
+
+/* junction latches */
+static uint8_t  seenLeft       = 0;
+static uint8_t  seenRight      = 0;
+
+/* debounce / arming */
+static uint16_t sideLeftTicks  = 0;
+static uint16_t sideRightTicks = 0;
+static uint16_t clearTicks     = 0;
+static uint8_t  sideArmed      = 1;
+static uint16_t deadEndTicks   = 0;
+static uint16_t lineLostTicks  = 0;
+
+/* drift correction */
+static int8_t   driftDir       = 0;   /* -1 line on left, +1 line on right */
+static uint16_t driftTicks     = 0;
+
+static uint16_t Inc(uint16_t v)
+{
+    return (v < 0xFFFFu) ? (uint16_t)(v + 1u) : v;
+}
+
+static void EnterState(State next)
+{
+    state       = next;
+    stateTicks  = 0;
+    stateStartL = encL;
+    stateStartR = encR;
+}
+
+/* Back to line-following. Side sensors must clear before the next junction
+ * can be detected (stops one junction being counted twice). */
+static void ResumeFollow(void)
+{
+    Motor_Stop();
+    sideArmed      = 0;
+    clearTicks     = 0;
+    sideLeftTicks  = 0;
+    sideRightTicks = 0;
+    deadEndTicks   = 0;
+    lineLostTicks  = 0;
+    driftDir       = 0;
+    driftTicks     = 0;
+    EnterState(ST_FOLLOW);
+}
+
+/* Stop, pause, then reverse (alignBackTicks) to put the axle over the
+ * junction centre before pivoting. */
+static void BeginAlign(int8_t dir, int32_t alignBackTicks)
+{
+    Motor_Stop();
+    CyDelay(BRAKE_MS);
+    pendingDir  = dir;
+    alignTarget = alignBackTicks;
+    EnterState(ST_ALIGN);
+}
+
+static void BeginTurn(int8_t dir, int32_t minT, int32_t maxT, uint16_t timeoutTicks)
+{
+    turnDir      = dir;
+    turnMinTicks = minT;
+    turnMaxTicks = maxT;
+    turnTimeout  = timeoutTicks;
+    EnterState(ST_TURN_SEEK);
+}
+
+/* Straight-line following with the front pair.
+ * Line under frontLeft  -> robot has drifted right -> steer left.
+ * Line under frontRight -> robot has drifted left  -> steer right.
+ * A lone front sensor must persist for DRIFT_CONFIRM_TICKS first, so a side
+ * branch sliding under one sensor doesn't make the robot swerve. */
+static void Steer(const SensorState *s)
+{
+    int8_t want = 0;
+
+    if (s->frontLeft && !s->frontRight)      { want = -1; }
+    else if (s->frontRight && !s->frontLeft) { want = +1; }
+
+    if (want != 0 && want == driftDir) { driftTicks = Inc(driftTicks); }
+    else                               { driftTicks = 0; }
+    driftDir = want;
+
+    if (want == 0 || driftTicks < DRIFT_CONFIRM_TICKS) {
+        Motor_SetSpeed((int16_t)SPEED_BASE, (int16_t)SPEED_BASE);
+    } else if (want < 0) {
+        Motor_SetSpeed((int16_t)SPEED_BASE - (int16_t)DRIFT_CUT, (int16_t)SPEED_BASE);
+    } else {
+        Motor_SetSpeed((int16_t)SPEED_BASE, (int16_t)SPEED_BASE - (int16_t)DRIFT_CUT);
+    }
+}
 
 static void RunLineFollower(const SensorState *s)
 {
     uint8_t anyOnLine = s->left | s->frontLeft | s->mid | s->frontRight | s->right | s->back;
-    uint8_t onlyBack  = s->back && !s->left && !s->frontLeft && !s->mid && !s->frontRight && !s->right;
+    uint8_t onlyBack  = s->back && !s->left && !s->frontLeft && !s->mid
+                        && !s->frontRight && !s->right;
 
-    /* dead-end detector: counts consecutive ticks of "back sensor only" while driving straight */
-    deadEndCounter = (onlyBack && state == STATE_DRIVE_STRAIGHT) ? (deadEndCounter + 1u) : 0u;
-
-    if (state != STATE_TURN_LEFT && state != STATE_TURN_RIGHT && state != STATE_TURN_BACKUP
-        && state != STATE_ADJUST_LEFT && state != STATE_ADJUST_RIGHT && state != STATE_TURN_AROUND) {
-        if (!anyOnLine) {
-            lineLostCounter++;
-            if (lineLostCounter >= LINE_LOST_THRESHOLD) {
-                state = STATE_LINE_LOST;
-            }
-            /* else treat a short all-off read as a gap, not a loss */
-        } else {
-            lineLostCounter = 0;
-        }
-    } else {
-        lineLostCounter = 0;
-    }
+    Enc_Update();
+    stateTicks = Inc(stateTicks);
 
     switch (state) {
 
-        case STATE_DRIVE_STRAIGHT:
-            if (suppressSideCounter > 0) {
-                /* just forced out of a turn that never cleared on its own -
-                 * ignore left/right for a bit so a chronically-triggered
-                 * sensor can't instantly throw us back into the same turn */
-                suppressSideCounter--;
-                Motor_SetSpeed(SPEED_BASE, SPEED_BASE);
-            } else if (s->left) {
-                /* brake, then back up before attempting the turn - by the
-                 * time this side sensor sees the branch the robot has
-                 * usually already driven past the actual junction */
+    /* ------------------------------------------------------------------ */
+    case ST_FOLLOW:
+        /* line-lost watchdog: short all-white reads are treated as gaps */
+        if (!anyOnLine) {
+            lineLostTicks = Inc(lineLostTicks);
+            if (lineLostTicks >= LINE_LOST_TICKS) {
                 Motor_Stop();
-                CyDelay(TURN_BACKUP_BRAKE_MS);
-                pendingTurnState = STATE_TURN_LEFT;
-                backupCounter = 0;
-                state = STATE_TURN_BACKUP;
-            } else if (s->right) {
-                Motor_Stop();
-                CyDelay(TURN_BACKUP_BRAKE_MS);
-                pendingTurnState = STATE_TURN_RIGHT;
-                backupCounter = 0;
-                state = STATE_TURN_BACKUP;
-            } else if (deadEndCounter >= DEAD_END_CONFIRM_ITERATIONS) {
-                /* line seen ONLY on the back sensor - dead end, spin around */
-                state = STATE_TURN_AROUND;
-                turnCounter = 0;
-                deadEndCounter = 0;
-            } else if (s->frontLeft && !s->frontRight) {
-                Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET); /* line drifted right -> nudge right */
-            } else if (s->frontRight && !s->frontLeft) {
-                Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE); /* line drifted left -> nudge left */
+                EnterState(ST_LINE_LOST);
+                break;
+            }
+        } else {
+            lineLostTicks = 0;
+        }
+
+        sideLeftTicks  = s->left  ? Inc(sideLeftTicks)  : 0u;
+        sideRightTicks = s->right ? Inc(sideRightTicks) : 0u;
+        deadEndTicks   = onlyBack ? Inc(deadEndTicks)   : 0u;
+
+        /* re-arm once both outer sensors have been off the line for a while */
+        if (!sideArmed) {
+            if (!s->left && !s->right) {
+                clearTicks = Inc(clearTicks);
+                if (clearTicks >= REARM_CLEAR_TICKS) { sideArmed = 1u; }
             } else {
-                Motor_SetSpeed(SPEED_BASE, SPEED_BASE); /* centered, or only mid/back still seeing it */
+                clearTicks = 0;
             }
-            break;
+        }
 
-        case STATE_TURN_BACKUP:
-            Motor_SetSpeed(-(int16_t)SPEED_BASE, -(int16_t)SPEED_BASE);
-            backupCounter++;
-            if (backupCounter >= TURN_BACKUP_ITERATIONS) {
-                state = pendingTurnState;   /* backed up - now actually attempt the turn */
-                turnCounter = 0;
-                backupCounter = 0;
+        if (sideArmed && (sideRightTicks >= SIDE_CONFIRM_TICKS ||
+                          sideLeftTicks  >= SIDE_CONFIRM_TICKS)) {
+            seenRight = (sideRightTicks >= SIDE_CONFIRM_TICKS) ? 1u : 0u;
+            seenLeft  = (sideLeftTicks  >= SIDE_CONFIRM_TICKS) ? 1u : 0u;
+
+            if (seenRight) {
+                BeginAlign(+1, ALIGN_BACKUP_TICKS);      /* priority 1: right */
+            } else {
+                EnterState(ST_JUNCTION);                 /* left only: straight too? */
             }
-            break;
-
-        case STATE_TURN_LEFT:
-            Motor_SetSpeed(-(int16_t)SPEED_TURN, (int16_t)SPEED_TURN);
-            turnCounter++;
-            /* exit as soon as the OPPOSITE front sensor sees the line -
-             * doesn't wait for mid too, so it can still be off-center at
-             * the exact instant this fires. STATE_ADJUST_LEFT closes that
-             * remaining gap before handing off to straight driving. */
-            if (s->frontRight) {
-                state = STATE_ADJUST_LEFT;
-                turnCounter = 0;
-                adjustCounter = 0;
-                suppressSideCounter = POST_TURN_COOLDOWN;
-            } else if (turnCounter >= TURN_TIMEOUT) {
-                /* frontRight never lit up - force a clean break instead of
-                 * hanging here forever */
-                state = STATE_DRIVE_STRAIGHT;
-                turnCounter = 0;
-                suppressSideCounter = TURN_COOLDOWN;
-            }
-            break;
-
-        case STATE_TURN_RIGHT:
-            Motor_SetSpeed((int16_t)SPEED_TURN, -(int16_t)SPEED_TURN);
-            turnCounter++;
-            if (s->frontLeft) {
-                state = STATE_ADJUST_RIGHT;
-                turnCounter = 0;
-                adjustCounter = 0;
-                suppressSideCounter = POST_TURN_COOLDOWN;
-            } else if (turnCounter >= TURN_TIMEOUT) {
-                state = STATE_DRIVE_STRAIGHT;
-                turnCounter = 0;
-                suppressSideCounter = TURN_COOLDOWN;
-            }
-            break;
-
-        case STATE_TURN_AROUND:
-            /* in-place spin left; exits as soon as the OPPOSITE front sensor
-             * (frontRight) sees the line, straight into driving - no adjust
-             * step */
-            Motor_SetSpeed(-(int16_t)SPEED_TURN_AROUND, (int16_t)SPEED_TURN_AROUND);
-            turnCounter++;
-            if (s->frontRight) {
-                state = STATE_DRIVE_STRAIGHT;
-                turnCounter = 0;
-                suppressSideCounter = POST_TURN_COOLDOWN;
-            } else if (turnCounter >= U_TURN_TIMEOUT) {
-                /* frontRight never lit up - force a clean break */
-                state = STATE_DRIVE_STRAIGHT;
-                turnCounter = 0;
-                suppressSideCounter = TURN_COOLDOWN;
-            }
-            break;
-
-        case STATE_ADJUST_LEFT:
-            /* same direction as the turn just taken, but gentle and still
-             * moving forward. Sensor-reactive: exits the instant mid or
-             * BOTH front sensors confirm it's actually centered, instead of
-             * blindly running the full duration and driving past center -
-             * POST_TURN_ADJUST_ITERATIONS is now just a backstop in case
-             * neither condition is ever met. */
-            Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE);
-            adjustCounter++;
-            if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
-                state = STATE_DRIVE_STRAIGHT;
-                adjustCounter = 0;
-            }
-            break;
-
-        case STATE_ADJUST_RIGHT:
-            Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET);
-            adjustCounter++;
-            if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
-                state = STATE_DRIVE_STRAIGHT;
-                adjustCounter = 0;
-            }
-            break;
-
-        case STATE_LINE_LOST:
+        }
+        else if (deadEndTicks >= DEAD_END_CONFIRM_TICKS) {
             Motor_Stop();
-            if (anyOnLine) {
-                state = STATE_DRIVE_STRAIGHT;
-                lineLostCounter = 0;
+            CyDelay(BRAKE_MS);
+            deadEndTicks = 0;
+            BeginTurn(+1, TURN_180_MIN_TICKS, TURN_180_MAX_TICKS, TURN_180_TIMEOUT_TICKS);
+        }
+        else {
+            Steer(s);
+        }
+        break;
+
+    /* ------------------------------------------------------------------ */
+    case ST_JUNCTION:
+        /* Roll forward just past the branch's width. A right branch showing
+         * up late (robot not square) still wins. After that, if mid still
+         * sees the line then the line continues straight. */
+        Motor_SetSpeed((int16_t)SPEED_BASE, (int16_t)SPEED_BASE);
+        if (s->right) { seenRight = 1u; }
+        if (s->left)  { seenLeft  = 1u; }
+
+        if (seenRight) {
+            /* we've rolled on by Travel() since the trigger - reverse that too */
+            BeginAlign(+1, ALIGN_BACKUP_TICKS + Travel());
+        }
+        else if (Travel() >= JUNCTION_CREEP_TICKS || stateTicks >= JUNCTION_TIMEOUT_TICKS) {
+            if (s->mid) {
+                ResumeFollow();                          /* priority 2: straight */
+            } else if (seenLeft) {
+                BeginAlign(-1, ALIGN_BACKUP_TICKS + Travel());   /* priority 3: left */
+            } else {
+                ResumeFollow();                          /* false alarm */
             }
-            break;
+        }
+        break;
+
+    /* ------------------------------------------------------------------ */
+    case ST_ALIGN:
+        Motor_SetSpeed(-(int16_t)SPEED_BASE, -(int16_t)SPEED_BASE);
+        if (Travel() >= alignTarget || stateTicks >= ALIGN_TIMEOUT_TICKS) {
+            Motor_Stop();
+            CyDelay(SETTLE_MS);
+            BeginTurn(pendingDir, TURN_90_MIN_TICKS, TURN_90_MAX_TICKS, TURN_90_TIMEOUT_TICKS);
+        }
+        break;
+
+    /* ------------------------------------------------------------------ */
+    case ST_TURN_SEEK: {
+        /* The front pair straddles the line. Spinning right, the RIGHT front
+         * sensor (the leading one) meets the new line first, then the LEFT
+         * one (the second/trailing sensor). Spinning left it's mirrored.
+         * Nothing is accepted before the minimum angle so the old line can't
+         * fool us. Slow down once past the minimum angle. */
+        int32_t progress = Travel();
+        uint8_t trail    = (turnDir > 0) ? s->frontLeft : s->frontRight;
+
+        Motor_Spin(turnDir, (progress < turnMinTicks) ? (int16_t)SPEED_TURN_COARSE
+                                                      : (int16_t)SPEED_TURN_FINE);
+
+        if (progress >= turnMaxTicks || stateTicks >= turnTimeout) {
+            /* never found the line - give up and let FOLLOW / LINE_LOST cope */
+            Motor_Stop();
+            CyDelay(SETTLE_MS);
+            ResumeFollow();
+        }
+        else if (progress >= turnMinTicks && trail) {
+            /* second front sensor just hit the line -> stop and right ourselves */
+            Motor_Stop();
+            CyDelay(SETTLE_MS);
+            EnterState(ST_TURN_RIGHTING);
+        }
+        break;
+    }
+
+    /* ------------------------------------------------------------------ */
+    case ST_TURN_RIGHTING: {
+        /* We're a touch past centre: the trailing front sensor is on the line.
+         * Creep back the other way until it lets go - the line is then back
+         * between the pair. If the leading sensor picks it up we've come back
+         * through centre, so that's also done. */
+        uint8_t trail = (turnDir > 0) ? s->frontLeft  : s->frontRight;
+        uint8_t lead  = (turnDir > 0) ? s->frontRight : s->frontLeft;
+
+        if (!trail || lead || stateTicks >= RIGHTING_TIMEOUT_TICKS) {
+            Motor_Stop();
+            CyDelay(SETTLE_MS);
+            ResumeFollow();
+        } else {
+            Motor_Spin((int8_t)-turnDir, (int16_t)SPEED_RIGHTING);
+        }
+        break;
+    }
+
+    /* ------------------------------------------------------------------ */
+    case ST_LINE_LOST:
+        Motor_Stop();
+        LED_Write(1u);
+        if (anyOnLine) {
+            LED_Write(0u);
+            ResumeFollow();
+        }
+        break;
     }
 }
 
-/* ---------------- Main ---------------- */
+/* ==========================================================================
+ * Main
+ * ========================================================================== */
 
 int main(void)
 {
@@ -301,12 +497,24 @@ int main(void)
     Clock_2_Start();
     PWM_1_Start();
     PWM_2_Start();
+    QuadDec_L_Start();
+    QuadDec_R_Start();
+    QuadDec_L_SetCounter(0);
+    QuadDec_R_SetCounter(0);
     Motor_Stop();
+    LED_Write(0u);
+
+#if USE_START_SWITCH
+    /* wait for press, then release, then give the user time to let go */
+    while (SW_Read() != SW_PRESSED_LEVEL) { CyDelay(10); }
+    while (SW_Read() == SW_PRESSED_LEVEL) { CyDelay(10); }
+    CyDelay(500);
+#endif
 
     for (;;) {
         SensorState sensors;
         Sensors_Read(&sensors);
         RunLineFollower(&sensors);
-        CyDelay(10); /* ~100 Hz control loop */
+        CyDelay(LOOP_MS);
     }
 }
