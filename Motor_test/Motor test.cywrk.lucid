@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Motor test\Design01\Source Files\main.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Motor test\Design01\Generated_Source">
 <ExpandedNodeIds>
 <v>Motor test</v>
 <v>Motor test\Design01</v>
@@ -32,7 +32,6 @@
 <v>Motor test\Design01\Header Files\cyapicallbacks.h</v>
 <v>Motor test\Design01\Source Files</v>
 <v>Motor test\Design01\Source Files\main.c</v>
-<v>Motor test\Design01\Generated_Source</v>
 <v>Motor test\Design01\Generated_Source\PSoC5</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
@@ -54,14 +53,6 @@
 <v>Motor test\Design01\Source Files</v>
 <v>Motor test\Design01\Source Files\main.c</v>
 <v>Motor test\Design01\Generated_Source</v>
-<v>Motor test\Design01\Generated_Source\PSoC5</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\Clock_1</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\Clock_2</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\cy_boot</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\D1</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\D1_1</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\Em_EEPROM_Dynamic</v>
-<v>Motor test\Design01\Generated_Source\PSoC5\ENCD1</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
