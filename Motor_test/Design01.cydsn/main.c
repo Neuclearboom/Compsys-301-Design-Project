@@ -56,17 +56,18 @@
 #define RAW_RIGHT()            S1_Read()
 
 /* ---- Start-up ------------------------------------------------------------
- * No start switch on the board: after power-up the robot runs the motor
- * self-test, then waits START_DELAY_MS (LED blinking) so it can be placed on
- * the line before it begins following. */
+ * No start switch on the board: after power-up the robot waits START_DELAY_MS
+ * (LED blinking) so it can be placed on the line before it begins following. */
 #define START_DELAY_MS         3000u
-
-/* ---- Startup motor self-test: both wheels forward, then backward ---------- */
-#define SELFTEST_SPEED         60u
-#define SELFTEST_MS            300u
 
 /* ---- Speeds (PWM compare, 0-255) ---------------------------------------- */
 #define PWM_MAX_COMPARE        255u
+
+/* Left motor trim: the robot leaned left when driving straight, i.e. the left
+ * wheel was running slower. Left wheel commands are scaled up by this many
+ * percent (forward, reverse and spin). TUNE: raise if it still leans left,
+ * lower if it now leans right. */
+#define LEFT_MOTOR_TRIM_PERCENT  7
 #define SPEED_BASE             30u
 
 #define SPEED_TURN_COARSE      45u   /* spin speed before the minimum angle - nothing
@@ -154,7 +155,7 @@ static int16_t Clamp(int16_t v)
 
 static void Motor_Left_SetSpeed(int16_t speed)
 {
-    speed = Clamp(speed);
+    speed = Clamp((int16_t)(((int32_t)speed * (100 + LEFT_MOTOR_TRIM_PERCENT)) / 100));
     if (speed >= 0) {
         PWM_1_WriteCompare1((uint8_t)speed);
         PWM_1_WriteCompare2(0u);
@@ -494,20 +495,6 @@ static void RunLineFollower(const SensorState *s)
  * Main
  * ========================================================================== */
 
-static void Motor_SelfTest(void)
-{
-    LED_Write(1u);
-    Motor_SetSpeed((int16_t)SELFTEST_SPEED, (int16_t)SELFTEST_SPEED);      /* forward  */
-    CyDelay(SELFTEST_MS);
-    Motor_Stop();
-    CyDelay(150u);
-    Motor_SetSpeed(-(int16_t)SELFTEST_SPEED, -(int16_t)SELFTEST_SPEED);    /* backward */
-    CyDelay(SELFTEST_MS);
-    Motor_Stop();
-    LED_Write(0u);
-    CyDelay(300u);
-}
-
 int main(void)
 {
     CyGlobalIntEnable;
@@ -524,7 +511,6 @@ int main(void)
     LED_Write(0u);
 
     CyDelay(200u);          /* let the supply and inputs settle */
-    Motor_SelfTest();
 
     /* countdown: LED blinks so you know it's about to go */
     {
