@@ -1,4 +1,5 @@
 /* ==========================================================================
+<<<<<<< Updated upstream
  * Straight-Line Follower
  * ==========================================================================
  * Follows a straight black line on white. Uses ONLY:
@@ -20,13 +21,21 @@
  *
  * If every sensor reads white for LINE_LOST_MS the robot stops (LED on) and
  * resumes when any sensor sees the line again.
+=======
+ * Simple sensor -> motor test
+ * ==========================================================================
+ *   S2 (front-left)  active -> left motor runs
+ *   S3 (front-right) active -> right motor runs
+>>>>>>> Stashed changes
  * ========================================================================== */
 
 #include "project.h"
 #include <stdint.h>
 
-/* ---------------- Configuration ---------------- */
+#define SENSOR_ACTIVE_LEVEL   0u    /* sensors read 0 when they see the line */
+#define MOTOR_SPEED           40u   /* PWM compare value, 0..255 */
 
+<<<<<<< Updated upstream
 #define LOOP_MS                5u
 
 /* Sensor mapping (front pair swapped as confirmed on the bench) */
@@ -71,10 +80,19 @@ typedef struct {
 static uint8_t OnLine(uint8_t raw)
 {
     return (raw == SENSOR_ACTIVE_LEVEL) ? 1u : 0u;
+=======
+/* Left motor: PWM_1, forward on compare 1 */
+static void Motor_Left_Set(uint8_t speed)
+{
+    PWM_1_WriteCompare1(speed);
+    PWM_1_WriteCompare2(0u);
+>>>>>>> Stashed changes
 }
 
-static void Sensors_Read(SensorState *s)
+/* Right motor: PWM_2, forward on compare 1 */
+static void Motor_Right_Set(uint8_t speed)
 {
+<<<<<<< Updated upstream
     s->frontLeft  = OnLine(RAW_FRONT_LEFT());
     s->frontRight = OnLine(RAW_FRONT_RIGHT());
     s->mid        = OnLine(RAW_MID());
@@ -199,6 +217,12 @@ static void RunLineFollower(const SensorState *s)
 
 /* ---------------- Main ---------------- */
 
+=======
+    PWM_2_WriteCompare1(speed);
+    PWM_2_WriteCompare2(0u);
+}
+
+>>>>>>> Stashed changes
 int main(void)
 {
     CyGlobalIntEnable;
@@ -207,6 +231,7 @@ int main(void)
     Clock_2_Start();
     PWM_1_Start();
     PWM_2_Start();
+<<<<<<< Updated upstream
     Motor_Stop();
     LED_Write(0u);
 
@@ -227,5 +252,18 @@ int main(void)
         Sensors_Read(&sensors);
         RunLineFollower(&sensors);
         CyDelay(LOOP_MS);
+=======
+    Motor_Left_Set(0u);
+    Motor_Right_Set(0u);
+
+    for (;;) {
+        uint8_t frontLeftActive  = (S2_Read() == SENSOR_ACTIVE_LEVEL);
+        uint8_t frontRightActive = (S3_Read() == SENSOR_ACTIVE_LEVEL);
+
+        Motor_Left_Set(frontLeftActive   ? MOTOR_SPEED : 0u);
+        Motor_Right_Set(frontRightActive ? MOTOR_SPEED : 0u);
+
+        CyDelay(10);
+>>>>>>> Stashed changes
     }
 }
