@@ -56,9 +56,14 @@
 #define RAW_RIGHT()            S1_Read()
 
 /* ---- Start switch ---------------------------------------------------------
- * SW_PRESSED_LEVEL is the pin level when pressed (TUNE). */
+ * The switch's idle level is read at power-up (assumes it is NOT held down at
+ * boot); "pressed" is whatever level differs from that, so polarity doesn't
+ * matter. Set USE_START_SWITCH to 0 to start straight after the self-test. */
 #define USE_START_SWITCH       1
-#define SW_PRESSED_LEVEL       0u
+
+/* ---- Startup motor self-test: both wheels forward, then backward ---------- */
+#define SELFTEST_SPEED         60u
+#define SELFTEST_MS            300u
 
 /* ---- Speeds (PWM compare, 0-255) ---------------------------------------- */
 #define PWM_MAX_COMPARE        255u
@@ -489,6 +494,20 @@ static void RunLineFollower(const SensorState *s)
  * Main
  * ========================================================================== */
 
+static void Motor_SelfTest(void)
+{
+    LED_Write(1u);
+    Motor_SetSpeed((int16_t)SELFTEST_SPEED, (int16_t)SELFTEST_SPEED);      /* forward  */
+    CyDelay(SELFTEST_MS);
+    Motor_Stop();
+    CyDelay(150u);
+    Motor_SetSpeed(-(int16_t)SELFTEST_SPEED, -(int16_t)SELFTEST_SPEED);    /* backward */
+    CyDelay(SELFTEST_MS);
+    Motor_Stop();
+    LED_Write(0u);
+    CyDelay(300u);
+}
+
 int main(void)
 {
     CyGlobalIntEnable;
@@ -504,11 +523,27 @@ int main(void)
     Motor_Stop();
     LED_Write(0u);
 
+    CyDelay(200u);          /* let the supply and inputs settle */
+    Motor_SelfTest();
+
 #if USE_START_SWITCH
-    /* wait for press, then release, then give the user time to let go */
-    while (SW_Read() != SW_PRESSED_LEVEL) { CyDelay(10); }
-    while (SW_Read() == SW_PRESSED_LEVEL) { CyDelay(10); }
-    CyDelay(500);
+    {
+        /* idle level = what the switch reads right now; pressed = the opposite */
+        uint8_t idle = (uint8_t)(SW_Read() ? 1u : 0u);
+        uint8_t blink = 0u;
+        uint8_t ledOn = 0u;
+
+        /* wait for press (LED blinks to show we're armed and waiting) */
+        while ((SW_Read() ? 1u : 0u) == idle) {
+            CyDelay(10u);
+            if (++blink >= 25u) { blink = 0u; ledOn = (uint8_t)!ledOn; LED_Write(ledOn); }
+        }
+        LED_Write(0u);
+
+        /* wait for release, then give the user time to let go */
+        while ((SW_Read() ? 1u : 0u) != idle) { CyDelay(10u); }
+        CyDelay(500u);
+    }
 #endif
 
     for (;;) {
