@@ -37,7 +37,7 @@
 #define RAW_BACK()             S4_Read()
 
 /* Wait after power-up (LED blinking) so the robot can be placed on the line */
-#define START_DELAY_MS         3000u
+#define START_DELAY_MS         500u
 
 /* Speeds (PWM compare, 0-255) */
 #define PWM_MAX_COMPARE        255u
@@ -55,7 +55,7 @@
  * even 10 permille has an effect at speed 30. TUNE:
  *   still leaning left  -> raise it (try 20, 30, ...)
  *   leaning right       -> lower it / go negative */
-#define LEFT_TRIM_PERMILLE     0
+#define LEFT_TRIM_PERMILLE     2
 
 #define LINE_LOST_MS           200u
 
