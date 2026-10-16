@@ -30,9 +30,6 @@
  * Every turn: ALIGN (reverse so the axle is over the junction) -> SEEK (slow
  * spin until the SECOND front sensor hits the new line) -> RIGHTING (creep
  * back until that sensor lets go, so the line is between the front pair).
- *
- * Everything marked with the big  <<<<<===== TURN VARIABLE  arrow is turning
- * related (arrows are temporary, to be removed in the next step).
  * ========================================================================== */
 
 #include "project.h"
@@ -49,11 +46,11 @@
 #define RAW_MID()              S6_Read()
 #define RAW_BACK()             S4_Read()
 
-/* Outer axle-row sensors, used ONLY to spot junctions. Mapping carried over
- * from the old main.c (S5 = left, S1 = right). If a right turn happens on a
- * LEFT branch, swap these two.                                              */
-#define RAW_LEFT()             S5_Read()   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: left outer sensor pin  */
-#define RAW_RIGHT()            S1_Read()   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: right outer sensor pin */
+/* Outer axle-row sensors, used ONLY to spot junctions. Swapped (like the front
+ * pair): S1 is physically on the left, S5 on the right. If a right turn
+ * happens at a LEFT branch, swap these two back.                            */
+#define RAW_LEFT()             S1_Read()   /* left outer sensor pin */
+#define RAW_RIGHT()            S5_Read()   /* right outer sensor pin */
 
 /* Wait after power-up (LED blinking) so the robot can be placed on the line */
 #define START_DELAY_MS         500u
@@ -80,17 +77,17 @@
 
 /* ---------------- Turning configuration ---------------- */
 
-#define TICKS(ms)              ((uint16_t)((ms) / LOOP_MS))   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: ms -> loop ticks */
+#define TICKS(ms)              ((uint16_t)((ms) / LOOP_MS))   /* ms -> loop ticks */
 
 /* Spin speeds. Slow = less overshoot, but too slow and the wheels stall. */
-#define SPEED_TURN_COARSE      45u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: spin speed BEFORE the minimum angle (nothing is detected yet) */
-#define SPEED_TURN_FINE        30u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: spin speed while hunting for the line (lower = less overshoot) */
-#define SPEED_RIGHTING         30u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: creep-back speed that re-centres after overshoot */
+#define SPEED_TURN_COARSE      45u   /* spin speed BEFORE the minimum angle (nothing is detected yet) */
+#define SPEED_TURN_FINE        30u   /* spin speed while hunting for the line (lower = less overshoot) */
+#define SPEED_RIGHTING         30u   /* creep-back speed that re-centres after overshoot */
 
 /* Junction detection timing */
-#define SIDE_CONFIRM_MS        10u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: outer sensor must hold this long to count as a branch */
-#define REARM_CLEAR_MS         20u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: both outer sensors clear this long before the next junction is accepted */
-#define DEAD_END_CONFIRM_MS    30u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: back-only must hold this long to count as a dead end */
+#define SIDE_CONFIRM_MS        10u   /* outer sensor must hold this long to count as a branch */
+#define REARM_CLEAR_MS         20u   /* both outer sensors clear this long before the next junction is accepted */
+#define DEAD_END_CONFIRM_MS    30u   /* back-only must hold this long to count as a dead end */
 
 /* Encoder distances in ticks (direction-independent). PLACEHOLDERS - TUNE.
  *   ticks_per_mm   = encoder counts per wheel rev / (pi * wheel_diameter_mm)
@@ -98,22 +95,22 @@
  *   ALIGN_BACKUP   = (axle-to-outer-sensor distance - line_width/2) * ticks_per_mm
  *   TURN_90_*      = per-wheel arc of a 90 deg pivot = pi * track_width / 4
  *                    MIN ~ 60 % of it, MAX ~ 150 % of it. 180 deg doubles both. */
-#define JUNCTION_CREEP_TICKS   40    /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: roll-on distance after a left-only branch, to see if the line goes straight */
-#define ALIGN_BACKUP_TICKS     60    /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: reverse distance so the axle sits over the junction */
-#define TURN_90_MIN_TICKS      150   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: 90 deg turn - ignore the front sensors until this much rotation */
-#define TURN_90_MAX_TICKS      600   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: 90 deg turn - give up after this much rotation */
-#define TURN_180_MIN_TICKS     350   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: dead-end spin - ignore the front sensors until this much rotation */
-#define TURN_180_MAX_TICKS     1100  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: dead-end spin - give up after this much rotation */
+#define JUNCTION_CREEP_TICKS   40    /* roll-on distance after a left-only branch, to see if the line goes straight */
+#define ALIGN_BACKUP_TICKS     4     /* reverse distance so the axle sits over the junction */
+#define TURN_90_MIN_TICKS      150   /* 90 deg turn - ignore the front sensors until this much rotation */
+#define TURN_90_MAX_TICKS      600   /* 90 deg turn - give up after this much rotation */
+#define TURN_180_MIN_TICKS     350   /* dead-end spin - ignore the front sensors until this much rotation */
+#define TURN_180_MAX_TICKS     1100  /* dead-end spin - give up after this much rotation */
 
 /* Safety timeouts so no turning state can hang forever */
-#define JUNCTION_TIMEOUT_MS    400u  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: roll-on check timeout */
-#define ALIGN_TIMEOUT_MS       600u  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: reverse timeout */
-#define TURN_90_TIMEOUT_MS     3000u /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: 90 deg spin timeout */
-#define TURN_180_TIMEOUT_MS    5000u /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: 180 deg spin timeout */
-#define RIGHTING_TIMEOUT_MS    600u  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: re-centring timeout */
+#define JUNCTION_TIMEOUT_MS    400u  /* roll-on check timeout */
+#define ALIGN_TIMEOUT_MS       600u  /* reverse timeout */
+#define TURN_90_TIMEOUT_MS     3000u /* 90 deg spin timeout */
+#define TURN_180_TIMEOUT_MS    5000u /* 180 deg spin timeout */
+#define RIGHTING_TIMEOUT_MS    600u  /* re-centring timeout */
 
-#define BRAKE_MS               50u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: pause after stopping, before reversing */
-#define SETTLE_MS              40u   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: pause to let the wheels stop spinning */
+#define BRAKE_MS               50u   /* pause after stopping, before reversing */
+#define SETTLE_MS              40u   /* pause to let the wheels stop spinning */
 
 /* ---------------- Sensors ---------------- */
 
@@ -122,8 +119,8 @@ typedef struct {
     uint8_t frontRight;
     uint8_t mid;
     uint8_t back;
-    uint8_t left;     /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: outer left sensor  */
-    uint8_t right;    /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: outer right sensor */
+    uint8_t left;     /* outer left sensor */
+    uint8_t right;    /* outer right sensor */
 } SensorState;
 
 static uint8_t OnLine(uint8_t raw)
@@ -137,8 +134,8 @@ static void Sensors_Read(SensorState *s)
     s->frontRight = OnLine(RAW_FRONT_RIGHT());
     s->mid        = OnLine(RAW_MID());
     s->back       = OnLine(RAW_BACK());
-    s->left       = OnLine(RAW_LEFT());     /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
-    s->right      = OnLine(RAW_RIGHT());    /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
+    s->left       = OnLine(RAW_LEFT());
+    s->right      = OnLine(RAW_RIGHT());
 }
 
 /* ---------------- Motors (positive = forward, negative = reverse) ---------------- */
@@ -207,10 +204,10 @@ static void Motor_Spin(int8_t dir, int16_t speed)
 
 /* ---------------- Encoders (turning only) ---------------- */
 
-static int32_t encL        = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: latest left encoder count  */
-static int32_t encR        = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: latest right encoder count */
-static int32_t stateStartL = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: left count when the current state began  */
-static int32_t stateStartR = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: right count when the current state began */
+static int32_t encL        = 0;   /* latest left encoder count */
+static int32_t encR        = 0;   /* latest right encoder count */
+static int32_t stateStartL = 0;   /* left count when the current state began */
+static int32_t stateStartR = 0;   /* right count when the current state began */
 
 static int32_t Abs32(int32_t v)
 {
@@ -237,10 +234,10 @@ typedef enum {
     ST_ALIGN,           /* reverse so the axle is over the junction             */
     ST_TURN_SEEK,       /* slow spin until the second front sensor hits line    */
     ST_TURN_RIGHTING    /* creep back until the line is between the front pair  */
-} State;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: robot state (everything except ST_FOLLOW is turning) */
+} State;   /* robot state (everything except ST_FOLLOW is turning) */
 
-static State    state      = ST_FOLLOW;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: current state       */
-static uint16_t stateTicks = 0;           /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: loop ticks in state */
+static State    state      = ST_FOLLOW;   /* current state */
+static uint16_t stateTicks = 0;           /* loop ticks in state */
 
 static uint16_t lineLostTicks = 0;
 static uint8_t  lost          = 0;
@@ -248,23 +245,23 @@ static int8_t   steerDir      = 0;   /* -1 = steering left, +1 = steering right 
 static uint16_t holdTicks     = 0;   /* ticks left to keep steering after clear  */
 
 /* turn parameters, set by BeginTurn() */
-static int8_t   turnDir          = +1;  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: +1 = turning right, -1 = turning left */
-static int32_t  turnMinTicks     = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: rotation before front sensors are trusted */
-static int32_t  turnMaxTicks     = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: rotation limit */
-static uint16_t turnTimeoutTicks = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: time limit */
+static int8_t   turnDir          = +1;  /* +1 = turning right, -1 = turning left */
+static int32_t  turnMinTicks     = 0;   /* rotation before front sensors are trusted */
+static int32_t  turnMaxTicks     = 0;   /* rotation limit */
+static uint16_t turnTimeoutTicks = 0;   /* time limit */
 
 /* pending 90 deg turn and how far to reverse before it */
-static int8_t   pendingDir  = +1;  /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: direction of the turn waiting behind ST_ALIGN */
-static int32_t  alignTarget = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: reverse distance for ST_ALIGN */
+static int8_t   pendingDir  = +1;  /* direction of the turn waiting behind ST_ALIGN */
+static int32_t  alignTarget = 0;   /* reverse distance for ST_ALIGN */
 
 /* junction latches and debounce */
-static uint8_t  seenLeft       = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: left branch latched  */
-static uint8_t  seenRight      = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: right branch latched */
-static uint16_t sideLeftTicks  = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: how long left outer has been on the line  */
-static uint16_t sideRightTicks = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: how long right outer has been on the line */
-static uint16_t clearTicks     = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: how long both outers have been clear      */
-static uint8_t  sideArmed      = 1;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: 1 = junction detection enabled              */
-static uint16_t deadEndTicks   = 0;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: how long ONLY the back sensor has seen line */
+static uint8_t  seenLeft       = 0;   /* left branch latched */
+static uint8_t  seenRight      = 0;   /* right branch latched */
+static uint16_t sideLeftTicks  = 0;   /* how long left outer has been on the line */
+static uint16_t sideRightTicks = 0;   /* how long right outer has been on the line */
+static uint16_t clearTicks     = 0;   /* how long both outers have been clear */
+static uint8_t  sideArmed      = 1;   /* 1 = junction detection enabled */
+static uint16_t deadEndTicks   = 0;   /* how long ONLY the back sensor has seen line */
 
 static uint16_t Inc(uint16_t v)   /* saturating ++ (used by turning counters) */
 {
@@ -322,7 +319,7 @@ static void FollowStep(const SensorState *s)
     uint8_t anyOnLine = s->frontLeft | s->frontRight | s->mid | s->back;
     int8_t  want      = 0;
     uint8_t onlyBack  = s->back && !s->frontLeft && !s->frontRight && !s->mid
-                        && !s->left && !s->right;   /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: line seen only by the back sensor */
+                        && !s->left && !s->right;   /* line seen only by the back sensor */
 
     /* ---- line-lost handling ---- */
     if (anyOnLine) {
@@ -457,8 +454,8 @@ static void RunLineFollower(const SensorState *s)
      * SECOND (trailing) front sensor. Nothing is accepted before the minimum
      * angle so the old line can't fool us. */
     case ST_TURN_SEEK: {
-        int32_t progress = Travel();                                            /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
-        uint8_t trail    = (turnDir > 0) ? s->frontLeft : s->frontRight;        /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: the second front sensor to hit the line */
+        int32_t progress = Travel();
+        uint8_t trail    = (turnDir > 0) ? s->frontLeft : s->frontRight;        /* the second front sensor to hit the line */
 
         Motor_Spin(turnDir, (progress < turnMinTicks) ? (int16_t)SPEED_TURN_COARSE
                                                       : (int16_t)SPEED_TURN_FINE);
@@ -481,8 +478,8 @@ static void RunLineFollower(const SensorState *s)
      * pair. If the leading sensor picks it up we've come back through centre,
      * which also counts as done. */
     case ST_TURN_RIGHTING: {
-        uint8_t trail = (turnDir > 0) ? s->frontLeft  : s->frontRight;         /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
-        uint8_t lead  = (turnDir > 0) ? s->frontRight : s->frontLeft;          /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
+        uint8_t trail = (turnDir > 0) ? s->frontLeft  : s->frontRight;
+        uint8_t lead  = (turnDir > 0) ? s->frontRight : s->frontLeft;
 
         if (!trail || lead || stateTicks >= TICKS(RIGHTING_TIMEOUT_MS)) {
             Motor_Stop();
@@ -506,10 +503,10 @@ int main(void)
     Clock_2_Start();
     PWM_1_Start();
     PWM_2_Start();
-    QuadDec_L_Start();            /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE: encoders only needed for turning */
-    QuadDec_R_Start();            /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
-    QuadDec_L_SetCounter(0);      /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
-    QuadDec_R_SetCounter(0);      /* <<<<<<<<<<<<<<<<<<<<===== TURN VARIABLE */
+    QuadDec_L_Start();            /* encoders only needed for turning */
+    QuadDec_R_Start();
+    QuadDec_L_SetCounter(0);
+    QuadDec_R_SetCounter(0);
     Motor_Stop();
     LED_Write(0u);
 
