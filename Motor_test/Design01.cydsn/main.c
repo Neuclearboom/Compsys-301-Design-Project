@@ -20,23 +20,23 @@
 #define SENSOR_ACTIVE_LEVEL   0u
 #define PWM_MAX_COMPARE       255u
 #define SPEED_BASE            30u
-#define SPEED_TURN            60u
+#define SPEED_TURN            40u
 #define SPEED_TURN_AROUND     40u         /* spin speed for the dead-end 180 only - the normal left/right
                                             * turns keep using SPEED_TURN */
 
 #define LINE_LOST_THRESHOLD   20u
 #define TURN_TIMEOUT          60u
 #define TURN_COOLDOWN         30u
-#define POST_TURN_COOLDOWN    20u
+#define POST_TURN_COOLDOWN    30u
 
 #define DEAD_END_CONFIRM_ITERATIONS  3u   /* back-only must hold this many ticks in a row before the 180 starts (1 = immediate) */
 #define U_TURN_TIMEOUT        120u        /* safety cap for the 180 - roughly 2x TURN_TIMEOUT since it covers about twice the angle */
 
 #define TURN_BACKUP_BRAKE_MS      50u
-#define TURN_BACKUP_ITERATIONS    15u
+#define TURN_BACKUP_ITERATIONS    7u
 #define POST_TURN_ADJUST_ITERATIONS  6u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below */
 
-#define DRIFT_CORRECTION_OFFSET   5u  /* how much slower the inside wheel runs during a drift-correction
+#define DRIFT_CORRECTION_OFFSET   10u  /* how much slower the inside wheel runs during a drift-correction
                                         * nudge (straight-line AND post-turn adjust). Small on purpose -
                                         * this used to be a 33% cut (SPEED_BASE / 1.5), which was strong
                                         * enough to overshoot past center and oscillate. Bump it up only a
