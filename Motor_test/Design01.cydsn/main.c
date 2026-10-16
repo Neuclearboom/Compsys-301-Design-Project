@@ -37,6 +37,7 @@
 
 /* ---------------- Configuration ---------------- */
 
+<<<<<<< Updated upstream
 #define LOOP_MS                5u
 
 /* Sensor mapping (front pair swapped as confirmed on the bench) */
@@ -45,6 +46,19 @@
 #define RAW_FRONT_RIGHT()      S3_Read()
 #define RAW_MID()              S6_Read()
 #define RAW_BACK()             S4_Read()
+=======
+#define SENSOR_ACTIVE_LEVEL   0u
+#define PWM_MAX_COMPARE       255u
+#define SPEED_BASE            30u
+#define SPEED_TURN            40u
+#define SPEED_TURN_AROUND     40u         /* spin speed for the dead-end 180 only - the normal left/right
+                                            * turns keep using SPEED_TURN */
+
+#define LINE_LOST_THRESHOLD   20u
+#define TURN_TIMEOUT          60u
+#define TURN_COOLDOWN         30u
+#define POST_TURN_COOLDOWN    30u
+>>>>>>> Stashed changes
 
 /* Outer axle-row sensors, used ONLY to spot junctions. Swapped (like the front
  * pair): S1 is physically on the left, S5 on the right. If a right turn
@@ -52,8 +66,14 @@
 #define RAW_LEFT()             S1_Read()   /* left outer sensor pin */
 #define RAW_RIGHT()            S5_Read()   /* right outer sensor pin */
 
+<<<<<<< Updated upstream
 /* Wait after power-up (LED blinking) so the robot can be placed on the line */
 #define START_DELAY_MS         500u
+=======
+#define TURN_BACKUP_BRAKE_MS      50u
+#define TURN_BACKUP_ITERATIONS    10u
+#define POST_TURN_ADJUST_ITERATIONS  6u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below */
+>>>>>>> Stashed changes
 
 /* Speeds (PWM compare, 0-255) */
 #define PWM_MAX_COMPARE        255u
