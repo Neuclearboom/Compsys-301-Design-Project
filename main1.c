@@ -57,13 +57,13 @@
  * dead end, corner or junction - the sensors need something to recognise it
  * by - otherwise the plan is refused and the robot stays put. */
 #define MAX_FOOD              5u
-#define NUM_FOOD              2u
+#define NUM_FOOD              5u
 static const uint8_t food_list[MAX_FOOD][2] = {
-    {  0u,  0u },   /* (1,15) */
-    { 13u,  0u },   /* (1,2) */
-    {  0u,  0u },
-    {  0u,  0u },
-    {  0u,  0u }
+    { 13u, 14u },   /* F1 (15,2):  STRAIGHT corridor - encoder stop */
+    { 13u, 13u },   /* F2 (13,13): CORNER */
+    {  0u, 0u },   /* F3 (19,10): DEAD END - pause, then 180 */
+    { 3u, 11u },   /* F4 (12,5):  CORNER */
+    {  9u, 18u }    /* F5 (19,6):  DEAD END - pause, then 180 */
 };
 #if NUM_FOOD > MAX_FOOD
 #error NUM_FOOD can be at most MAX_FOOD (5)
@@ -74,8 +74,62 @@ static const uint8_t food_list[MAX_FOOD][2] = {
                                             * other side). Only affects BFS path following. 0u = turns go the way
                                             * they are named. */
 
-#define FOOD_PAUSE_MS         5000u       /* stand still this long at every food stop, then carry on
+#define FOOD_PAUSE_MS         2000u       /* stand still this long at every food stop, then carry on
                                             * (the GOAL is not a food stop - the robot stops there for good) */
+
+/* ---- Encoder distance: food stops in the MIDDLE of a straight corridor ----
+ * Junctions, corners and dead ends are found by the side/back sensors. A food cell on a plain
+ * straight corridor has nothing the sensors can see, so the robot counts encoder ticks from the
+ * last thing it DID see (junction passed, turn finished) and stops after COUNTS_PER_NODE x nodes.
+ *
+ * Hardware needed in the PSoC schematic: two Quadrature Decoder components (counter resolution x4),
+ * one per wheel, fed by the DE3 encoder Channel A / Channel B pins - here QuadDec_L and QuadDec_R.
+ * The names are mapped in the ENC_* macros below - change them there if yours are called something else.
+ * (A 32-bit counter is fine: only the low 16 bits of the DIFFERENCE are used, which wraps correctly.)
+ * At x4 this motor gives 228 counts per wheel revolution (57 cycles x 4 edges, from the spec sheet). */
+#define USE_ENCODER_FOOD_STOPS  1u        /* 0u = old behaviour: a food stop must be a junction/corner/dead end */
+
+#define COUNTS_PER_NODE         97       /* encoder counts for the robot to drive from one node to the next.
+                                           * Calculated: node 90 mm, wheel 65 mm, 228 counts per wheel turn (x4):
+                                           *   distance per count = pi x 65 / 228 = 0.896 mm
+                                           *   counts per node    = 90 / 0.896     = 100.5  ->  100
+                                           * (The motor is really 3249/169 = 19.2:1 not 19:1, which would give ~102.)
+                                           * Fine-tune from a real food-stop run: stops SHORT -> raise it, stops
+                                           * PAST the cell -> lower it. */
+
+#define ENC_L_START()           QuadDec_L_Start()
+#define ENC_R_START()           QuadDec_R_Start()
+#define ENC_L_GET()             QuadDec_L_GetCounter()
+#define ENC_R_GET()             QuadDec_R_GetCounter()
+
+#define ODO_CALIBRATION_MODE    0u        /* 1u = motors stay OFF and the robot just reports odoDebugCounts. Push the
+                                           * robot along the line BY HAND and read the count in the debugger. Optional:
+                                           * use it to check COUNTS_PER_NODE, then set back to 0u. */
+
+#define ODO_OFFSET_AFTER_STRAIGHT  0      /* counts already travelled past the node centre at the moment the robot
+                                           * decides a junction it drives STRAIGHT through. Can be negative. */
+#define ODO_OFFSET_AFTER_TURN      0      /* same, but at the moment a turn / 180 has finished and driving resumes.
+                                           * Tune these two until the robot stops dead centre on the food cell. */
+#define MIDSTOP_BRAKE_COUNTS       0      /* straight-fruit calibration: positive stops earlier */
+
+/* Final leg after F5 is SENSOR BASED.
+ * After the 180 at (19,12), the normal BFS route remains active:
+ *   (19,13) is a junction -> CMD_STRAIGHT
+ *   (19,14) is a plain corridor -> keep following the line
+ *   (19,15) is the final corner -> CMD_STOP
+ * Do not use encoder distance for the final goal. */
+
+/* Safety nets so a bad encoder can't make the robot drive blind past its junctions. */
+#define MIDSTOP_STALL_TICKS     150u      /* while waiting for a plain-corridor food stop, if the robot has driven this many
+                                           * ticks (10 ms each = 1.5 s) ... */
+#define MIDSTOP_STALL_COUNTS    20        /* ... and the encoders have counted fewer than this, they are not working.
+                                           * The fruit is SKIPPED (no pause) and the robot carries on with the route;
+                                           * encoderFault is set to 2 so you can see it happened. */
+#define BOOT_SETTLE_MS          500u      /* stand still this long after power-up so sensors and encoders settle */
+#define BOOT_IGNORE_TICKS       15u       /* then ignore junction / dead-end detection for this many ticks (10 ms each) */
+#define ODO_CAL_USE_LED         1u        /* in ODO_CALIBRATION_MODE the board LED flips every COUNTS_PER_NODE of travel,
+                                           * so you can test the encoders with no debugger. Set 0u if LED_Write() doesn't
+                                           * exist in your project. */
 
 #define SIDE_CLEAR_ITERATIONS 5u          /* both side sensors must read off this many ticks in a row before
                                             * the next junction can be detected - stops one junction being
@@ -84,7 +138,7 @@ static const uint8_t food_list[MAX_FOOD][2] = {
 #define TURN_BACKUP_BRAKE_MS      50u
 #define TURN_BACKUP_ITERATIONS    7u
 #define U_TURN_BACKUP_ITERATIONS  20u         /* reverse time before a 180, in 10 ms ticks (90-degree turns use TURN_BACKUP_ITERATIONS) */
-#define POST_TURN_ADJUST_ITERATIONS  6u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below */
+#define POST_TURN_ADJUST_ITERATIONS  12u  /* safety cap only now - see STATE_ADJUST_LEFT/RIGHT below */
 
 #define DRIFT_CORRECTION_OFFSET   10u  /* how much slower the inside wheel runs during a drift-correction
                                         * nudge (straight-line AND post-turn adjust). Small on purpose -
@@ -165,6 +219,79 @@ static void Motor_Stop(void)
     Motor_SetSpeed(0, 0);
 }
 
+/* ---------------- Debug: why did the robot stop? ----------------
+ * Add these to the debugger's Watch window. After a surprise stop, stopReason says which
+ * rule fired and routeIndex / routeLen say where in the plan the robot thought it was. */
+typedef enum {
+    STOP_NONE = 0,
+    STOP_PLAN_FAILED,          /* Route_Plan refused the inputs at boot */
+    STOP_GOAL,                 /* reached the goal - normal */
+    STOP_ROUTE_RAN_OUT,        /* a junction was seen after the last route command (a junction got counted twice, or one was missed) */
+    STOP_DEAD_END_UNEXPECTED,  /* only the back sensor saw the line and the plan did not expect a dead end here */
+    STOP_LINE_LOST             /* every sensor off for LINE_LOST_THRESHOLD ticks (clears itself if a sensor sees the line again) */
+} StopReason;
+static volatile StopReason stopReason = STOP_NONE;
+
+/* ---------------- Encoder distance ---------------- */
+
+static volatile uint8_t encoderFault = 0u;   /* 0 = fine, 1 = one wheel's encoder not counting (other one used),
+                                              * 2 = encoders not counting at all, a fruit was skipped */
+static uint16_t         midWatchTicks = 0u;  /* ticks driven while waiting for a CMD_MIDSTOP */
+
+#if USE_ENCODER_FOOD_STOPS
+static int16_t         odoMarkL = 0;
+static int16_t         odoMarkR = 0;
+static int32_t         odoOffset = 0;
+static volatile int32_t odoDebugCounts = 0;   /* watch this to calibrate COUNTS_PER_NODE */
+#endif
+
+static void Odo_Start(void)
+{
+#if USE_ENCODER_FOOD_STOPS
+    ENC_L_START();
+    ENC_R_START();
+#endif
+}
+
+/* Start counting from here. offset = counts the robot is already past the node centre. */
+static void Odo_Mark(int32_t offset)
+{
+#if USE_ENCODER_FOOD_STOPS
+    odoMarkL  = (int16_t)ENC_L_GET();
+    odoMarkR  = (int16_t)ENC_R_GET();
+    odoOffset = offset;
+#else
+    (void)offset;
+#endif
+}
+
+/* Average distance moved by the two wheels since Odo_Mark(), in encoder counts. The int16 subtraction
+ * wraps correctly if the counter rolls over. Only meant for driving straight ahead: the mark is always
+ * taken AFTER a turn or reverse has finished, and the robot never reverses between a mark and a food stop. */
+static int32_t Odo_Counts(void)
+{
+#if USE_ENCODER_FOOD_STOPS
+    int32_t dL = (int16_t)((int16_t)ENC_L_GET() - odoMarkL);
+    int32_t dR = (int16_t)((int16_t)ENC_R_GET() - odoMarkR);
+    if (dL < 0) { dL = -dL; }   /* the motors face opposite ways, so one decoder counts down when driving */
+    if (dR < 0) { dR = -dR; }   /* forward. Using the size of each change means the direction doesn't matter. */
+    {
+        int32_t hi = (dL > dR) ? dL : dR;
+        int32_t lo = (dL > dR) ? dR : dL;
+        int32_t dist = (dL + dR) / 2;
+        if (hi >= 40 && (lo * 4) < hi) {
+            dist = hi;             /* one wheel's encoder reads under a quarter of the other's: it is not counting.
+                                    * Trust the working one instead of averaging in a zero. */
+            encoderFault = 1u;
+        }
+        odoDebugCounts = dist + odoOffset;
+    }
+    return odoDebugCounts;
+#else
+    return 0;
+#endif
+}
+
 /* ---------------- Path planning (BFS) ---------------- */
 
 #define ROWS       15
@@ -212,7 +339,9 @@ typedef enum {
     CMD_AROUND   = 2,
     CMD_LEFT     = 3,
     CMD_STOP     = 4,
-    CMD_AROUND_RIGHT = 5   /* the 180 again, but spinning RIGHT - see Map_UTurnCmd */
+    CMD_AROUND_RIGHT = 5,  /* the 180 again, but spinning RIGHT - see Map_UTurnCmd */
+    CMD_MIDSTOP  = 6       /* food stop on a plain corridor: drive midDist[] nodes (by encoder) from the last
+                            * command, stand still FOOD_PAUSE_MS, then carry on. No junction event involved. */
 } PlanCmd;
 
 /* A route entry is a PlanCmd in the low bits. ROUTE_FOOD_FLAG marks the junction /
@@ -220,6 +349,8 @@ typedef enum {
  * FOOD_PAUSE_MS first, then carries out the command. */
 #define ROUTE_CMD_MASK   0x07u
 #define ROUTE_FOOD_FLAG  0x80u
+#define ROUTE_IMMEDIATE_FLAG 0x40u   /* do this command straight after the CMD_MIDSTOP before it, not on the next
+                                      * junction event (a 180 on the spot at a food cell in a plain corridor) */
 
 typedef struct {
     Cell     q[MAX_NODES];
@@ -333,6 +464,9 @@ static uint8_t  route[MAX_ROUTE_CMDS];
 static uint16_t routeLen       = 0u;
 static uint16_t routeIndex     = 0u;
 static PlanCmd  initialCmd     = CMD_STRAIGHT;   /* turn needed at the start cell to face the first move */
+static uint8_t  midDist[MAX_FOOD];                /* nodes to drive for each CMD_MIDSTOP, in route order */
+static uint8_t  midCount       = 0u;
+static uint8_t  midIndex       = 0u;
 
 static uint8_t Map_IsOpen(int16_t r, int16_t c)
 {
@@ -436,10 +570,13 @@ static uint8_t Route_Plan(Cell start, const Cell *stops, uint8_t numStops, uint8
     uint8_t  moved      = 0u;
     uint8_t  k, hIn, hOut;
     uint16_t i;
+    uint16_t lastCmdIdx;   /* last path cell of this leg the robot gets a command at (or the leg's start cell) */
 
     routeLen   = 0u;
     routeIndex = 0u;
     initialCmd = CMD_STRAIGHT;
+    midCount   = 0u;
+    midIndex   = 0u;
 
     if (numStops == 0u || !Map_IsOpen(start.r, start.c)) { return 0u; }
     for (k = 0u; k < numStops; k++) {
@@ -450,12 +587,21 @@ static uint8_t Route_Plan(Cell start, const Cell *stops, uint8_t numStops, uint8
         if (stops[k].r == pos.r && stops[k].c == pos.c) { continue; }   /* already standing on this stop */
         if (!bfs_path(mazeMap, pos, stops[k], legPath, &legLen)) { return 0u; }
 
+        lastCmdIdx = 0u;
         for (i = 0u; i + 1u < legLen; i++) {
             hOut = Heading_Between(legPath[i], legPath[i + 1u]);
             hIn  = (i == 0u) ? curHeading : Heading_Between(legPath[i - 1u], legPath[i]);
             if (i == 0u && !moved) {
                 /* the start cell itself: turn on the spot at boot, not a sensor event */
                 initialCmd = Route_CmdFor((uint8_t)((hOut - hIn) & 3), legPath[0], hIn);
+            } else if (i == 0u && USE_ENCODER_FOOD_STOPS && !Map_IsDetectable(legPath[0])) {
+                /* this leg starts on a food stop in a plain corridor. The robot was already stopped here
+                 * by its CMD_MIDSTOP, which did the pause. Carry on the same way = nothing to add; turn
+                 * back the way it came = a 180 on the spot, done straight after the pause. */
+                if (((hOut - hIn) & 3) == (uint8_t)CMD_AROUND) {
+                    if (routeLen >= MAX_ROUTE_CMDS) { return 0u; }
+                    route[routeLen++] = (uint8_t)Route_CmdFor((uint8_t)CMD_AROUND, legPath[0], hIn) | ROUTE_IMMEDIATE_FLAG;
+                }
             } else {
                 uint16_t before = routeLen;
                 if (!Route_AddNode(legPath[i], hIn, hOut)) {
@@ -464,11 +610,22 @@ static uint8_t Route_Plan(Cell start, const Cell *stops, uint8_t numStops, uint8
                 if (i == 0u) {
                     /* this leg starts on a food stop: its command carries the pause */
                     if (routeLen == before) {
-                        return 0u;   /* food stop on a plain corridor cell - nothing for the sensors to see */
+                        return 0u;   /* food stop on a plain corridor cell and USE_ENCODER_FOOD_STOPS is off */
                     }
                     route[routeLen - 1u] |= ROUTE_FOOD_FLAG;
                 }
+                if (routeLen != before) {
+                    lastCmdIdx = i;
+                }
             }
+        }
+
+        /* This leg ends on a food stop (not the goal). If it is a plain corridor cell the sensors can't
+         * see it, so add a CMD_MIDSTOP: "drive this many nodes past the last command, then stop". */
+        if (USE_ENCODER_FOOD_STOPS && (k + 1u < numStops) && !Map_IsDetectable(stops[k])) {
+            if (midCount >= MAX_FOOD || routeLen >= MAX_ROUTE_CMDS) { return 0u; }
+            midDist[midCount++] = (uint8_t)((legLen - 1u) - lastCmdIdx);
+            route[routeLen++]   = (uint8_t)CMD_MIDSTOP;
         }
         curHeading = Heading_Between(legPath[legLen - 2u], legPath[legLen - 1u]);
         pos   = stops[k];
@@ -509,7 +666,9 @@ static uint16_t   adjustCounter     = 0;
 static uint16_t   suppressSideCounter = 0;  /* set on a timed-out turn, forces a clean straight period */
 static uint16_t   deadEndCounter    = 0;    /* consecutive ticks where ONLY the back sensor sees the line */
 static uint16_t   sideClearCounter  = 0;    /* consecutive ticks both side sensors have read off */
+static uint8_t    foodCollectedCount = 0u;  /* increments once for each 5-second fruit pause */
 static uint8_t    turnSawWhite      = 0;    /* this turn's exit sensor has read white at least once */
+static RobotState prevState         = STATE_DRIVE_STRAIGHT;  /* state on the previous tick - to spot "turn just finished" */
 
 /* Plans the route at boot. If the robot has to start facing a different way
  * than the first move, the matching turn state is entered straight away. */
@@ -533,6 +692,7 @@ static void Route_Init(void)
 
     if (!Route_Plan(start, stops, (uint8_t)(numFood + 1u), (uint8_t)START_HEADING)) {
         Motor_Stop();
+        stopReason = STOP_PLAN_FAILED;
         state = STATE_DONE;      /* bad inputs / no path / undetectable stop - stay put */
         return;
     }
@@ -555,6 +715,9 @@ static void Food_Pause(void)
 {
     Motor_Stop();
     CyDelay(FOOD_PAUSE_MS);
+    if (foodCollectedCount < NUM_FOOD) {
+        foodCollectedCount++;
+    }
 }
 
 /* Start a 180 (spinState = STATE_TURN_AROUND or STATE_TURN_AROUND_RIGHT). With
@@ -589,6 +752,17 @@ static void RunLineFollower(const SensorState *s)
     uint8_t anyOnLine = s->left | s->frontLeft | s->mid | s->frontRight | s->right | s->back;
     uint8_t onlyBack  = s->back && !s->left && !s->frontLeft && !s->mid && !s->frontRight && !s->right;
 
+    (void)Odo_Counts();   /* keeps odoDebugCounts live for calibration */
+
+    /* A turn / 180 / adjust has just finished and the robot is driving straight again: start the
+     * encoder distance count from here. (Not after LINE_LOST: the robot hasn't moved to a new reference.) */
+    if (state != prevState) {
+        if (state == STATE_DRIVE_STRAIGHT && prevState != STATE_LINE_LOST) {
+            Odo_Mark(ODO_OFFSET_AFTER_TURN);
+        }
+        prevState = state;
+    }
+
     /* the white-then-black turn exit starts fresh for every turn */
     if (state != STATE_TURN_LEFT && state != STATE_TURN_RIGHT
         && state != STATE_TURN_AROUND && state != STATE_TURN_AROUND_RIGHT) {
@@ -610,6 +784,28 @@ static void RunLineFollower(const SensorState *s)
         sideClearCounter++;
     }
 
+    /* A CMD_MIDSTOP is next in the plan: the food cell is a plain corridor cell, so there is no
+     * junction before it. Ignore side-sensor events until the encoder says we are on the cell. */
+    uint8_t midStopDue = 0u;
+    if (FOLLOW_PLANNED_PATH && USE_ENCODER_FOOD_STOPS && state == STATE_DRIVE_STRAIGHT
+        && routeIndex < routeLen && (route[routeIndex] & ROUTE_CMD_MASK) == (uint8_t)CMD_MIDSTOP) {
+        int32_t counts = Odo_Counts();
+        junctionEvent = 0u;
+        if (counts >= ((int32_t)midDist[midIndex] * (int32_t)COUNTS_PER_NODE) - (int32_t)MIDSTOP_BRAKE_COUNTS) {
+            midStopDue = 1u;
+        } else {
+            if (midWatchTicks < 0xFFFFu) { midWatchTicks++; }
+            if (midWatchTicks >= MIDSTOP_STALL_TICKS && counts < (int32_t)MIDSTOP_STALL_COUNTS) {
+                /* driving for 1.5 s and the encoders have barely moved: they are not working. Waiting any longer
+                 * would leave the robot ignoring every junction, so skip this fruit and stay on the route. */
+                encoderFault = 2u;
+                midIndex++;
+                routeIndex++;
+                midWatchTicks = 0u;
+            }
+        }
+    }
+
     if (state != STATE_TURN_LEFT && state != STATE_TURN_RIGHT && state != STATE_TURN_BACKUP
         && state != STATE_ADJUST_LEFT && state != STATE_ADJUST_RIGHT && state != STATE_TURN_AROUND
         && state != STATE_TURN_AROUND_RIGHT
@@ -617,6 +813,7 @@ static void RunLineFollower(const SensorState *s)
         if (!anyOnLine) {
             lineLostCounter++;
             if (lineLostCounter >= LINE_LOST_THRESHOLD) {
+                stopReason = STOP_LINE_LOST;
                 state = STATE_LINE_LOST;
             }
             /* else treat a short all-off read as a gap, not a loss */
@@ -627,6 +824,11 @@ static void RunLineFollower(const SensorState *s)
         lineLostCounter = 0;
     }
 
+    /* Final leg is handled entirely by the normal sensor/BFS route.
+     * After F5's 180, do not suppress or replace route commands here.
+     * The junction at (19,13) consumes CMD_STRAIGHT and the corner at
+     * (19,15) consumes CMD_STOP. */
+
     switch (state) {
 
         case STATE_DRIVE_STRAIGHT:
@@ -636,9 +838,22 @@ static void RunLineFollower(const SensorState *s)
                  * sensor can't instantly throw us back into the same turn */
                 suppressSideCounter--;
                 Motor_SetSpeed(SPEED_BASE, SPEED_BASE);
+            } else if (midStopDue) {
+                /* on the food cell in a plain corridor: stand still, then carry on */
+                Food_Pause();
+                midIndex++;
+                routeIndex++;
+                midWatchTicks = 0u;
+                Odo_Mark(0);   /* we are on the cell centre by definition - next count starts here */
+                if (routeIndex < routeLen && (route[routeIndex] & ROUTE_IMMEDIATE_FLAG)) {
+                    /* the next leg leaves back the way we came: 180 on the spot */
+                    uint8_t uturn = (uint8_t)(route[routeIndex++] & ROUTE_CMD_MASK);
+                    Begin_UTurn((uturn == (uint8_t)CMD_AROUND_RIGHT) ? STATE_TURN_AROUND_RIGHT : STATE_TURN_AROUND);
+                }
             } else if (FOLLOW_PLANNED_PATH && junctionEvent) {
                 /* new junction/corner: carry out the next command from the
                  * BFS route. Running out of commands is treated as STOP. */
+                uint8_t ranOut = (routeIndex < routeLen) ? 0u : 1u;
                 uint8_t entry = (routeIndex < routeLen) ? route[routeIndex++] : (uint8_t)CMD_STOP;
                 PlanCmd cmd   = (PlanCmd)(entry & ROUTE_CMD_MASK);
                 if (entry & ROUTE_FOOD_FLAG) {
@@ -656,9 +871,11 @@ static void RunLineFollower(const SensorState *s)
                     Begin_UTurn(STATE_TURN_AROUND_RIGHT);   /* same, spinning away from a branch on the left */
                 } else if (cmd == CMD_STOP) {
                     Motor_Stop();
+                    stopReason = ranOut ? STOP_ROUTE_RAN_OUT : STOP_GOAL;
                     state = STATE_DONE;
                 } else {
                     Motor_SetSpeed(SPEED_BASE, SPEED_BASE);   /* CMD_STRAIGHT: drive on through the junction */
+                    Odo_Mark(ODO_OFFSET_AFTER_STRAIGHT);       /* a plain-corridor food stop after this is counted from here */
                 }
             } else if (!FOLLOW_PLANNED_PATH && s->left) {
                 /* brake, then back up before attempting the turn - by the
@@ -691,6 +908,11 @@ static void RunLineFollower(const SensorState *s)
                         deadEndCounter = 0;
                     } else {
                         Motor_Stop();
+                        if (next == (uint8_t)CMD_STOP) {
+                            stopReason = (routeIndex < routeLen) ? STOP_GOAL : STOP_ROUTE_RAN_OUT;
+                        } else {
+                            stopReason = STOP_DEAD_END_UNEXPECTED;   /* the plan wanted a junction/turn here, not a dead end */
+                        }
                         state = STATE_DONE;
                     }
                 } else {
@@ -732,9 +954,10 @@ static void RunLineFollower(const SensorState *s)
             } else if (turnCounter >= TURN_TIMEOUT) {
                 /* frontRight never lit up - force a clean break instead of
                  * hanging here forever */
-                state = STATE_DRIVE_STRAIGHT;
+                state = STATE_ADJUST_LEFT;
                 turnCounter = 0;
-                suppressSideCounter = TURN_COOLDOWN;
+                adjustCounter = 0;
+                suppressSideCounter = POST_TURN_COOLDOWN;
             }
             break;
 
@@ -747,9 +970,10 @@ static void RunLineFollower(const SensorState *s)
                 adjustCounter = 0;
                 suppressSideCounter = POST_TURN_COOLDOWN;
             } else if (turnCounter >= TURN_TIMEOUT) {
-                state = STATE_DRIVE_STRAIGHT;
+                state = STATE_ADJUST_RIGHT;
                 turnCounter = 0;
-                suppressSideCounter = TURN_COOLDOWN;
+                adjustCounter = 0;
+                suppressSideCounter = POST_TURN_COOLDOWN;
             }
             break;
 
@@ -799,7 +1023,7 @@ static void RunLineFollower(const SensorState *s)
              * neither condition is ever met. */
             Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE);
             adjustCounter++;
-            if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
+            if ((s->frontLeft && s->frontRight) || (s->mid && adjustCounter >= 3u) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
                 state = STATE_DRIVE_STRAIGHT;
                 adjustCounter = 0;
             }
@@ -808,7 +1032,7 @@ static void RunLineFollower(const SensorState *s)
         case STATE_ADJUST_RIGHT:
             Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET);
             adjustCounter++;
-            if (s->mid || (s->frontLeft && s->frontRight) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
+            if ((s->frontLeft && s->frontRight) || (s->mid && adjustCounter >= 3u) || (adjustCounter >= POST_TURN_ADJUST_ITERATIONS)) {
                 state = STATE_DRIVE_STRAIGHT;
                 adjustCounter = 0;
             }
@@ -839,6 +1063,14 @@ int main(void)
     PWM_1_Start();
     PWM_2_Start();
     Motor_Stop();
+    Odo_Start();
+    Odo_Mark(0);
+#if ODO_CALIBRATION_MODE
+    for (;;) {                       /* motors off: just keep odoDebugCounts live while you push the robot by hand */
+        (void)Odo_Counts();
+        CyDelay(10);
+    }
+#endif
     Route_Init();   /* BFS runs once here, before the loop starts */
 
     for (;;) {
