@@ -151,6 +151,19 @@ static const uint8_t food_list[MAX_FOOD][2] = {
 
 #define BACK_UP_BEFORE_180 1u   /* 1u = every 180 first brakes and reverses a little (the same backup the 90-degree turns use) */
 
+/* ---- Turn finishing (stops the robot ending a turn pointing off the line) ----
+ * The old rule ended a turn the moment the FIRST front sensor touched the new line. That sensor is the
+ * one leading the rotation, so it touches the line while the robot is still roughly 20-35 degrees short of
+ * pointing along it - and then the robot drove off at that angle. Now the turn only ends once BOTH front
+ * sensors have found the line (each reading white, then black), which happens when the robot is lined up
+ * with it. Once one has found it the spin slows to SPEED_TURN_FINAL so it doesn't sail past. */
+#define TURN_EXIT_BOTH_FRONT  1u   /* 0u = old behaviour: end the turn when the first front sensor sees the line */
+#define SPEED_TURN_FINAL      30u  /* spin speed after the first front sensor has found the line */
+#define STEER_DURING_COOLDOWN 1u   /* 1u = the front sensors keep steering during the post-turn cooldown (only the
+                                    * side-sensor junction detection is suppressed). 0u = old: drive dead straight. */
+#define TURN_USE_ADJUST       0u   /* 1u = after a 90-degree turn, do the gentle forward curve (STATE_ADJUST_*) first.
+                                    * Off by default: that curve kept steering the same way the turn went. */
+
 /* ---------------- Sensor reading ---------------- */
 
 typedef struct {
@@ -668,6 +681,8 @@ static uint16_t   deadEndCounter    = 0;    /* consecutive ticks where ONLY the 
 static uint16_t   sideClearCounter  = 0;    /* consecutive ticks both side sensors have read off */
 static uint8_t    foodCollectedCount = 0u;  /* increments once for each 5-second fruit pause */
 static uint8_t    turnSawWhite      = 0;    /* this turn's exit sensor has read white at least once */
+static uint8_t    turnWhiteFL = 0, turnWhiteFR = 0;   /* each front sensor has read white during this turn */
+static uint8_t    turnSeenFL  = 0, turnSeenFR  = 0;   /* each front sensor has since read black = found the new line */
 static RobotState prevState         = STATE_DRIVE_STRAIGHT;  /* state on the previous tick - to spot "turn just finished" */
 
 /* Plans the route at boot. If the robot has to start facing a different way
@@ -737,14 +752,35 @@ static void Begin_UTurn(RobotState spinState)
     turnCounter = 0;
 }
 
-/* Turn exit test. The exit sensor must have read white at some point during the
- * turn and THEN read black. Called once per tick by the four turn states. */
+/* Called once per tick while a turn is running: records which front sensors have found the new line
+ * (white first, then black - so a sensor that starts the turn sitting on the OLD line doesn't count). */
+static void Turn_Track(const SensorState *s)
+{
+    if (!s->frontLeft)  { turnWhiteFL = 1u; } else if (turnWhiteFL || !TURN_EXIT_NEEDS_WHITE_FIRST) { turnSeenFL = 1u; }
+    if (!s->frontRight) { turnWhiteFR = 1u; } else if (turnWhiteFR || !TURN_EXIT_NEEDS_WHITE_FIRST) { turnSeenFR = 1u; }
+}
+
+/* Turn exit test, called once per tick by the four turn states. */
 static uint8_t Turn_ExitSeen(uint8_t exitSensor)
 {
+    if (TURN_EXIT_BOTH_FRONT) {
+        return (turnSeenFL && turnSeenFR) ? 1u : 0u;
+    }
     if (!exitSensor) {
         turnSawWhite = 1u;
     }
     return (exitSensor && (turnSawWhite || !TURN_EXIT_NEEDS_WHITE_FIRST)) ? 1u : 0u;
+}
+
+/* Spin speed: full speed until a front sensor has found the new line, then slower for the last bit. */
+static int16_t Turn_Speed(uint16_t full)
+{
+    return (int16_t)((TURN_EXIT_BOTH_FRONT && (turnSeenFL || turnSeenFR)) ? SPEED_TURN_FINAL : full);
+}
+
+static RobotState Turn_NextState(RobotState adjustState)
+{
+    return TURN_USE_ADJUST ? adjustState : STATE_DRIVE_STRAIGHT;
 }
 
 static void RunLineFollower(const SensorState *s)
@@ -767,6 +803,10 @@ static void RunLineFollower(const SensorState *s)
     if (state != STATE_TURN_LEFT && state != STATE_TURN_RIGHT
         && state != STATE_TURN_AROUND && state != STATE_TURN_AROUND_RIGHT) {
         turnSawWhite = 0u;
+        turnWhiteFL = turnWhiteFR = 0u;
+        turnSeenFL  = turnSeenFR  = 0u;
+    } else {
+        Turn_Track(s);
     }
 
     /* dead-end detector: counts consecutive ticks of "back sensor only" while driving straight */
@@ -833,11 +873,19 @@ static void RunLineFollower(const SensorState *s)
 
         case STATE_DRIVE_STRAIGHT:
             if (suppressSideCounter > 0) {
-                /* just forced out of a turn that never cleared on its own -
-                 * ignore left/right for a bit so a chronically-triggered
-                 * sensor can't instantly throw us back into the same turn */
+                /* just finished (or forced out of) a turn - ignore left/right for a bit so a
+                 * chronically-triggered sensor can't instantly throw us back into the same turn.
+                 * The FRONT sensors still steer: a robot that finishes a turn slightly to one side
+                 * of the line (the wheels pivot a few mm short of the junction) used to drive
+                 * blind for this whole period and could lose the line before steering started. */
                 suppressSideCounter--;
-                Motor_SetSpeed(SPEED_BASE, SPEED_BASE);
+                if (STEER_DURING_COOLDOWN && s->frontLeft && !s->frontRight) {
+                    Motor_SetSpeed(SPEED_BASE, SPEED_BASE - DRIFT_CORRECTION_OFFSET);
+                } else if (STEER_DURING_COOLDOWN && s->frontRight && !s->frontLeft) {
+                    Motor_SetSpeed(SPEED_BASE - DRIFT_CORRECTION_OFFSET, SPEED_BASE);
+                } else {
+                    Motor_SetSpeed(SPEED_BASE, SPEED_BASE);
+                }
             } else if (midStopDue) {
                 /* on the food cell in a plain corridor: stand still, then carry on */
                 Food_Pause();
@@ -940,14 +988,14 @@ static void RunLineFollower(const SensorState *s)
             break;
 
         case STATE_TURN_LEFT:
-            Motor_SetSpeed(-(int16_t)SPEED_TURN, (int16_t)SPEED_TURN);
+            Motor_SetSpeed(-Turn_Speed(SPEED_TURN), Turn_Speed(SPEED_TURN));
             turnCounter++;
             /* exit as soon as the OPPOSITE front sensor sees the line -
              * doesn't wait for mid too, so it can still be off-center at
              * the exact instant this fires. STATE_ADJUST_LEFT closes that
              * remaining gap before handing off to straight driving. */
             if (Turn_ExitSeen(s->frontRight)) {
-                state = STATE_ADJUST_LEFT;
+                state = Turn_NextState(STATE_ADJUST_LEFT);
                 turnCounter = 0;
                 adjustCounter = 0;
                 suppressSideCounter = POST_TURN_COOLDOWN;
@@ -962,10 +1010,10 @@ static void RunLineFollower(const SensorState *s)
             break;
 
         case STATE_TURN_RIGHT:
-            Motor_SetSpeed((int16_t)SPEED_TURN, -(int16_t)SPEED_TURN);
+            Motor_SetSpeed(Turn_Speed(SPEED_TURN), -Turn_Speed(SPEED_TURN));
             turnCounter++;
             if (Turn_ExitSeen(s->frontLeft)) {
-                state = STATE_ADJUST_RIGHT;
+                state = Turn_NextState(STATE_ADJUST_RIGHT);
                 turnCounter = 0;
                 adjustCounter = 0;
                 suppressSideCounter = POST_TURN_COOLDOWN;
@@ -981,7 +1029,7 @@ static void RunLineFollower(const SensorState *s)
             /* in-place spin left; exits as soon as the OPPOSITE front sensor
              * (frontRight) sees the line, straight into driving - no adjust
              * step */
-            Motor_SetSpeed(-(int16_t)SPEED_TURN_AROUND, (int16_t)SPEED_TURN_AROUND);
+            Motor_SetSpeed(-Turn_Speed(SPEED_TURN_AROUND), Turn_Speed(SPEED_TURN_AROUND));
             turnCounter++;
             if (Turn_ExitSeen(s->frontRight)) {
                 state = STATE_DRIVE_STRAIGHT;
@@ -1000,7 +1048,7 @@ static void RunLineFollower(const SensorState *s)
              * the OPPOSITE front sensor (frontLeft) sees the line, straight into
              * driving - no adjust step. Used for a 180 where a branch of the line
              * leaves on the left, so the spin turns away from it */
-            Motor_SetSpeed((int16_t)SPEED_TURN_AROUND, -(int16_t)SPEED_TURN_AROUND);
+            Motor_SetSpeed(Turn_Speed(SPEED_TURN_AROUND), -Turn_Speed(SPEED_TURN_AROUND));
             turnCounter++;
             if (Turn_ExitSeen(s->frontLeft)) {
                 state = STATE_DRIVE_STRAIGHT;
