@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Motor test\Design01\Generated_Source">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="Motor test\Design01\Source Files\main.c">
 <ExpandedNodeIds>
 <v>Motor test</v>
 <v>Motor test\Design01</v>
@@ -32,6 +32,7 @@
 <v>Motor test\Design01\Header Files\cyapicallbacks.h</v>
 <v>Motor test\Design01\Source Files</v>
 <v>Motor test\Design01\Source Files\main.c</v>
+<v>Motor test\Design01\Generated_Source</v>
 <v>Motor test\Design01\Generated_Source\PSoC5</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
@@ -53,6 +54,22 @@
 <v>Motor test\Design01\Source Files</v>
 <v>Motor test\Design01\Source Files\main.c</v>
 <v>Motor test\Design01\Generated_Source</v>
+<v>Motor test\Design01\Generated_Source\PSoC5</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\Clock_1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\Clock_2</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\cy_boot</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\D1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\D1_1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\Em_EEPROM_Dynamic</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\ENCD1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\ENCD2</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\ENCD3</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\ENCD4</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\In1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\In1_1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\IN2</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\IN2_1</v>
+<v>Motor test\Design01\Generated_Source\PSoC5\LED</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
@@ -73,6 +90,61 @@
 <ExpandedNodeIds>
 <v>Motor test</v>
 <v>Motor test\Design01</v>
+<v>Motor test\Design01\CortexM3</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Clock_1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Clock_2.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\D1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\D1_1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ENCD1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ENCD2.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ENCD3.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\ENCD4.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\In1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\In1_1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\IN2.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\IN2_1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\LED.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM_1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM_1_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM_2.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\PWM_2_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L_Cnt16.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L_Cnt16_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L_INT.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L_isr.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_L_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R_Cnt16.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R_Cnt16_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R_INT.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R_isr.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\QuadDec_R_PM.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S1.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S2.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S3.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S4.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S5.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\S6.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Listing Files\SW.lst</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Design01.elf</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Design01.hex</v>
+<v>Motor test\Design01\CortexM3\ARM_GCC_541\Debug\Design01.map</v>
 <v>Motor test\Design01\Design01.gpdsc</v>
 <v>Motor test\Design01\Design01.rpt</v>
 <v>Motor test\Design01\Design01_timing.html</v>
@@ -80,9 +152,6 @@
 <VisibleNodeIds>
 <v>Motor test</v>
 <v>Motor test\Design01</v>
-<v>Motor test\Design01\Design01.gpdsc</v>
-<v>Motor test\Design01\Design01.rpt</v>
-<v>Motor test\Design01\Design01_timing.html</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
@@ -97,6 +166,7 @@
 <v>Motor test\Design01\PSoC 5LP Architecture TRM</v>
 <v>Motor test\Design01\CY8C58LP Family Datasheet</v>
 <v>Motor test\Design01\System Reference Guides</v>
+<v>Motor test\Design01\System Reference Guides\cy_boot_v6_10</v>
 <v>Motor test\Design01\cy_clock_v2_20</v>
 <v>Motor test\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
 <v>Motor test\Design01\cy_constant_v1_0</v>
@@ -114,6 +184,7 @@
 <v>Motor test\Design01\PSoC 5LP Architecture TRM</v>
 <v>Motor test\Design01\CY8C58LP Family Datasheet</v>
 <v>Motor test\Design01\System Reference Guides</v>
+<v>Motor test\Design01\System Reference Guides\cy_boot_v6_10</v>
 <v>Motor test\Design01\cy_clock_v2_20</v>
 <v>Motor test\Design01\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
 <v>Motor test\Design01\cy_constant_v1_0</v>
@@ -132,7 +203,17 @@
 </userData>
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
-<OpenDocs />
+<OpenDocs>
+<name v=".\Design01.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\Design01.cydsn\main.c" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="846, 471" SelectedTabbedMdiWindow="aff3b959-35e5-4907-abb6-f041fc5e2116"><DocumentWindow Key="C:\Users\lucid\Documents\Compsys\Compsys 301\Compsys-301-Design-Project\Motor_test\Design01.cydsn\TopDesign\TopDesign.cysch" Guid="718ebc4d-862a-4ffc-be78-b5c545b7d0bc" /><DocumentWindow Key="C:\Users\lucid\Documents\Compsys\Compsys 301\Compsys-301-Design-Project\Motor_test\Design01.cydsn\main.c" Guid="aff3b959-35e5-4907-abb6-f041fc5e2116" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
